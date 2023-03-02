@@ -1,27 +1,31 @@
-LESSON NAME
-===========
-
-Intro
-
-
-
-.. prereq::
-
-   prerequisites
-
-
-
-.. csv-table::
-   :widths: auto
-   :delim: ;
-
-   20 min ; :doc:`filename`
-
+Molecular dynamics simulations
+==============================
 
 .. toctree::
    :maxdepth: 1
-   :caption: The lesson
+   :caption: Prerequisites
 
+   00_Prereq/01_Software
+
+.. toctree::
+   :maxdepth: 1
+   :caption: MD simulations of biological molecules
+
+   02_BiologicalMolecules/01_Water
+   02_BiologicalMolecules/02_Proteins
+   02_BiologicalMolecules/03_DNA
+
+.. toctree::
+   :maxdepth: 1
+   :caption: MD simulations of small molecules
+
+   03_SmallMolecules/01_Benzene
+   03_SmallMolecules/02_Alkanes
+   03_SmallMolecules/03_ManyMoleculesInABox
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Implementations
 
 .. toctree::
    :maxdepth: 1

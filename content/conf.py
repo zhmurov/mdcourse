@@ -36,6 +36,7 @@ extensions = [
     "sphinx_lesson",
     # remove once sphinx_rtd_theme updated for contrast and accessibility:
     "sphinx_rtd_theme_ext_color_contrast",
+    'sphinxcontrib.yt',
 ]
 
 # Settings for myst_nb:

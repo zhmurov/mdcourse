@@ -86,13 +86,22 @@ Adding these up:
 
         \mathbf{r}_{i}(t+\Delta t)=2\mathbf{r}_{i}(t)-\mathbf{r}_{i}(t-\Delta t)+\frac{\mathbf{f}_{i}(t)}{m}\Delta t^{2}+\mathbf{o}(\Delta t^{4}).
 
-And to compute velocities, one can use:
+To compute velocities, one can use:
 
     .. math::
 
         \mathbf{v}_{i}(t)=\frac{\mathbf{r}_{i}(t+\Delta t)-\mathbf{r}_{i}(t-\Delta t)}{2\Delta t}+\mathbf{o}(\Delta t^{2}).
 
-This is Velocity-Verlet algorithm.
+Or, in numerical notations:
+
+    .. math::
+
+        \mathbf{r}_{i}^{n+1}=2\mathbf{r}_{i}^{n}-\mathbf{r}_{i}^{n-1}+\frac{\mathbf{f}_{i}^{n}}{m}\tau^{2},
+
+        \mathbf{v}_{i}^{n}=\frac{\mathbf{r}_{i}^{n+1}-\mathbf{r}_{i}^{n-1}}{2\tau}.
+        
+
+This is called Velocity-Verlet algorithm.
 
 Leap-Frog algorithm
 -------------------
@@ -101,3 +110,29 @@ Newtonian equation of motion are second order differential equation for position
 By introducing velocities, we can re-write them as first-order equation.
 Notice that in this case, the velocities and positions are never on both right- and left-hand side.
 If we compute position on full steps and velocities on half steps, we can increase the approximation to the second order.
+Note that this is only possible because (and when) the forces :math:`\mathbf{f}_{i}` are functions of coordinates.
+
+We start with re-writing the basic scheme but using the central point to where the derivative is estimated:
+
+    .. math::
+
+        m_i\frac{\mathbf{v}_{i}(t+\frac{\Delta t}{2})-\mathbf{v}_{i}(t-\frac{\Delta t}{2})}{\Delta t} = \mathbf{f}_{i}(t)
+
+        \frac{\mathbf{r}_{i}(t+\Delta t)-\mathbf{r}_{i}(t)}{\Delta t} = \mathbf{v}_{i}(t+\frac{\Delta t}{2})
+
+Re-arranging the formulas:
+
+    .. math::
+
+        \mathbf{v}_{i}(t+\frac{\Delta t}{2}) = \mathbf{v}_{i}(t-\frac{\Delta t}{2}) + \frac{\mathbf{f}_{i}(t)}{m_i}\Delta t
+
+        \mathbf{r}_{i}(t+\Delta t) = \mathbf{r}_{i}(t) + \mathbf{v}_{i}(t+\frac{\Delta t}{2})\Delta t
+
+Or, in numerical notations:
+
+    .. math::
+
+        \mathbf{v}_{i}^{n+\frac{1}{2}} = \mathbf{v}_{i}^{n-\frac{1}{2}} + \frac{\mathbf{f}_{i}^{n}}{m_i}\tau
+
+        \mathbf{r}_{i}^{n+1} = \mathbf{r}_{i}^{n} + \mathbf{v}_{i}^{n+\frac{1}{2}}\tau
+

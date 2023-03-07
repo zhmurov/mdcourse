@@ -28,8 +28,9 @@ Molecular dynamics simulations
    :caption: Implementations
 
    04_Implementations/01_Integration
-   04_Implementations/02_HarmonicBonds
-   04_Implementations/03_Nonbonded
+   04_Implementations/02_GeneralNotesOnPotential
+   04_Implementations/03_Bonded
+   04_Implementations/04_Nonbonded
 
 .. toctree::
    :maxdepth: 1

@@ -1,6 +1,7 @@
 Software
 ========
 
+.. _gromacs-installation:
 Build and install GROMACS
 -------------------------
 
@@ -48,6 +49,7 @@ Optionally, one can set the installation path by adding ``-DCMAKE_INSTALL_PREFIX
 Force-fields
 ------------
 
+.. _trappeua-installation:
 TraPPE-UA
 ^^^^^^^^^
 
@@ -75,6 +77,7 @@ Assuming that GROMACS in installed at ``/usr/local/gromacs``:
 
 Note that you can also keep force-field files in your local folder without installing.
 
+.. _charmm36-installation:
 CHARMM36
 ^^^^^^^^
 
@@ -100,7 +103,7 @@ Assuming that GROMACS in installed at ``/usr/local/gromacs``:
 
 Note that you can also keep force-field files in your local folder without installing.
 
-
+.. _packmol-installation:
 PackMol
 -------
 

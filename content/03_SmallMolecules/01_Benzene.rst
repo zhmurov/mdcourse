@@ -195,6 +195,7 @@ To convert, one can use ``editconf`` utility from GROMACS:
 Now, the ``hydrocarbons`` folder should have both ``.gro`` and ``.pdb`` files.
 
 .. _energy-minimization-in-vacuum-mdp:
+
 The energy minimization .mdp file
 ---------------------------------
 

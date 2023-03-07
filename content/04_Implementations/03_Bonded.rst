@@ -1,6 +1,15 @@
 Bonded interactions
 ===================
 
+    .. math::
+
+        \begin{split}
+            V_{bonded} = &\sum_{(i,j)\in bonds}\frac{k^s_{ij}}{2}(r_{ij}-r_{ij}^0)^2 + \\
+                         &\sum_{(i,j,k)\in angles}\frac{k^{\theta}_{ijk}}{2}(\theta_{ijk}-\theta_{ijk}^0)^2 + \\
+                         &\sum_{(i,j,k,l)\in dihedrals}k^{\phi}_{ijkl}(1-\cos(n\phi_{ijkl} - \phi_{ijkl}^0)) + \\
+                         &\sum_{(i,j,k,l)\in impropers}k^{\psi}_{ijkl}(\psi_{ijkl}-\psi_{ijkl}^0)^2
+        \end{split}
+
 Harmonic potential
 ------------------
 

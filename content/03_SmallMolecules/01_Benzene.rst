@@ -129,7 +129,7 @@ This does not make much sense in case of benzene molecule, but this does not aff
 Once we decide which coordinates correspond to which atom name, we can create the coordinates file in any format that is suitable for the software.
 For instance, we can use `GROMACS .gro format <https://manual.gromacs.org/documentation/current/reference-manual/file-formats.html#gro>`_.
 
-    .. exerceise::
+    .. exercise::
 
         Write a basic code that generates coordinates for benzene and saves them in ``.gro`` format.
 
@@ -191,6 +191,8 @@ To convert, one can use ``editconf`` utility from GROMACS:
 
         $GMX editconf -f ${SYSTEM_NAME}_em.gro -o ${SYSTEM_NAME}.pdb
         cp ${SYSTEM_NAME}.pdb hydrocarbons/${SYSTEM_NAME}.pdb
+
+Now, the ``hydrocarbons`` folder should have both ``.gro`` and ``.pdb`` files.
 
 .. _energy-minimization-in-vacuum-mdp:
 The energy minimization .mdp file
@@ -308,7 +310,7 @@ By default, the molecule is called ``Other``.
 This is followed by the list of atoms with their respective types, residue number, residue name, charge and mass.
 Note that we are adding mass here, which is defined by the atom type.
 
-    .. exercice::
+    .. exercise::
 
         In the force-filed files, find where is mass is defined for our atom types.
 

@@ -10,10 +10,10 @@ Bonded interactions
                          &\sum_{(i,j,k,l)\in impropers}k^{\psi}_{ijkl}(\psi_{ijkl}-\psi_{ijkl}^0)^2
         \end{split}
 
-Harmonic potential
-------------------
+Harmonic bond potential
+-----------------------
 
-Harmonic potential usually used to describe covalent bonds.
+Harmonic bond potential usually used to describe covalent bonds.
 Its mathematical formula is:
 
     .. math::
@@ -37,3 +37,10 @@ Hence, for each bonded interaction, each atom will be experiencing the force:
         \mathbf{f}_{bond_{ij}}^i=\nabla_iV_{bond}^{ij}=\frac{\partial V_{bond}}{\partial r_{ij}}\nabla r_{ij} = -k^s_{ij}(r_{ij}-r_{ij}^0)\frac{\mathbf{r}_{ij}}{r_{ij}}
 
 One can show that :math:`\mathbf{f}_{bond_{ij}}^j = -\mathbf{f}_{bond_{ij}}^i`, which corresponds to the third Newtons law.
+
+Harmonic angle potential
+------------------------
+
+    .. exercise::
+
+        Derive the formula for forces that act on each of three particles, connected by harmonic angle potential.

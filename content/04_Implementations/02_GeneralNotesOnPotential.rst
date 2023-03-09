@@ -1,5 +1,5 @@
-General notes
-=============
+From potential energy to atomic forces
+======================================
 
 First, let us derive a couple of general expression that should help us later.
 Consider a system of :math:`N` particles.

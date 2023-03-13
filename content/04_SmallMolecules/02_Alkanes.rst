@@ -154,7 +154,7 @@ Making topologies for the rest of alkanes should be then simple using analogy.
 In fact, there are some more in the ``ethers.itp`` file: ethane, octane. decane, etc.
 However, we can take it a notch further, by using the same mechanism that GROMACS uses for proteins.
 Proteins are sequences of amino acid residues, linked covalently.
-Since each residue is one of 20 standard amino-acids, there are :math:`20^100` variants to construct a 100-residue-long protein.
+Since each residue is one of 20 standard amino-acids, there are :math:`20^{100}` variants to construct a 100-residue-long protein.
 Obviously, it is not possible to keep topology for all of them.
 Instead, each residue has special entries in their bond listings on how to connect the residue to the next/previous one, marked with +/- signs.
 Similarly, we can construct alkanes out of `residues`: CH3 and CH2 groups.

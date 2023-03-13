@@ -35,8 +35,11 @@ Consider a system of particles linked by a set of harmonic springs with spring c
 Fix the topology file
 ---------------------
 
-1. Change the number of molecules
-2. Missing include
+You are given a topology/coordinates pair to run simulations.
+However, ``gmx grompp`` exits with error.
+Fix the topology file: 
+1. Use these `topology <FixTopology/1/topol.top>`_ and `coordinates <FixTopology/1/conf.gro>`_ files.
+2. Use these `topology <FixTopology/2/topol.top>`_ and `coordinates <FixTopology/2/conf.gro>`_ files.
 
 End-to-end distance
 -------------------

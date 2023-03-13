@@ -1,3 +1,6 @@
+Exam
+====
+
 Morse potential
 ---------------
 
@@ -19,7 +22,7 @@ Its mathematical form is:
 
     .. math::
 
-        V^{FENE}_{ij}=-\frac{k_{ij}}{2}R_{0}^2\log\lefft[1-(r_{ij}-r_{ij}^0)^2\right]
+        V^{FENE}_{ij}=-\frac{k_{ij}}{2}R_{0}^2\log\left[1-(r_{ij}-r_{ij}^0)^2\right]
 
 Compute the atomic forces due to this potential.
 
@@ -37,16 +40,17 @@ Fix the topology file
 
 You are given a topology/coordinates pair to run simulations.
 However, ``gmx grompp`` exits with error.
-Fix the topology file: 
-1. Use these `topology <FixTopology/1/topol.top>`_ and `coordinates <FixTopology/1/conf.gro>`_ files.
-2. Use these `topology <FixTopology/2/topol.top>`_ and `coordinates <FixTopology/2/conf.gro>`_ files.
+Fix the topology file:
+
+1. Use these :download:`topology <FixTopology/1/topol.top>` and :download:`coordinates <FixTopology/1/conf.gro>` files.
+
+1. Use these :download:`topology <FixTopology/2/topol.top>` and :download:`coordinates <FixTopology/2/conf.gro>` files.
 
 End-to-end distance
 -------------------
 
 Compute the distribution of the end-to-end distance for hydrocarbon (i.e. distribution of distances between first and last carbon atom throughout the MD simulation run).
 Hint: use VMD label functionality.
-
 
 Surface tension
 ---------------

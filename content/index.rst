@@ -14,6 +14,7 @@ Molecular dynamics simulations
    02_BiologicalMolecules/01_Water
    02_BiologicalMolecules/02_Proteins
    02_BiologicalMolecules/03_DNA
+   02_BiologicalMolecules/04_MolecularSystems
 
 .. toctree::
    :maxdepth: 1

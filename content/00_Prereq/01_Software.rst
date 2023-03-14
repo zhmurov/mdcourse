@@ -12,7 +12,7 @@ Build and install GROMACS
 
         wget https://ftp.gromacs.org/gromacs/gromacs-2022.5.tar.gz
         tar -xvf gromacs-2022.5.tar.gz
-        cd gromacs
+        cd gromacs-2022.5
 
 Alternatively, you can checkout required version using Git:
 

@@ -1,6 +1,8 @@
 Molecular dynamics simulations
 ==============================
 
+HackMD: `https://hackmd.io/Mg9dmtVlT3OwbZzSD9t_WQ <https://hackmd.io/Mg9dmtVlT3OwbZzSD9t_WQ>`_
+
 .. toctree::
    :maxdepth: 1
    :caption: Prerequisites

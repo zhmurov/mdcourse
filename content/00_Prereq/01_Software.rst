@@ -88,8 +88,8 @@ Download and extract the force-field files:
 
     .. code-block:: shell
 
-        wget https://www.charmm.org/archive/charmm/resources/charmm-force-fields/download.php?filename=CHARMM_ff_params_files/archive/charmm36-mar2019.ff.tgz
-        tar -xvf charmm36-mar2019.ff.tgz
+        wget http://mackerell.umaryland.edu/download.php?filename=CHARMM_ff_params_files/charmm36-jul2022.ff.tgz
+        tar -xvf charmm36-jul2022.ff.tgz
 
 Or clone `this repository <https://gitlab.com/artemzhmurov/charmm36>`_:
 

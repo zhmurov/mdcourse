@@ -37,4 +37,4 @@ Note that :math:`\nabla_j r_{ij}=-\nabla_i r_{ij}`, as suggested by Newtons thir
 
     .. exercise::
 
-    Compute :math:`\nabla_i\phi_{ijkl}`, :math:`\nabla_j\phi_{ijkl}`, :math:`\nabla_k\phi_{ijkl}` and :math:`\nabla_l\phi_{ijkl}`, where :math:`\phi_{ijkl}` is the dihedral (torsion) angle between :math:`i-j-k` and :math:`j-k-l` planes (i.e. torsion angle for the :math:`\mathbf{r_{jk}}` bond).
+        Compute :math:`\nabla_i\phi_{ijkl}`, :math:`\nabla_j\phi_{ijkl}`, :math:`\nabla_k\phi_{ijkl}` and :math:`\nabla_l\phi_{ijkl}`, where :math:`\phi_{ijkl}` is the dihedral (torsion) angle between :math:`i-j-k` and :math:`j-k-l` planes (i.e. torsion angle for the :math:`\mathbf{r_{jk}}` bond).

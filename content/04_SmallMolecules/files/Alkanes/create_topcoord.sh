@@ -7,6 +7,7 @@ mkdir hydrocarbons
 # Copy the energy minimization script
 cp ${PETROLMD}/files/em_vac.mdp em.mdp
 # Generate PDBs for alkanes
+c++ main.cpp pdbio.cpp -o create_alkanes
 ./create_alkanes
 
 for filename in *.pdb; do

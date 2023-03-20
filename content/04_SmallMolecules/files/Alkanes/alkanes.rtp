@@ -1,0 +1,49 @@
+[ bondedtypes ]
+; Col 1: Type of bond 
+; Col 2: Type of angles 
+; Col 3: Type of proper dihedrals 
+; Col 4: Type of improper dihedrals 
+; Col 5: Generate all dihedrals if 1, only heavy atoms of 0. 
+; Col 6: Number of excluded neighbors for nonbonded interactions 
+; Col 7: Generate 1,4 interactions between pairs of hydrogens if 1 
+; Col 8: Remove propers over the same bond as an improper if it is 1 
+; bonds  angles  dihedrals  impropers  all_dihedrals  nrexcl  HH14  RemoveDih 
+    1       5        9          2            1           3      1       0
+
+[ CH4 ]
+; Methane
+  [ atoms ]
+       C    CC33A -0.3600   1
+      H1    HCA3A  0.0900   1
+      H2    HCA3A  0.0900   1
+      H3    HCA3A  0.0900   1
+      H4    HCA3A  0.0900   1
+  [ bonds ]
+       C   H1
+       C   H2
+       C   H3
+       C   H4
+
+[ CH3 ]
+; CH3 for linear alkane
+  [ atoms ]
+       C    CC33A -0.2700   1
+      H1    HCA3A  0.0900   1
+      H2    HCA3A  0.0900   1
+      H3    HCA3A  0.0900   1
+  [ bonds ]
+       C   H1
+       C   H2
+       C   H3
+       C   +C
+
+[ CH2 ]
+; CH2 for linear alkane
+  [ atoms ]
+       C    CC32A -0.1800   1
+      H1    HCA2A  0.0900   1
+      H2    HCA2A  0.0900   1
+  [ bonds ]
+       C   H1
+       C   H2
+       C   +C

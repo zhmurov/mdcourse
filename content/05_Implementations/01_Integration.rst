@@ -136,3 +136,41 @@ Or, in numerical notations:
 
         \mathbf{r}_{i}^{n+1} = \mathbf{r}_{i}^{n} + \mathbf{v}_{i}^{n+\frac{1}{2}}\tau
 
+Langevin equation
+-----------------
+
+Langevin equations of motion often used to describe coarse-grained systems, i.e. when more than one atom is considered a particle.
+In addition to the deterministic force due to inter-particle interactions, there are two terms in these equations: drag force and random force.
+Combined together, these imitate the effect on the medium on the system.
+The functional form of Langevin equations are:
+
+    .. math::
+
+            m_i\frac{d^2\mathbf{r}_i}{dt^2}=-\nabla_iV-\lambda\frac{d\mathbf{r}_i}{dt}+\eta_i(t),
+
+where :math:`m_i` is the mass of the particle, :math:`V({\mathbf{r}_i})` --- potential energy, :math:`\eta_i(t)` --- random force that is normally distributed:
+
+    .. math::
+
+            \langle\eta_i(t)\eta_j(t)\rangle = 2\lambda k_BT\delta_{ij}\delta(t-t')
+
+Note that the Langevin equations are stochastic and can not be integrated in normal sense.
+The numerical integration is possible though, with the help of random variables.
+
+The coefficient :math:`\lambda` is called damping and describe how strong the interactions with the media are.
+If :math:`\lambda` is big, the system becomes Brownian, when :math:`lambda` is small the system is Newtonian.
+Take a look at the equation and its limits for small and big :math:`lambda`.
+Typical value of the damping coefficient is :math:`\lambda=50`.
+
+To integrate Langevin equations numerically one can use the following integration:
+
+    .. math::
+
+        \begin{split}
+         m_i\frac{\mathbf{v}_{i}^{n+\frac{1}{2}}-\mathbf{v}_{i}^{n-\frac{1}{2}}}{\tau} &= \mathbf{f}_{i}^{n} - \lambda m_i\frac{\mathbf{v}_{i}^{n+\frac{1}{2}}+\mathbf{v}_{i}^{n-\frac{1}{2}}}{2}+\sqrt{\frac{2k_BT\lambda m_i}{\tau}}\mathbf{r}_i^f\\
+        \frac{\mathbf{r}_{i}^{n+1}-\mathbf{r}_{i}^{n}}{\tau} &= \mathbf{v}_{i}^{n+\frac{1}{2}}
+
+        \end{split}
+
+Here, :math:`\mathbf{r}_i^f` --- a vector of three normally distributed random variables with dispersion :math:`1` and expectancy of :math:`0`. :math:`k_B=8.31\times10^{-3}` kJ/molK is Boltzman constant, :math:`T` is temperature.
+The numerical scheme above is explicit.

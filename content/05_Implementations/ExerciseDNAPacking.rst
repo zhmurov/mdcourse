@@ -41,7 +41,7 @@
 
     .. math::
 
-        V_{hic}({\mathbf{r}_i})=\sum_{U_{ij}\ne 0}k_{ij}(|\mathbf{r}_i-\mathbf{r}_{i+1}|-r_{ij}^0)^2,
+        V_{hic}({\mathbf{r}_i})=\sum_{U_{ij}\ne 0}k_{ij}(|\mathbf{r}_i-\mathbf{r}_{j}|-r_{ij}^0)^2,
 
 где
 

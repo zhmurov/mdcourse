@@ -42,6 +42,13 @@ HackMD: `https://hackmd.io/@wrBxE4_jSICosPSnFsnauw/H1gfEs312/edit <https://hackm
    quick-reference
    guide
 
+.. toctree::
+   :maxdepth: 2
+   :caption: Home
+   :hidden:
+
+   05_Implementations/AnglePotential
+
 
 
 .. _learner-personas:

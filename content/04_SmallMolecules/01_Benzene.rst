@@ -158,18 +158,19 @@ Strictly speaking, this step is not required because we created the coordinates 
 Hence the structure should be already in its energy minima.
 But it is useful to do the energy minimization to fix any imperfections in the structure and to make sure that the coordinates are useable.
 
-The following script performs the energy minimization in vacuo for the molecular system.
+The following script performs the energy minimization in vacuo for the molecular system. Assuming that you have :download:`this minimization .mdp file <files/em_vac.mdp>` and your coordinates are saved as ``C6H6.gro``:
 
     .. code-block:: bash
 
+        SYSTEM_NAME=C6H6
         $GMX editconf -f ${SYSTEM_NAME}.gro -o ${SYSTEM_NAME}.gro -d 0.1
         $GMX editconf -f ${SYSTEM_NAME}.gro -o ${SYSTEM_NAME}.gro -box 100 100 100 -noc
-        cp ${PETROLMD}/files/em_vac.mdp em.mdp
-        $GMX grompp -f em.mdp -c ${SYSTEM_NAME}.gro -p ${SYSTEM_NAME}.top -o ${SYSTEM_NAME}_em.tpr
-        $GMX mdrun -deffnm c
+        $GMX grompp -f em.mdp -c ${SYSTEM_NAME}.gro -o ${SYSTEM_NAME}_em.tpr
+        $GMX mdrun -deffnm em_vac
         mkdir hydrocarbons
         cp ${SYSTEM_NAME}_em.gro hydrocarbons/${SYSTEM_NAME}.gro
 
+Note that this will overwrite your ``.gro`` file, but don't worry --- GROMACS will make a backup, surrounded by ``#`` signs.
 We first run the ``editconf`` utility twice to set the periodic boundary correctly.
 The first run moves the molecule so that all the coordinates are positive.
 The ``-d 0.1`` option means, that the box will be no closer than 0.1 nm from the molecule.

@@ -165,7 +165,7 @@ The following script performs the energy minimization in vacuo for the molecular
         SYSTEM_NAME=C6H6
         $GMX editconf -f ${SYSTEM_NAME}.gro -o ${SYSTEM_NAME}.gro -d 0.1
         $GMX editconf -f ${SYSTEM_NAME}.gro -o ${SYSTEM_NAME}.gro -box 100 100 100 -noc
-        $GMX grompp -f em.mdp -c ${SYSTEM_NAME}.gro -o ${SYSTEM_NAME}_em.tpr
+        $GMX grompp -f em_vac.mdp -c ${SYSTEM_NAME}.gro -o em_vac.tpr
         $GMX mdrun -deffnm em_vac
         mkdir hydrocarbons
         cp ${SYSTEM_NAME}_em.gro hydrocarbons/${SYSTEM_NAME}.gro

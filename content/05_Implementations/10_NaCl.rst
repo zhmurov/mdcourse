@@ -32,6 +32,70 @@ Note that from the performance standpoint this is not the most efficient way to 
 It would be better if these were more localized, for more efficient memory access pattern.
 But this should be fine in our example.
 
+Before, we can to create and fill an array containing all the particles in the system, we need to get and define all the parameters for our simulations (temperature, masses, charges, etc).
+This marks an important decision to make: we need to choose the units.
+It is tempting to use familiar SI system, but this will lead to a very small numbers --- atoms are very small.
+We don't need to invent anything here though, since there are two system that are widely used in Molecular Dynamics.
+Here, we are going to use the same units as MD software GROMACS: nm for length, ps for time, g/mol for mass, K for temperature.
+These units conveniently converge to kJ/mol for energy.
+We will also use the 
+
+    .. exercise::
+
+        Suppose that you are using nm for length, ps for time, g/mol for mass, K for temperature and elementary charge for charge.
+        Using Newton equation of motion, show that the units of energy are kJ/mol.
+        Using Maxwell-Boltzmann distribution for particle velocities, find a numerical value and units for Boltzmann constant.
+        Using equation for Coulomb energy for two interacting particles, define the units and find numerical value for Coulomb constant.
+
+With the units chosen, it is quite easy to define masses and charges for the particles.
+The charges are :math:`+1` for sodium ions (Na) and :math:`-1` for chloride (Cl)
+Masses can be taken from periodic table of elements: :math:`23.0` g/mol for sodium and :math:`35.5` g/mol for chloride.
+
+We also need to define Van-der-Waals parameters (:math:`\sigma` and :math:`\varepsilon`) for all three possible interactions: Na-Na, Cl-Cl and Na-Cl.
+In force-field, these parameters are usually listed on atom base: one set per atom type.
+When the forces and energies are computed, these are averaged using arithmetic average for :math:`sigma` and geometric average for :math:`\varepsilon`.
+The main reason for defining parameters this way is to minimize the number of parameters needed for an atomic system: if we have :math:`N_{at}` atom types, we will have :math:`N_{par}=N_{at}(N_{at}-1)/2+N_{at}` different pairs.
+Though this is not a problem in our case (:math:`N_{par}=2\times1/2+2=3`), we are going to stick with this strategy to able to use the force-field files as a source of parameters.
+If you did not do so already, `download <http://mackerell.umaryland.edu/download.php?filename=CHARMM_ff_params_files/charmm36-jul2022.ff.tgz>`_ and unpack the force-field files.
+The file that we need is called ``ffnonbonded.itp``.
+There we should look for sodium and chloride, the respective lines are:
+
+    .. code::
+
+        ...
+        ; type atnum         mass   charge ptype           sigma  epsilon
+        ...
+        SOD    11    22.989770    0.000     A  0.251367073323  0.1962296  ; Sodium Ion
+        ...
+        CLA    17    35.450000    0.000     A  0.404468018036  0.6276000  ; Chloride Ion
+        ...
+
+Two parameters we are looking for are in the last two columns, which list :math:`sigma` and :math:`epsilon` for the respective atoms in GROMACS units.
+Note that the masses are also listed there (with more precision), feel free to take those from there as well.
+The charges on the other hand are not in this list, since they are more volatile with respect to local environment --- same atom type can have different charges depending on the atom position in the molecule.
+The charges thus are defined when the molecule is constructed as we saw when we were making topology of a small molecule.
+
+Let us summarize all the parameters we found in the code, by adding this on top of the file:
+
+    .. code::
+
+        #define T  300.0 // K
+
+        #define KB 8.314462e-3 // kJ/mol/K
+        #define KC 138.9118    // nm*kJ/mol/e^2 
+
+        #define Q_NA  1.0 // Elementary charge
+        #define Q_CL  -1.0
+
+        #define M_NA  23.0 // g/mol
+        #define M_CL  35.5
+
+        #define SIGMA_NA 0.25
+        #define SIGMA_CL 0.40
+
+        #define EPSILON_NA 0.196
+        #define EPSILON_CL 0.628
+
 
     .. code::
 

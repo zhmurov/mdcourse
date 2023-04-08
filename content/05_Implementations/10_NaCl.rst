@@ -6,31 +6,8 @@ We will create a simulation box of size 4nm x 4nm x 4nm and fill it with Na and 
 The motion of atoms will be governed by Newton equations of motion and periodic boundary conditions will be applied to keep the atoms inside the box.
 The atoms will interact with each other via Lennard-Jones and Coulomb potentials.
 
-Creating the system and saving output for visualization
--------------------------------------------------------
-
-Initially, we will place particle in the box randomly.
-This may cause a problem if the atoms will be placed too close to one another, so we should expect that.
-We will use basic XYZ file format to save output so that we will be able to visualize it in third-party software (e.g. VMD).
-But to start with let use introduce the type ``Atom`` which we will use to store all the atom-related data (positions, velocities, forces, mass, etc.):
-
-    .. code::
-
-        struct Atom
-        {
-            float x, y, z;
-            float vx, vy, vz;
-            float fx, fy, fz;
-            float q;
-            float m;
-            float sigma;
-            float epsilon;
-            char name;
-        };
-
-Note that from the performance standpoint this is not the most efficient way to store positions and other data that we will be frequently interacting with.
-It would be better if these were more localized, for more efficient memory access pattern.
-But this should be fine in our example.
+Parameters and units
+--------------------
 
 Before, we can to create and fill an array containing all the particles in the system, we need to get and define all the parameters for our simulations (temperature, masses, charges, etc).
 This marks an important decision to make: we need to choose the units.
@@ -95,6 +72,151 @@ Let us summarize all the parameters we found in the code, by adding this on top 
 
         #define EPSILON_NA 0.196
         #define EPSILON_CL 0.628
+
+Creating the system and saving output for visualization
+-------------------------------------------------------
+
+Initially, we will place particle in the box randomly.
+This may cause a problem if the atoms will be placed too close to one another, so we should expect that.
+We will use basic XYZ file format to save output so that we will be able to visualize it in third-party software (e.g. VMD).
+But to start with let use introduce the type ``Atom`` which we will use to store all the atom-related data (positions, velocities, forces, mass, etc.):
+
+    .. code::
+
+        struct Atom
+        {
+            float x, y, z;
+            float vx, vy, vz;
+            float fx, fy, fz;
+            float q;
+            float m;
+            float sigma;
+            float epsilon;
+            char name;
+        };
+
+Note that from the performance standpoint this is not the most efficient way to store positions and other data that we will be frequently interacting with.
+It would be better if these were more localized, for more efficient memory access pattern.
+But this should be fine in our example.
+
+Before we place the atom, we need to define the dimensions of the system.
+Let us use quadratic box of size L, filled with N randomly placed atoms.
+First, we define these values.
+
+    .. code::
+
+        #define N  100
+        #define L  5.0  // nm
+
+Now let us create the ``main`` function in which we define parameters for each atom and fill the box with randomly placed atoms.
+Half of the atoms will be sodium ions, half --- chloride.
+
+    .. code::
+
+        int main(int argc, char* argv[])
+        {
+            std::vector<Atom> atoms(N);
+
+            std::random_device randomDevice;
+            std::mt19937 randomGenerator(randomDevice());
+            std::uniform_real_distribution<> distributionX(0, L);
+
+            for (int i = 0; i < N; i++)
+            {
+                atoms[i].x = distributionX(randomGenerator);
+                atoms[i].y = distributionX(randomGenerator);
+                atoms[i].z = distributionX(randomGenerator);
+
+                if (i < N/2)
+                {
+                    atoms[i].name = 'N';
+                    atoms[i].q = Q_NA;
+                    atoms[i].m = M_NA;
+                    atoms[i].sigma = SIGMA_NA;
+                    atoms[i].epsilon = EPSILON_NA;
+                }
+                else
+                {
+                    atoms[i].name = 'C';
+                    atoms[i].q = Q_CL;
+                    atoms[i].m = M_CL;
+                    atoms[i].sigma = SIGMA_CL;
+                    atoms[i].epsilon = EPSILON_CL;
+                }
+
+            }
+        }
+
+In this function, we first define random numbers generator using Mersene-Twister PRNG.
+We need uniform distribution from 0 to L to draw coordinates of atoms from.
+In a loop, we also add a condition on which atom the ``i``-th atom is going to be: sodium or chloride, and assign the parameters accordingly.
+
+We also need to define initial velocities and zero the initial forces.
+Though, we are going to have an excess in the potential energy in our initial state, the temperature control will also be needed.
+Otherwise, the temperature will increase from its initial value.
+We will deal with this on the later stages.
+
+To instantiate the velocities, we need normally distributed random numbers.
+The mean of this distribution should be zero, and the dispersion should be :math:`\sqrt{k_BT/m}`.
+Since the masses of Na and Cl ions are different, we are going to define the normal distribution with dispersion of :math:`\sqrt{k_BT}` and then divide the number over :math:`\sqrt{m}` for each particle.
+This way we can use one distribution for all particles:
+
+    .. code::
+
+        int main(int argc, char* argv[])
+        {
+            ...
+            std::uniform_real_distribution<> distributionX(0, L);
+            std::normal_distribution<> distributionV(0.0, sqrtf(KB*T));
+            ...
+            for (int i = 0; i < N; i++)
+            {
+                ...
+
+                float mult = 1.0/sqrtf(atoms[i].m);
+                atoms[i].vx = mult*distributionV(randomGenerator);
+                atoms[i].vy = mult*distributionV(randomGenerator);
+                atoms[i].vz = mult*distributionV(randomGenerator);
+
+                atoms[i].fx = 0.0;
+                atoms[i].fy = 0.0;
+                atoms[i].fz = 0.0;
+            }
+        }
+
+Now, all the positions are defined, we want to be able to save and visualize them.
+To do so, let us define a function that will save the positions of the atoms in XYZ format:
+
+    .. code::
+
+        void saveFrame(const char* filename, const char* modifier, std::vector<Atom> atoms)
+        {
+            FILE* out = fopen(filename, modifier);
+            fprintf(out, "%ld\nNa+Cl\n", atoms.size());
+            for (int i = 0; i < atoms.size(); i++)
+            {
+                fprintf(out, "%c\t%f\t%f\t%f\n",
+                    atoms[i].name, 
+                    atoms[i].x*10.0,
+                    atoms[i].y*10.0,
+                    atoms[i].z*10.0);
+            }
+            fclose(out);
+        }
+
+The function takes three arguments: the name of the file to save data into, modifier (``w`` to overwrite or ``a`` to append data to the end of the file) and the vector of atoms containing the data that we are saving.
+Note that XYZ format allows one to save multiple frames by appending the data to the same file.
+Also note, that XYZ uses angstroms as length units, hence we are multiplying the positions by 10.
+The first line of the file should contain the number of atoms, which is the length of the atoms vector.
+The second line should have the description of the system.
+These two lines are repeated for each frame if we are appending them.
+XYZ uses only one character for atom name, which we defined earlier, while filling the vector of atoms.
+
+Now we can add the call to this function to write the initial frame:
+
+    .. code::
+
+        saveFrame("nacl.xyz", "w", atoms);
 
 
     .. code::

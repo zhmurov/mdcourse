@@ -313,6 +313,108 @@ Because of the way we implemented the function, is should be called for every co
         atoms[i].y = transferPBC(atoms[i].y);
         atoms[i].z = transferPBC(atoms[i].z);
 
+Compile and run the code to see that everything worked.
+The atoms should now be in the same box throughout the simulation.
+
+Adding interactions between atoms
+---------------------------------
+
+The atoms should be interacting via Van-der-Waals and electrostatic interactions.
+The functional form of the interaction potential is:
+
+    .. math::
+
+        V_{nb} = \sum_{i,j}\left(\varepsilon_{ij}\left[\left(\frac{\sigma_{ij}}{r_{ij}}\right)^{12}-2\left(\frac{\sigma_{ij}}{r_{ij}}\right)^{6}\right] + k_c\frac{q_{i}q_{j}}{r_{ij}}\right)
+
+To get the forces out of this, we need to compute the gradient of the potential with respect to the coordinates of the particle in question.
+The formula for the interatomic force acting on the ``i``-th particle is:
+
+    .. math::
+
+        \mathbf{f}_i = \sum_{j}\left(-12\varepsilon_{ij}\left(\frac{\sigma_{ij}}{r_{ij}}\right)^{6}\left[\left(\frac{\sigma_{ij}}{r_{ij}}\right)^{6}-1\right]\frac{1}{r_{ij}^2}\frac{\mathbf{r}_{ij}}{r_{ij}}-k_c\frac{q_{i}q_{j}}{r_{ij}^2}\frac{\mathbf{r}_{ij}}{r_{ij}} \right)
+
+    .. exercise::
+
+        Derive the expression above.
+
+Here, :math:`\mathbf{r}_{ij}` is the vector, connecting ``i``-th and ``j``-th particles and ::math:`r_{ij}` is its length.
+
+    .. code::
+
+        for (int i = 0; i < N; i++)
+        {
+            for (int j = 0; j < i; j++)
+            {
+                float dx = atoms[i].x - atoms[j].x;
+                float dy = atoms[i].y - atoms[j].y;
+                float dz = atoms[i].z - atoms[j].z;
+
+                float dr2 = dx*dx + dy*dy + dz*dz;
+                float sigma = 0.5*(atoms[i].sigma + atoms[j].sigma);
+                float epsilon = sqrtf(atoms[i].epsilon*atoms[j].epsilon);
+                float sigma2 = sigma*sigma;
+                float sor2 = sigma2/dr2;
+                float sor6 = sor2*sor2*sor2;
+                float df = 12.0*epsilon*sor6*(sor6 - 1.0)/dr2;
+
+                float dr = sqrtf(dr2);
+                df += KC*atoms[i].q*atoms[j].q/(dr2*dr);
+
+                atoms[i].fx += df*dx;
+                atoms[i].fy += df*dy;
+                atoms[i].fz += df*dz;
+
+                atoms[j].fx -= df*dx;
+                atoms[j].fy -= df*dy;
+                atoms[j].fz -= df*dz;
+            }
+        }
+
+Note that in the code above we took advantage of the Newton third law and compute force between two particle once and add the increment to both particles force but with opposite signs.
+This requires us to use separate loop over atoms: all the forces should be computed before we integrate the equations of motion.
+
+Before we test the code, there are two thing to fix.
+First, the vector, connecting particles ``i`` and ``j`` and its length should be computed with periodic boundary conditions in mind: the closest distance between any periodic image of particle ``i`` and any periodic image of particle ``j`` should be taken.
+Likely, this is easier than going through all the images: from every component of the vector :math:`\mathbf{r}_{ij}`, we should subtract the integer number of the box length in it.
+To fix this, edit the code:
+
+    .. code::
+
+        for (int i = 0; i < N; i++)
+        {
+            for (int j = 0; j < i; j++)
+            {
+                float dx = atoms[i].x - atoms[j].x;
+                float dy = atoms[i].y - atoms[j].y;
+                float dz = atoms[i].z - atoms[j].z;
+
+                dx -= rint(dx/L)*L;
+                dy -= rint(dy/L)*L;
+                dz -= rint(dz/L)*L;
+
+                ...
+            }
+        }
+
+Secondly, we are accumulating forces for each particle.
+To make sure that we don't keep these increments from the previous steps, we need to set forces to zero after the numerical integration timestep is done:
+
+    .. code::
+
+        atoms[i].fx = 0.0;
+        atoms[i].fy = 0.0;
+        atoms[i].fz = 0.0;
+
+
+Monitoring and controlling temperature of the system
+----------------------------------------------------
+
+
+
+The final code
+--------------
+
+If one puts all the above together, they end up with something similar to the following code snippet:
 
     .. code::
 
@@ -445,7 +547,6 @@ Because of the way we implemented the function, is should be called for every co
                         float dy = atoms[i].y - atoms[j].y;
                         float dz = atoms[i].z - atoms[j].z;
 
-                        // Check these
                         dx -= rint(dx/L)*L;
                         dy -= rint(dy/L)*L;
                         dz -= rint(dz/L)*L;
@@ -515,3 +616,7 @@ Because of the way we implemented the function, is should be called for every co
                 }
             }
         }
+
+Big problem with the code above
+-------------------------------
+

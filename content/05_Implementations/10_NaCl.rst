@@ -218,6 +218,101 @@ Now we can add the call to this function to write the initial frame:
 
         saveFrame("nacl.xyz", "w", atoms);
 
+If you compile and execute the code, you should have ``nacl.xyz`` file, which can be visualized with e.g. VMD software.
+It is better to look at in VdW representation, that shows Van-der-Waals spheres for particles.
+
+Integrating equations of motion and applying periodic boundary conditions
+-------------------------------------------------------------------------
+
+We have the static picture of the system.
+Let us now make the atoms move by integrating their equations of motion numerically.
+Before implementing the numerical integration, we need to define its parameters: the timestep and the number of steps:
+
+    .. code::
+
+        #define NSTEPS 1000000
+        #define tau 0.001  // ps
+
+We used the timestep of 1 fs, which should be plenty small: we already showed that Leap-Frog method is stable with this timestep even if we have fast harmonic bond oscillations.
+Now, let us add a main loop in which we are going to do these integration steps.
+On each step, for each atom, we need to re-compute its velocities and positions according to the integration scheme.
+We will use the Leap-Frog algorithm:
+
+    .. math::
+
+        \mathbf{v}_{i}^{n+\frac{1}{2}} = \mathbf{v}_{i}^{n-\frac{1}{2}} + \frac{\mathbf{f}_{i}^{n}}{m_i}\tau
+
+        \mathbf{r}_{i}^{n+1} = \mathbf{r}_{i}^{n} + \mathbf{v}_{i}^{n+\frac{1}{2}}\tau
+
+In the code, this renders to:
+
+    .. code::
+
+        for (int n = 0; n < NSTEPS; n++)
+        {
+            for (int i = 0; i < N; i++)
+            {
+                float mult = tau/atoms[i].m;
+
+                atoms[i].vx = atoms[i].vx + mult*atoms[i].fx;
+                atoms[i].vy = atoms[i].vy + mult*atoms[i].fy;
+                atoms[i].vz = atoms[i].vz + mult*atoms[i].fz;
+
+                atoms[i].x = atoms[i].x + tau*atoms[i].vx;
+                atoms[i].y = atoms[i].y + tau*atoms[i].vy;
+                atoms[i].z = atoms[i].z + tau*atoms[i].vz;
+            }
+        }
+We also want to save the positions of atoms every now and then (say, every 100 steps).
+To do so, we can use the function we implemented earlier by calling it with ``a`` modifier:
+
+    .. code::
+
+        if (n % 100 == 0)
+        {
+            saveFrame("nacl.xyz", "a", atoms);
+        }
+
+Note that this should be placed inside the loop over the time steps, but not inside the loop over the particles.
+
+If one to compile and run the code, they will see that particles are floating away from the initial box they we put in.
+This is because we are not using any boundary conditions yet.
+In molecular dynamics, the most common boundary conditions are Periodic Boundary Conditions or PBC.
+These affect system in two ways.
+First, when particle floats from the box, it is moved as if it enters from the other side.
+Second, when the distances are computed, one should select the distance between the nearest images of the particles.
+We will deal with the second part later, let us do the first.
+
+What we need to do is transfer the particle to the other side if the box if it crosses the border.
+Since our box is quadratic, we can do this one component at a time.
+There are two options to go beyond the border then: when the component of the position of the particle becomes negative, or when it is larger than the size of the box L:
+
+    .. code::
+
+        float transferPBC(float x)
+        {
+            if (x < 0)
+            {
+                return x + L;
+            }
+            else if (x > L)
+            {
+                return x - L;
+            }
+            return x;
+        }
+
+This method only works when particles moved no further than one unit cell (i.e. crossed the border only once).
+There are more robust methods, but in the interest of clarity we stick with this simple method for now.
+Now we need to call this function during the simulation so that the particles are transferred to the initial box.
+Because of the way we implemented the function, is should be called for every component of the position for every atom, which can be done right after moving atoms in the integrator:
+
+    .. code::
+
+        atoms[i].x = transferPBC(atoms[i].x);
+        atoms[i].y = transferPBC(atoms[i].y);
+        atoms[i].z = transferPBC(atoms[i].z);
+
 
     .. code::
 
@@ -228,13 +323,14 @@ Now we can add the call to this function to write the initial frame:
         #include <random>
 
         #define N  100
-        #define NSTEPS 1000000
+        #define L  5.0  // nm
+    
         #define T  300.0 // K
 
         #define KB 8.314462e-3 // kJ/mol/K
         #define KC 138.9118    // nm*kJ/mol/e^2 
 
-        #define L  5.0  // nm
+        #define NSTEPS 1000000
         #define tau 0.001  // ps
 
         #define Q_NA  1.0 // Elementary charge

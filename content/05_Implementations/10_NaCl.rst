@@ -409,6 +409,27 @@ To make sure that we don't keep these increments from the previous steps, we nee
 Monitoring and controlling temperature of the system
 ----------------------------------------------------
 
+We would expect that after running the simulation for a while, we will have a partly of fully formed NaCl crystal.
+However, this is not what is happening.
+The reason is following.
+When we assigned the initial velocities to the atoms, we used Maxwell-Boltzmann distribution.
+These velocities correspond to the temperature of 300K and should give us the kinetic energy that also corresponds to 300K.
+However, we did not do the same with positions and potential energy --- we just placed the particles randomly in the selected compartment.
+Because of that, the initial configuration of the system (i.e. randomly placed particles) has an excess in potential energy.
+During the simulations, the extra energy makes its way into the kinetic energy, particles accelerate and never form crystal.
+The effective temperature is just too high.
+
+Let us check if this is the case.
+We can use Maxwell-Boltzmann distribution again, only now we are going to get the actual temperature of the system out of particles velocities.
+The formula that we are going to use is:
+
+    .. math::
+
+        T=\langle \frac{m_iv_i^2}{3k_B}\rangle
+
+Where :math:`m_i` and :math:`v_i` are the mass and velocity of the particle, :math:`k_B` is Boltzmann constant.
+The angular brackets represent average over all particles.
+Since our molecular system is soo small, we also are going to take the average over time, otherwise the value of
 
 
 The final code

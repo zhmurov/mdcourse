@@ -431,6 +431,68 @@ Where :math:`m_i` and :math:`v_i` are the mass and velocity of the particle, :ma
 The angular brackets represent average over all particles.
 Since our molecular system is soo small, we also are going to take the average over time, otherwise the value of
 
+To do the averaging, we are going to need two numbers: a real number to accumulate the sum of all the temperatures for all particles across the system and an integer that will keep the quantity of the numbers added.
+The integer is not required since we can always compute it as a product of the number of particles and number of steps that we were accumulating.
+But to avoid mistakes it is better to add one to this number every time we accumulate.
+We are also adding the variable to keep last computed temperature, which is going to be useful later.
+Initially, we set it to ``T`` since this is the temperature that corresponds to the initial velocities of the particles.
+
+    .. code::
+
+        double temperature = 0.0;
+        int nTemperature = 0;
+        float currentTemperature = T;
+
+Note that we used ``double`` here.
+We are going to add small number to a relatively large sum.
+It is better to use double precision in such cases to avoid round-up errors.
+
+Now, on each timestep and for each particle, we are going to add :math:`m_iv_i^2` to ``temperature`` and add one to ``nTemperature``:
+
+    .. code::
+
+        float v2 = atoms[i].vx*atoms[i].vx + 
+        atoms[i].vy*atoms[i].vy +
+        atoms[i].vz*atoms[i].vz;
+
+        temperature += atoms[i].m*v2;
+        nTemperature ++;
+
+To compute and print the temperature:
+
+    .. code::
+
+        currentTemperature = (temperature/(3.0*KB))/nTemperature;
+        printf("%d\t%f\n", n, currentTemperature);
+        temperature = 0.0;
+        nTemperature = 0;
+
+Note that we divide by :math:`3k_B` on the later stage in order to do the division only once, which is better from the performance standpoint.
+
+If we ran the code, we will see that the temperature rises from its initial value of 300K, which is expected: we have too much extra potential energy in our initial conformation.
+In order to control the current temperature, we are going to employ basic thermostat, that will scale the velocities of particles on each timestep.
+Since the computed temperature is not exact and will oscillate, we are going to smooth the scaling by employing the relaxation time constant, :math:`\tau_r`.
+With this constant, the scaling factor is:
+
+    .. math::
+
+        s_v=\sqrt{1 - \frac{(T_c-T)*\tau}{T*\tau_r}}
+
+Here, :math:`T_c` and :math:`T` are our current (computed) and target temperatures, :math:`\tau` is the timestep and :math:`\tau_r` is the relaxation time.
+Note that the relaxation time should be larger than the timestep and larger than periods with which we update the current temperature.
+In the code, the temperature control renders to the definition of relaxation time and scaling of the velocities when we integrate:
+
+    .. code::
+
+        ...
+        #define relax 10.0
+        ...
+        float scale = sqrtf(1.0 - ((currentTemperature-T)*tau)/(T*relax));
+        atoms[i].vx *= scale;
+        atoms[i].vy *= scale;
+        atoms[i].vz *= scale;
+
+Run the code to see that the temperature is leveling off on the target of 300K.
 
 The final code
 --------------
@@ -512,7 +574,6 @@ If one puts all the above together, they end up with something similar to the fo
 
         int main(int argc, char* argv[])
         {
-            float currentTemperature = T;
             std::vector<Atom> atoms(N);
 
             std::random_device randomDevice;
@@ -557,6 +618,7 @@ If one puts all the above together, they end up with something similar to the fo
 
             double temperature = 0.0;
             int nTemperature = 0;
+            float currentTemperature = T;
 
             for (int n = 0; n < NSTEPS; n++)
             {
@@ -641,3 +703,9 @@ If one puts all the above together, they end up with something similar to the fo
 Big problem with the code above
 -------------------------------
 
+There is one big problem with the code above, which can not be easily addressed.
+When we compute the distance between two particles, we take into account the periodic boundary conditions.
+This means, that any component of the :math:`r_{ij}` vector that connect two particles can not be larger than half of the simulation box.
+What happens is when the distance becomes larger, we switch to another periodic image of the particle.
+This creates an artificial mimima in the interaction potential on the half-box length.
+Throughout the simulations, some of the particles can be dragged to this minima

@@ -69,7 +69,7 @@ About the course
 See also
 --------
 
-
+:download:`MIPT materials <Files/Lectures8.pdf>`
 
 
 

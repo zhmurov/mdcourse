@@ -19,8 +19,3 @@ Protein folding
 ------------------
 
     .. youtube:: bodPd817I58
-
-Viral capsid
-------------
-
-    .. youtube:: rCIKhxrL75E

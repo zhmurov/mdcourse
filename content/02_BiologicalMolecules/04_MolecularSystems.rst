@@ -1,6 +1,14 @@
 Molecular systems
 =================
 
+Viral capsid
+------------
+
+    .. youtube:: rCIKhxrL75E
+
+Exercise
+--------
+
     .. exercise::
 
         From `Molecule of the Month <https://pdb101.rcsb.org/motm/motm-by-date>`_ listing of `Protein Data Bank <https://www.rcsb.org/>`_, select one molecule that you like.

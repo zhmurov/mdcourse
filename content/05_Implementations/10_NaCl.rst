@@ -429,7 +429,8 @@ The formula that we are going to use is:
 
 Where :math:`m_i` and :math:`v_i` are the mass and velocity of the particle, :math:`k_B` is Boltzmann constant.
 The angular brackets represent average over all particles.
-Since our molecular system is soo small, we also are going to take the average over time, otherwise the value of
+Since our molecular system is small, we also are going to take the average over time.
+This will allow us to get better average with less noise.
 
 To do the averaging, we are going to need two numbers: a real number to accumulate the sum of all the temperatures for all particles across the system and an integer that will keep the quantity of the numbers added.
 The integer is not required since we can always compute it as a product of the number of particles and number of steps that we were accumulating.

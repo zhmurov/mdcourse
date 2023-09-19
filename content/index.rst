@@ -9,12 +9,13 @@ Molecular dynamics simulations
 
 .. toctree::
    :maxdepth: 1
-   :caption: MD simulations of biological molecules
+   :caption: Biological molecules
 
    02_BiologicalMolecules/01_Water
-   02_BiologicalMolecules/02_Proteins
-   02_BiologicalMolecules/03_DNA
-   02_BiologicalMolecules/04_MolecularSystems
+   02_BiologicalMolecules/02_AminoAcids
+   02_BiologicalMolecules/03_Proteins
+   02_BiologicalMolecules/04_DNA
+   02_BiologicalMolecules/05_MolecularSystems
 
 .. toctree::
    :maxdepth: 1

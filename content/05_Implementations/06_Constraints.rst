@@ -5,7 +5,7 @@ Equations of motion for the :math:`k`-th particle:
 
     .. math::
 
-        m_k\frac{d^2\mathbf{r}_k}{dt^2}=-\frac{\partial}{\partial \mathbf{r}_k}V\left(\{\mathbf{r}\}\right)=-\nabla_kU\left(\{\mathbf{r}\}\right)
+        m_k\frac{d^2\mathbf{r}_k}{dt^2}=-\frac{\partial}{\partial \mathbf{r}_k}V\left(\{\mathbf{r}\}\right)=-\nabla_kV\left(\{\mathbf{r}\}\right)
 
 Same equations with constraints:
 

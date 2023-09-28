@@ -25,7 +25,7 @@ The ''constrain'' force :math:`\delta\mathbf{f}_k` is then:
 
     .. math::
 
-        \delta\mathbf{f}_k=\frac{\partial}{\partial\mathbf{r}_k}\sum_{c=1}{C}\lambda_c\sigma_c\left(\{\mathbf{r}\}\right)=\sum_{c=1}{C}\lambda_c\frac{\partial}{\partial\mathbf{r}_k}\sigma_c\left(\{\mathbf{r}\}\right)=\sum_{c=1}{C}\lambda_c2\delta_{km}\delta_{kl}\mathbf{r}_{ml}
+        \delta\mathbf{f}_k=\frac{\partial}{\partial\mathbf{r}_k}\sum_{c=1}^{C}\lambda_c\sigma_c\left(\{\mathbf{r}\}\right)=\sum_{c=1}^{C}\lambda_c\frac{\partial}{\partial\mathbf{r}_k}\sigma_c\left(\{\mathbf{r}\}\right)=\sum_{c=1}^{C}\lambda_c2\delta_{km}\delta_{kl}\mathbf{r}_{ml}
 
 Numerical integration
 ---------------------
@@ -86,4 +86,4 @@ Before applying the above formula to specific cases, let us simplify the notatio
 One constraint
 --------------
 
-The simplest case by far is when we have a single constraint, which is not coupled to any other. An example should be the constrained C-H bond in the protein backbone in the case when only bonds with hydrogens are constrained (with the only exception of glycine, where there is another hydrogen instead of a side-chain). Indeed, this case is very simple: we have the direction of the bond in which atoms should be moved. And the sum of the displacements for two moved atoms should be so that the final distance is equal to the target. The displacements are reversely proportional to masses of atoms. Let us derive this formally, using the Equation :eq:`mu` above.
+The simplest case by far is when we have a single constraint, which is not coupled to any other. An example should be the constrained C-H bond in the protein backbone in the case when only bonds with hydrogens are constrained (with the only exception of glycine, where there is another hydrogen instead of a side-chain). Indeed, this case is very simple: we have the direction of the bond in which atoms should be moved. And the sum of the displacements for two moved atoms should be so that the final distance is equal to the target. The displacements are reversely proportional to masses of atoms. Let us derive this formally, using the :eq:`mu` above.

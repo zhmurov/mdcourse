@@ -5,13 +5,13 @@ Equations of motion for the :math:`k`-th particle:
 
     .. math::
 
-        m_k\frac{d\mathbf{r}_k}{dt^2}=-\frac{\partial}{\partial \mathbf{r}_k}U\left(\{\mathbf{r}\}\right)=-\nabla_kU\left(\{\mathbf{r}\}\right)
+        m_k\frac{d^2\mathbf{r}_k}{dt^2}=-\frac{\partial}{\partial \mathbf{r}_k}V\left(\{\mathbf{r}\}\right)=-\nabla_kU\left(\{\mathbf{r}\}\right)
 
 Same equations with constraints:
 
     .. math::
 
-        m_k\frac{d\mathbf{r}_k}{dt^2}=-\frac{\partial}{\partial \mathbf{r}_k}\left(U\left(\{\mathbf{r}\}\right)+\sum_{c=1}^C\lambda_c\sigma_c\left(\{\mathbf{r}\}\right)\right)=\mathbf{f}_k+\delta\mathbf{f}_k
+        m_k\frac{d^2\mathbf{r}_k}{dt^2}=-\frac{\partial}{\partial \mathbf{r}_k}\left(V\left(\{\mathbf{r}\}\right)+\sum_{c=1}^C\lambda_c\sigma_c\left(\{\mathbf{r}\}\right)\right)=\mathbf{f}_k+\delta\mathbf{f}_k
 
 Where
 
@@ -34,7 +34,7 @@ Since
 
     .. math::
 
-        m_k\frac{d\mathbf{r}_k}{dt^2}=\mathbf{f}_k+\delta\mathbf{f}_k
+        m_k\frac{d^2\mathbf{r}_k}{dt^2}=\mathbf{f}_k+\delta\mathbf{f}_k
 
 (add numerical scheme here to show how lambda and mu are related)
 

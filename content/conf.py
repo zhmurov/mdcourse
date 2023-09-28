@@ -70,6 +70,9 @@ exclude_patterns = [
 html_theme = "sphinx_rtd_theme"
 
 numfig = True
+math_numfig = True
+numfig_secnum_depth = 2
+math_eqref_format = "Eq.{number}"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

@@ -116,7 +116,7 @@ We start with re-writing the basic scheme but using the central point to where t
 
     .. math::
 
-        m_i\frac{\mathbf{v}_{i}(t+\frac{\Delta t}{2})-\mathbf{v}_{i}(t-\frac{\Delta t}{2})}{\Delta t} = \mathbf{f}_{i}(t)
+        m_i\frac{\mathbf{v}_{i}(t+\frac{\Delta t}{2})-\mathbf{v}_{i}(t-\frac{\Delta t}{2})}{\Delta t} = \mathbf{f}_{i}(\{\mathbf{r(t)}\})
 
         \frac{\mathbf{r}_{i}(t+\Delta t)-\mathbf{r}_{i}(t)}{\Delta t} = \mathbf{v}_{i}(t+\frac{\Delta t}{2})
 

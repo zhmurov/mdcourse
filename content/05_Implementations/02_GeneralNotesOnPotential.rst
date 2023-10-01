@@ -1,6 +1,10 @@
 From potential energy to atomic forces
 ======================================
 
+    .. math::
+
+        V = V_{bonded} + V_{nb}
+
 First, let us derive a couple of general expression that should help us later.
 Consider a system of :math:`N` particles.
 Assume, that the potential energy of the system depends on the coordinates of the particles :math:`V=V(\{\mathbf{r}_i\})=V(\mathbf{r}_1, \mathbf{r}_2, \ldots \mathbf{r}_N)`.

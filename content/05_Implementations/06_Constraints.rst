@@ -88,7 +88,7 @@ One constraint
 
 The simplest case by far is when we have a single constraint, which is not coupled to any other. An example should be the constrained C-H bond in the protein backbone in the case when only bonds with hydrogens are constrained (with the only exception of glycine, where there is another hydrogen instead of a side-chain). Indeed, this case is very simple: we have the direction of the bond in which atoms should be moved. And the sum of the displacements for two moved atoms should be so that the final distance is equal to the target. The displacements are reversely proportional to masses of atoms. Let us derive this formally, using the :eq:`mu` above.
 
-We have one constraint :math:`c=1={0,1}` that connects two atoms :math:`i=0` and :math:`j=1` with masses :math:`m_0` and :math:`m_1`. We will also denote all the connecting vectors with constrain index, i.e. :math:`\mathbf{r}_1=\mathbf{r}_{01}=\mathbf{r}_0-\mathbf{r}_1`, etc. so there is less noise in formulas. Note that we could remove the index altogether since there is only one constrained bond, but we will keep the index here for consistency with the rest of the cases. The sole equation derived from :eq:`mu` is:
+We have one constraint :math:`c=1=\{0,1\}` that connects two atoms :math:`i=0` and :math:`j=1` with masses :math:`m_0` and :math:`m_1`. We will also denote all the connecting vectors with constrain index, i.e. :math:`\mathbf{r}_1=\mathbf{r}_{01}=\mathbf{r}_0-\mathbf{r}_1`, etc. so there is less noise in formulas. Note that we could remove the index altogether since there is only one constrained bond, but we will keep the index here for consistency with the rest of the cases. The sole equation derived from :eq:`mu` is:
 
     .. math::
 
@@ -130,3 +130,44 @@ As expected for quadratic equation, we have two solutions. However only one is v
 Two coupled constraints
 -----------------------
 
+Two coupled constraints will give us a much more complicated case of two coupled quadratic equations. Assuming that the central atom has index :math:`0`, with atoms :math:`1` and :math:`2` connected to it with two constrained bonds :math:`c=1=\{0,1\}` and :math:`c=2=\{0.2\}`, and using the reduced masses :math:`M_1=\frac{m_0m_1}{m_0+m_1}` and :math:`M_2=\frac{m_0m_2}{m_0+m_2}`, from :eq:`mu` we get:
+
+    .. math::
+
+        \begin{cases}
+        \left(\mathbf{r}_{1}^*+\frac{\mu_1}{M_1}\mathbf{r}_1^0+\frac{\mu_2}{m_0}\mathbf{r}_2^0\right)^2-d_1^2=0 \\
+        \left(\mathbf{r}_{2}^*+\frac{\mu_1}{m_0}\mathbf{r}_1^0+\frac{\mu_2}{M_2}\mathbf{r}_2^0\right)^2-d_1^2=0
+        \end{cases}
+
+    .. math::
+        :label: SystemTwoCoupled
+
+        \begin{cases}
+        k_1^{11}\mu_1^2+k_1^{22}\mu_2^2+k_1^{12}\mu_1\mu_2+k_1^1\mu_1+k_1^2\mu_2+k_1^0=0 \\
+        k_2^{11}\mu_1^2+k_2^{22}\mu_2^2+k_2^{12}\mu_1\mu_2+k_2^1\mu_1+k_2^2\mu_2+k_2^0=0
+        \end{cases}
+
+Where
+
+    .. math::
+
+        \begin{split}
+            k_1^{11}=\frac{{\mathbf{r}_1^0}^2}{M_1^2}\mathrm{,~~}
+            k_1^{22}=\frac{{\mathbf{r}_2^0}^2}{m_0^2}\mathrm{,~~}
+            k_1^{12}=\frac{2\left(\mathbf{r}_1^0\cdot\mathbf{r}_2^0\right)}{M_1m_0}\mathrm{,} \\
+            k_1^1=\frac{2\left(\mathbf{r}_1^*\cdot\mathbf{r}_1^0\right)}{M_1}\mathrm{,~~}
+            k_1^2=\frac{2\left(\mathbf{r}_1^*\cdot\mathbf{r}_2^0\right)}{m_0}\mathrm{,~~}
+            k_1^0={\mathbf{r}_1^*}^2-d_1^2\mathrm{,~~} \\ \\
+            k_2^{11}=\frac{{\mathbf{r}_1^0}^2}{m_0^2}\mathrm{,~~}
+            k_2^{22}=\frac{{\mathbf{r}_2^0}^2}{M_2^2}\mathrm{,~~}
+            k_2^{12}=\frac{2\left(\mathbf{r}_1^0\cdot\mathbf{r}_2^0\right)}{M_2m_0}\mathrm{,} \\
+            k_2^1=\frac{2\left(\mathbf{r}_2^*\cdot\mathbf{r}_1^0\right)}{m_0}\mathrm{,~~}
+            k_2^2=\frac{2\left(\mathbf{r}_2^*\cdot\mathbf{r}_2^0\right)}{M_2}\mathrm{,~~}
+            k_2^0={\mathbf{r}_2^*}^2-d_2^2\mathrm{.}
+        \end{split}
+
+If we introduce two dimensional vector-function :math:`F(\mu_1, \mu_2)` in :eq:`SystemTwoCoupled` so that it becomes:
+
+    .. math::
+
+        \mathbf{F}(\mu_1, \mu_2) = \mathbf{0}

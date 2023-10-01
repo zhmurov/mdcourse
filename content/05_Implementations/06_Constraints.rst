@@ -103,6 +103,7 @@ With reduced mass :math:`M_1=\frac{m_0m_1}{m_0+m_1}`:
 Expanding:
 
     .. math::
+        :label: EquationOneUncoupled
 
         \mu_1^2\frac{{\mathbf{r}_1^0}^2}{M_1^2}+2\mu_1\frac{\left(\mathbf{r}_1^*\cdot\mathbf{r}_1^0\right)}{M_1}+\left({\mathbf{r}_1^*}^2-d_1^2\right)=0
 
@@ -126,6 +127,20 @@ As expected for quadratic equation, we have two solutions. However only one is v
     .. math::
 
         {\mu_1}_{1,2}=M_1\frac{\sqrt{\left(\left(\mathbf{r}_1^*\cdot\mathbf{r}_1^0\right)^2-{\mathbf{r}_1^0}^2\left({\mathbf{r}_1^*}^2-d_1^2\right)\right)}-\left(\mathbf{r}_1^*\cdot\mathbf{r}_1^0\right)}{{\mathbf{r}_1^0}^2}
+
+Though this equation is quite simple, we need to prepare ourselves to the following cases. So let us introduce the notations for all the coefficients in the :eq:`EquationOneUncoupled`, re-writing it as:
+
+    .. math::
+
+        k_1^{11}\mu_1^2+k_1^1\mu_1+k_1^0=0
+
+Here, the indices for parameters :math:`k_x^y` are chosen the following way. The bottom index is the number of equation (we have one so far). The top indexes indicate what combination of variables :math:`mu` this coefficient is multiplied by: :math:`k_1^{11}` is for :math:`\mu_1\mu_1=\mu^2`, :math:`k_1^1` is for :math:`\mu_1` and :math:`0` is for free coefficient. Later we will encounter other variables (:math:`\mu_2`, :math:`\mu_3`, etc.), for which we will have :math:`k_1^{22}`, :math:`k_1^{33}` as well as some mixed products, e.g. :math:`\mu_1\mu_2` with :math:`k_1^{12}`, etc. As follows from :eq:`EquationOneUncoupled`, in the case of one uncoupled constraint, there are three coefficient:
+
+    .. math::
+
+        k_1^{11}=\frac{{\mathbf{r}_1^0}^2}{M_1^2}\mathrm{,~~}
+        k_1^1=\frac{2\left(\mathbf{r}_1^*\cdot\mathbf{r}_1^0\right)}{M_1}\mathrm{,~~}
+        k_1^0={\mathbf{r}_1^*}^2-d_1^2
 
 Two coupled constraints
 -----------------------

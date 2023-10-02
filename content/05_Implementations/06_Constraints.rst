@@ -161,7 +161,7 @@ Two coupled constraints will give us a much more complicated case of two coupled
 
         \begin{cases}
         \left(\mathbf{r}_{1}^*+\frac{\mu_1}{M_1}\mathbf{r}_1^0+\frac{\mu_2}{m_0}\mathbf{r}_2^0\right)^2-d_1^2=0 \\
-        \left(\mathbf{r}_{2}^*+\frac{\mu_1}{m_0}\mathbf{r}_1^0+\frac{\mu_2}{M_2}\mathbf{r}_2^0\right)^2-d_1^2=0
+        \left(\mathbf{r}_{2}^*+\frac{\mu_1}{m_0}\mathbf{r}_1^0+\frac{\mu_2}{M_2}\mathbf{r}_2^0\right)^2-d_2^2=0
         \end{cases}
 
     .. math::
@@ -228,3 +228,62 @@ With everything in the :eq:`SystemTwoCoupledNewton` derived, we need good initia
         \end{split}
 
 The numerical procedure to evaluate :math:`\mu_1` and :math:`\mu_2` is then contains following steps. (1) Compute coefficients in :eq:`SystemTwoCoupledKs`. (2) Use :eq:`CoupledMyAsUncoupledThroughK` to get initial approximations :math:`\mu_1^0` and :math:`\mu_2^0` for :math:`\mu_1` and :math:`\mu_2`. (3) Compute :math:`\mathbf{F}(\mu_1, \mu_2)` using :eq:`SystemTwoCoupled` and :math:`J_\mathbf{F}\left(\mu_1, \mu_2\right)`, invert the matrix :math:`J_\mathbf{F}` (one can derive formulas to compute the inverse Jakobian directly, without computing the Jakobian itself). (4) Apply the :eq:`SystemTwoCoupledNewton` to get the next iteration values for :math:`\mu_1` and :math:`\mu_2`. (5) Repeat steps (3) and (4) until convergence.
+
+
+Three constraints coupled through the central atom
+--------------------------------------------------
+
+    .. math::
+
+        \begin{cases}
+        \left(\mathbf{r}_{1}^*+\frac{\mu_1}{M_1}\mathbf{r}_1^0+\frac{\mu_2}{m_0}\mathbf{r}_2^0+\frac{\mu_3}{m_0}\mathbf{r}_3^0\right)^2-d_1^2=0 \\
+        \left(\mathbf{r}_{2}^*+\frac{\mu_1}{m_0}\mathbf{r}_1^0+\frac{\mu_2}{M_2}\mathbf{r}_2^0+\frac{\mu_3}{m_0}\mathbf{r}_3^0\right)^2-d_2^2=0 \\
+        \left(\mathbf{r}_{3}^*+\frac{\mu_1}{m_0}\mathbf{r}_1^0+\frac{\mu_2}{m_0}\mathbf{r}_2^0+\frac{\mu_3}{M_3}\mathbf{r}_3^0\right)^2-d_3^2=0 \\
+        \end{cases}
+
+    .. math::
+        :label: SystemThreeCoupled
+
+        \begin{cases}
+        k_1^{11}\mu_1^2+k_1^{22}\mu_2^2+k_1^{33}\mu_3^2+k_1^{12}\mu_1\mu_2+k_1^{13}\mu_1\mu_3+k_1^{23}\mu_2\mu_3+k_1^1\mu_1+k_1^2\mu_2+k_1^3\mu_3+k_1^0=0 \\
+        k_2^{11}\mu_1^2+k_2^{22}\mu_2^2+k_2^{33}\mu_3^2+k_2^{12}\mu_1\mu_2+k_2^{13}\mu_1\mu_3+k_2^{23}\mu_2\mu_3+k_2^1\mu_1+k_2^2\mu_2+k_2^3\mu_3+k_2^0=0 \\
+        k_3^{11}\mu_1^2+k_3^{22}\mu_2^2+k_3^{33}\mu_3^2+k_3^{12}\mu_1\mu_2+k_3^{13}\mu_1\mu_3+k_3^{23}\mu_2\mu_3+k_3^1\mu_1+k_3^2\mu_2+k_3^3\mu_3+k_3^0=0
+        \end{cases}
+
+Where
+
+    .. math::
+        :label: SystemThreeCoupledKs
+
+        \begin{split}
+            k_1^{11}=\frac{{\mathbf{r}_1^0}^2}{M_1^2}\mathrm{,~~}
+            k_1^{22}=\frac{{\mathbf{r}_2^0}^2}{m_0^2}\mathrm{,~~}
+            k_1^{33}=\frac{{\mathbf{r}_3^0}^2}{m_0^2}\mathrm{,} \\
+            k_1^{12}=\frac{2\left(\mathbf{r}_1^0\cdot\mathbf{r}_2^0\right)}{M_1m_0}\mathrm{,~~}
+            k_1^{13}=\frac{2\left(\mathbf{r}_1^0\cdot\mathbf{r}_3^0\right)}{M_1m_0}\mathrm{,~~}
+            k_1^{23}=\frac{2\left(\mathbf{r}_2^0\cdot\mathbf{r}_3^0\right)}{m_0^2}\mathrm{,} \\
+            k_1^1=\frac{2\left(\mathbf{r}_1^*\cdot\mathbf{r}_1^0\right)}{M_1}\mathrm{,~~}
+            k_1^2=\frac{2\left(\mathbf{r}_1^*\cdot\mathbf{r}_2^0\right)}{m_0}\mathrm{,~~}
+            k_1^3=\frac{2\left(\mathbf{r}_1^*\cdot\mathbf{r}_3^0\right)}{m_0}\mathrm{,~~}
+            k_1^0={\mathbf{r}_1^*}^2-d_1^2\mathrm{,~~} \\ \\
+            k_2^{11}=\frac{{\mathbf{r}_1^0}^2}{m_0^2}\mathrm{,~~}
+            k_2^{22}=\frac{{\mathbf{r}_2^0}^2}{M_2^2}\mathrm{,~~}
+            k_2^{33}=\frac{{\mathbf{r}_3^0}^2}{m_0^2}\mathrm{,} \\
+            k_2^{12}=\frac{2\left(\mathbf{r}_1^0\cdot\mathbf{r}_2^0\right)}{M_2m_0}\mathrm{,~~}
+            k_2^{13}=\frac{2\left(\mathbf{r}_1^0\cdot\mathbf{r}_3^0\right)}{m_0^2}\mathrm{,~~}
+            k_2^{23}=\frac{2\left(\mathbf{r}_2^0\cdot\mathbf{r}_3^0\right)}{M_2m_0}\mathrm{,} \\
+            k_2^1=\frac{2\left(\mathbf{r}_2^*\cdot\mathbf{r}_1^0\right)}{m_0}\mathrm{,~~}
+            k_2^2=\frac{2\left(\mathbf{r}_2^*\cdot\mathbf{r}_2^0\right)}{M_2}\mathrm{,~~}
+            k_2^3=\frac{2\left(\mathbf{r}_2^*\cdot\mathbf{r}_3^0\right)}{m_0}\mathrm{,~~}
+            k_2^0={\mathbf{r}_2^*}^2-d_2^2\mathrm{,~~} \\ \\
+            k_3^{11}=\frac{{\mathbf{r}_1^0}^2}{m_0^2}\mathrm{,~~}
+            k_3^{22}=\frac{{\mathbf{r}_2^0}^2}{m_0^2}\mathrm{,~~}
+            k_3^{33}=\frac{{\mathbf{r}_3^0}^2}{M_3^2}\mathrm{,} \\
+            k_3^{12}=\frac{2\left(\mathbf{r}_1^0\cdot\mathbf{r}_2^0\right)}{m_0^2}\mathrm{,~~}
+            k_3^{13}=\frac{2\left(\mathbf{r}_1^0\cdot\mathbf{r}_3^0\right)}{M_3m_0}\mathrm{,~~}
+            k_3^{23}=\frac{2\left(\mathbf{r}_2^0\cdot\mathbf{r}_3^0\right)}{M_3m_0}\mathrm{,} \\
+            k_3^1=\frac{2\left(\mathbf{r}_3^*\cdot\mathbf{r}_1^0\right)}{m_0}\mathrm{,~~}
+            k_3^2=\frac{2\left(\mathbf{r}_3^*\cdot\mathbf{r}_2^0\right)}{m_0}\mathrm{,~~}
+            k_3^3=\frac{2\left(\mathbf{r}_3^*\cdot\mathbf{r}_3^0\right)}{M_3}\mathrm{,~~}
+            k_3^0={\mathbf{r}_3^*}^2-d_3^2\mathrm{,~~} \\ \\
+        \end{split}

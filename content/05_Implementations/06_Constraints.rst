@@ -125,8 +125,9 @@ Plugging the :math:`D_2` into the solution gives:
 As expected for quadratic equation, we have two solutions. However only one is valid for our problem: the one that gives smaller absolute value of :math:`mu`. This is because we assume that the bond length after the numerical integration without constraints is close to the target length, i.e. the displacements of the atoms is small. Indeed, we can move the atoms so they satisfy the constraint two ways, one of which employs flipping the bond. The solution we are interested in is the one with the plus sign before the square root. So the final solution for :math:`\mu_1` is:
 
     .. math::
+        :label: UncoupledMu
 
-        {\mu_1}_{1,2}=M_1\frac{\sqrt{\left(\left(\mathbf{r}_1^*\cdot\mathbf{r}_1^0\right)^2-{\mathbf{r}_1^0}^2\left({\mathbf{r}_1^*}^2-d_1^2\right)\right)}-\left(\mathbf{r}_1^*\cdot\mathbf{r}_1^0\right)}{{\mathbf{r}_1^0}^2}
+        \mu_1=M_1\frac{\sqrt{\left(\left(\mathbf{r}_1^*\cdot\mathbf{r}_1^0\right)^2-{\mathbf{r}_1^0}^2\left({\mathbf{r}_1^*}^2-d_1^2\right)\right)}-\left(\mathbf{r}_1^*\cdot\mathbf{r}_1^0\right)}{{\mathbf{r}_1^0}^2}
 
 Though this equation is quite simple, we need to prepare ourselves to the following cases. So let us introduce the notations for all the coefficients in the :eq:`EquationOneUncoupled`, re-writing it as:
 
@@ -141,6 +142,15 @@ Here, the indices for parameters :math:`k_x^y` are chosen the following way. The
         k_1^{11}=\frac{{\mathbf{r}_1^0}^2}{M_1^2}\mathrm{,~~}
         k_1^1=\frac{2\left(\mathbf{r}_1^*\cdot\mathbf{r}_1^0\right)}{M_1}\mathrm{,~~}
         k_1^0={\mathbf{r}_1^*}^2-d_1^2
+
+In these notations, the solution for :math:`\mu_1` is:
+
+    .. math::
+        :label: UncoupledMuThroughK
+
+        \mu_1=\frac{\sqrt{{k_1^1}^2-4k_1^{11}k_1^0}-k_1^1}{2k_1^{11}}
+
+Note, that using :eq:`UncoupledMuThroughK` is slightly less computationally efficient when compared to :eq:`UncoupledMu`.
 
 Two coupled constraints
 -----------------------
@@ -165,6 +175,7 @@ Two coupled constraints will give us a much more complicated case of two coupled
 Where
 
     .. math::
+        :label: SystemTwoCoupledKs
 
         \begin{split}
             k_1^{11}=\frac{{\mathbf{r}_1^0}^2}{M_1^2}\mathrm{,~~}
@@ -181,8 +192,39 @@ Where
             k_2^0={\mathbf{r}_2^*}^2-d_2^2\mathrm{.}
         \end{split}
 
-If we introduce two dimensional vector-function :math:`F(\mu_1, \mu_2)` in :eq:`SystemTwoCoupled` so that it becomes:
+:eq:`SystemTwoCoupled` are two coupled quadratic equations of a general form. Unfortunately, there is no simple analytical solution to it. Hence the numerical method should be used. Before describing the methods used currently in most MD software packages, let us try to introduce a method for the specific cases we are considering here.
+
+If we introduce two dimensional vector-function :math:`F(\mu_1, \mu_2)` in :eq:`SystemTwoCoupled` it becomes:
 
     .. math::
 
         \mathbf{F}(\mu_1, \mu_2) = \mathbf{0}
+
+This is a system of non-linear equations, which are notoriously hard to solve if we (1) need to find all the solutions and (2) don't have good initial guess for these solutions. However, this is not the case here. Firstly, we assume that atoms did satisfy the constraints on the previous step (i.e. we are looking for :math:`mu`'s with smallest absolute value). Secondly, we only need to find this solution (see how we dropped one of the roots when solving for uncoupled constraint). Hence we can apply the Newtons method (also known as Newton-Raphson method). The general form of in in multi-dimensional case is:
+
+    .. math::
+        :label: SystemTwoCoupledNewton
+
+        \mathbf{\mu}^{n+1}=\mathbf{\mu}^n-J_\mathbf{F}\left(\mathbf{\mu}^n\right)^{-1}\mathbf{F}\left(\mathbf{\mu}^n\right)
+
+Here, :math:`\mathbf{\mu}^n=(\mu_1^n,\mu_2^n)^T` is a vector with the solutions on :math:`n`-th iteration, :math:`J_\mathbf{F}\left(\mathbf{\mu}\right)=J_\mathbf{F}\left(\mu_1, \mu_2\right)` is the Jakobian matrix for the system. Using :eq:`SystemTwoCoupled`, we can compute :math:`J_\mathbf{F}\left(\mu_1, \mu_2\right)`:
+
+    .. math::
+
+        J_\mathbf{F}=
+        \begin{pmatrix}
+        2k_1^{11}\mu_1+k_1^{12}\mu_2+k_1^1 & k_1^{12}\mu_1+2k_1^{22}\mu_2+k_1^2 \\
+        2k_2^{11}\mu_1+k_2^{12}\mu_2+k_2^1 & k_1^{12}\mu_2+2k_2^{22}\mu_2+k_2^2
+        \end{pmatrix}
+
+With everything in the :eq:`SystemTwoCoupledNewton` derived, we need good initial approximation for :math:`\mu_1` and :math:`mu_2`. One can use zeroes, assuming that atoms did not moved much during the integration time step atoms did not moved far away from their previous positions (which did satisfy the constraints). We can get slightly better initial approximation by assuming that the constraints are not coupled, i.e. by using :eq:`UncoupledMu` or :eq:`UncoupledMuThroughK` for two constraints we have in our case:
+
+    .. math::
+        :label: CoupledMyAsUncoupledThroughK
+
+        \begin{split}
+        \mu_1^0=\frac{\sqrt{{k_1^1}^2-4k_1^{11}k_1^0}-k_1^1}{2k_1^{11}} \\
+        \mu_2^0=\frac{\sqrt{{k_2^2}^2-4k_2^{22}k_2^0}-k_2^2}{2k_2^{22}}
+        \end{split}
+
+The numerical procedure to evaluate :math:`\mu_1` and :math:`\mu_2` is then contains following steps. (1) Compute coefficients in :eq:`SystemTwoCoupledKs`. (2) Use :eq:`CoupledMyAsUncoupledThroughK` to get initial approximations :math:`\mu_1^0` and :math:`\mu_2^0` for :math:`\mu_1` and :math:`\mu_2`. (3) Compute :math:`\mathbf{F}(\mu_1, \mu_2)` using :eq:`SystemTwoCoupled` and :math:`J_\mathbf{F}\left(\mu_1, \mu_2\right)`, invert the matrix :math:`J_\mathbf{F}` (one can derive formulas to compute the inverse Jakobian directly, without computing the Jakobian itself). (4) Apply the :eq:`SystemTwoCoupledNewton` to get the next iteration values for :math:`\mu_1` and :math:`\mu_2`. (5) Repeat steps (3) and (4) until convergence.

@@ -113,16 +113,16 @@ This is a single quadratic equation for :math:`\mu_1`, with the following soluti
 
         \begin{split}
         D_2=\frac{1}{M_1^2}\left(\left(\mathbf{r}_1^*\cdot\mathbf{r}_1^0\right)^2-{\mathbf{r}_1^0}^2\left({\mathbf{r}_1^*}^2-d_1^2\right)\right) \\
-        {\mu_1}_{1,2}=\frac{\pm\sqrt{D_2}-\frac{\left(\mathbf{r}_1^*\cdot\mathbf{r}_1^0\right)}{M_1}}{\frac{{\mathbf{r}_1^0}^2}{M_1^2}}
+        {\mu_1}^{1,2}=\frac{\pm\sqrt{D_2}-\frac{\left(\mathbf{r}_1^*\cdot\mathbf{r}_1^0\right)}{M_1}}{\frac{{\mathbf{r}_1^0}^2}{M_1^2}}
         \end{split}
 
 Plugging the :math:`D_2` into the solution gives:
 
     .. math::
 
-        {\mu_1}_{1,2}=M_1\frac{\pm\sqrt{\left(\left(\mathbf{r}_1^*\cdot\mathbf{r}_1^0\right)^2-{\mathbf{r}_1^0}^2\left({\mathbf{r}_1^*}^2-d_1^2\right)\right)}-\left(\mathbf{r}_1^*\cdot\mathbf{r}_1^0\right)}{{\mathbf{r}_1^0}^2}
+        {\mu_1}^{1,2}=M_1\frac{\pm\sqrt{\left(\left(\mathbf{r}_1^*\cdot\mathbf{r}_1^0\right)^2-{\mathbf{r}_1^0}^2\left({\mathbf{r}_1^*}^2-d_1^2\right)\right)}-\left(\mathbf{r}_1^*\cdot\mathbf{r}_1^0\right)}{{\mathbf{r}_1^0}^2}
 
-As expected for quadratic equation, we have two solutions. However only one is valid for our problem: the one that gives smaller absolute value of :math:`mu`. This is because we assume that the bond length after the numerical integration without constraints is close to the target length, i.e. the displacements of the atoms is small. Indeed, we can move the atoms so they satisfy the constraint two ways, one of which employs flipping the bond. The solution we are interested in is the one with the plus sign before the square root. So the final solution for :math:`\mu_1` is:
+As expected for quadratic equation, we have two solutions. However only one is valid for our problem: the one that gives smaller absolute value of :math:`\mu`. This is because we assume that the bond length after the numerical integration without constraints is close to the target length, i.e. the displacements of the atoms is small. Indeed, we can move the atoms so they satisfy the constraint two ways, one of which employs flipping the bond. The solution we are interested in is the one with the plus sign before the square root. So the final solution for :math:`\mu_1` is:
 
     .. math::
         :label: UncoupledMu
@@ -291,12 +291,14 @@ Where
 
     .. math::
 
-        J_\mathbf{F}=\\
-        \begin{pmatrix}
+        \begin{split}
+        &J_\mathbf{F}=\\
+        &\begin{pmatrix}
         2k_1^{11}\mu_1+k_1^{12}\mu_2+k_1^{13}\mu_3+k_1^1 & k_1^{12}\mu_1+2k_1^{22}\mu_2+k_1^{23}\mu_3+k_1^2 & k_1^{13}\mu_1+k_1^{23}\mu_2+2k_1^{33}\mu_3+k_1^3 \\
         2k_2^{11}\mu_1+k_2^{12}\mu_2+k_2^{13}\mu_3+k_2^1 & k_2^{12}\mu_1+2k_2^{22}\mu_2+k_2^{23}\mu_3+k_2^2 & k_2^{13}\mu_1+k_2^{23}\mu_2+2k_2^{33}\mu_3+k_2^3 \\
         2k_3^{11}\mu_1+k_3^{12}\mu_2+k_3^{13}\mu_3+k_3^1 & k_3^{12}\mu_1+2k_3^{22}\mu_2+k_3^{23}\mu_3+k_3^2 & k_3^{13}\mu_1+k_3^{23}\mu_2+2k_3^{33}\mu_3+k_3^3 \\
         \end{pmatrix}
+        \end{split}
 
 Triangle of constraints
 -----------------------

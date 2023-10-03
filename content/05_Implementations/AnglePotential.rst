@@ -1,7 +1,7 @@
 Three-body potential
 ====================
 
-    .. figure:: img/angle_eng.png
+    .. figure:: Figures/angle_eng.png
         :name: fig:ff-angle-1
   
         Schematic representation of the angle potential (left panel) and the shape of the potential function as a function of angle :math:`\theta` (right panel). The minimum of the harmonic potential corresponds to the angle :math:`\theta_0`.

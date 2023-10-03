@@ -291,9 +291,57 @@ Where
 
     .. math::
 
-        J_\mathbf{F}=
+        J_\mathbf{F}=\\
         \begin{pmatrix}
         2k_1^{11}\mu_1+k_1^{12}\mu_2+k_1^{13}\mu_3+k_1^1 & k_1^{12}\mu_1+2k_1^{22}\mu_2+k_1^{23}\mu_3+k_1^2 & k_1^{13}\mu_1+k_1^{23}\mu_2+2k_1^{33}\mu_3+k_1^3 \\
         2k_2^{11}\mu_1+k_2^{12}\mu_2+k_2^{13}\mu_3+k_2^1 & k_2^{12}\mu_1+2k_2^{22}\mu_2+k_2^{23}\mu_3+k_2^2 & k_2^{13}\mu_1+k_2^{23}\mu_2+2k_2^{33}\mu_3+k_2^3 \\
         2k_3^{11}\mu_1+k_3^{12}\mu_2+k_3^{13}\mu_3+k_3^1 & k_3^{12}\mu_1+2k_3^{22}\mu_2+k_3^{23}\mu_3+k_3^2 & k_3^{13}\mu_1+k_3^{23}\mu_2+2k_3^{33}\mu_3+k_3^3 \\
         \end{pmatrix}
+
+Triangle of constraints
+-----------------------
+
+    .. math::
+
+        \begin{cases}
+        \left(\mathbf{r}_{1}^*+\frac{\mu_1}{M_1}\mathbf{r}_1^0-\frac{\mu_2}{m_2}\mathbf{r}_2^0-\frac{\mu_3}{m_1}\mathbf{r}_3^0\right)^2-d_1^2=0 \\
+        \left(\mathbf{r}_{2}^*-\frac{\mu_2}{m_0}\mathbf{r}_1^0+\frac{\mu_2}{M_2}\mathbf{r}_2^0-\frac{\mu_3}{m_3}\mathbf{r}_3^0\right)^2-d_2^2=0 \\
+        \left(\mathbf{r}_{3}^*-\frac{\mu_1}{m_1}\mathbf{r}_1^0-\frac{\mu_3}{m_0}\mathbf{r}_2^0+\frac{\mu_3}{M_3}\mathbf{r}_3^0\right)^2-d_3^2=0 \\
+        \end{cases}
+
+
+    .. math::
+        :label: SystemTriangleKs
+
+        \begin{split}
+            k_1^{11}=\frac{{\mathbf{r}_1^0}^2}{M_1^2}\mathrm{,~~}
+            k_1^{22}=\frac{{\mathbf{r}_2^0}^2}{m_2^2}\mathrm{,~~}
+            k_1^{33}=\frac{{\mathbf{r}_3^0}^2}{m_1^2}\mathrm{,} \\
+            k_1^{12}=-\frac{2\left(\mathbf{r}_1^0\cdot\mathbf{r}_2^0\right)}{M_1m_2}\mathrm{,~~}
+            k_1^{13}=-\frac{2\left(\mathbf{r}_1^0\cdot\mathbf{r}_3^0\right)}{M_1m_1}\mathrm{,~~}
+            k_1^{23}=\frac{2\left(\mathbf{r}_2^0\cdot\mathbf{r}_3^0\right)}{m_1m_2}\mathrm{,} \\
+            k_1^1=\frac{2\left(\mathbf{r}_1^*\cdot\mathbf{r}_1^0\right)}{M_1}\mathrm{,~~}
+            k_1^2=-\frac{2\left(\mathbf{r}_1^*\cdot\mathbf{r}_2^0\right)}{m_2}\mathrm{,~~}
+            k_1^3=-\frac{2\left(\mathbf{r}_1^*\cdot\mathbf{r}_3^0\right)}{m_1}\mathrm{,~~}
+            k_1^0={\mathbf{r}_1^*}^2-d_1^2\mathrm{,~~} \\ \\
+            k_2^{11}=\frac{{\mathbf{r}_1^0}^2}{m_2^2}\mathrm{,~~}
+            k_2^{22}=\frac{{\mathbf{r}_2^0}^2}{M_2^2}\mathrm{,~~}
+            k_2^{33}=\frac{{\mathbf{r}_3^0}^2}{m_3^2}\mathrm{,} \\
+            k_2^{12}=-\frac{2\left(\mathbf{r}_1^0\cdot\mathbf{r}_2^0\right)}{M_2m_2}\mathrm{,~~}
+            k_2^{13}=\frac{2\left(\mathbf{r}_1^0\cdot\mathbf{r}_3^0\right)}{m_2m_3}\mathrm{,~~}
+            k_2^{23}=-\frac{2\left(\mathbf{r}_2^0\cdot\mathbf{r}_3^0\right)}{M_2m_3}\mathrm{,} \\
+            k_2^1=-\frac{2\left(\mathbf{r}_2^*\cdot\mathbf{r}_1^0\right)}{m_2}\mathrm{,~~}
+            k_2^2=\frac{2\left(\mathbf{r}_2^*\cdot\mathbf{r}_2^0\right)}{M_2}\mathrm{,~~}
+            k_2^3=-\frac{2\left(\mathbf{r}_2^*\cdot\mathbf{r}_3^0\right)}{m_3}\mathrm{,~~}
+            k_2^0={\mathbf{r}_2^*}^2-d_2^2\mathrm{,~~} \\ \\
+            k_3^{11}=\frac{{\mathbf{r}_1^0}^2}{m_1^2}\mathrm{,~~}
+            k_3^{22}=-\frac{{\mathbf{r}_2^0}^2}{m_3^2}\mathrm{,~~}
+            k_3^{33}=-\frac{{\mathbf{r}_3^0}^2}{M_3^2}\mathrm{,} \\
+            k_3^{12}=\frac{2\left(\mathbf{r}_1^0\cdot\mathbf{r}_2^0\right)}{m_1m_3}\mathrm{,~~}
+            k_3^{13}=-\frac{2\left(\mathbf{r}_1^0\cdot\mathbf{r}_3^0\right)}{M_3m_1}\mathrm{,~~}
+            k_3^{23}=-\frac{2\left(\mathbf{r}_2^0\cdot\mathbf{r}_3^0\right)}{M_3m_3}\mathrm{,} \\
+            k_3^1=-\frac{2\left(\mathbf{r}_3^*\cdot\mathbf{r}_1^0\right)}{m_1}\mathrm{,~~}
+            k_3^2=-\frac{2\left(\mathbf{r}_3^*\cdot\mathbf{r}_2^0\right)}{m_3}\mathrm{,~~}
+            k_3^3=\frac{2\left(\mathbf{r}_3^*\cdot\mathbf{r}_3^0\right)}{M_3}\mathrm{,~~}
+            k_3^0={\mathbf{r}_3^*}^2-d_3^2\mathrm{,~~} \\ \\
+        \end{split}

@@ -88,6 +88,12 @@ One constraint
 
 The simplest case by far is when we have a single constraint, which is not coupled to any other. An example should be the constrained C-H bond in the protein backbone in the case when only bonds with hydrogens are constrained (with the only exception of glycine, where there is another hydrogen instead of a side-chain). Indeed, this case is very simple: we have the direction of the bond in which atoms should be moved. And the sum of the displacements for two moved atoms should be so that the final distance is equal to the target. The displacements are reversely proportional to masses of atoms. Let us derive this formally, using the :eq:`mu` above.
 
+    .. figure:: Figures/Constraints/CH1.png
+        :name: Fig:Constraints:CH1
+        :width: 200
+
+        A schematic representation of a constrained bond. Index on top of the bond represents the constraint index :math:`c`. Arrow indicates the direction of the vector :math:`\mathbf{r}_1`. Masses subscripts correspond to aton indices.
+
 We have one constraint :math:`c=1=\{0,1\}` that connects two atoms :math:`i=0` and :math:`j=1` with masses :math:`m_0` and :math:`m_1`. We will also denote all the connecting vectors with constrain index, i.e. :math:`\mathbf{r}_1=\mathbf{r}_{01}=\mathbf{r}_0-\mathbf{r}_1`, etc. so there is less noise in formulas. Note that we could remove the index altogether since there is only one constrained bond, but we will keep the index here for consistency with the rest of the cases. The sole equation derived from :eq:`mu` is:
 
     .. math::
@@ -122,7 +128,15 @@ Plugging the :math:`D_2` into the solution gives:
 
         {\mu_1}^{1,2}=M_1\frac{\pm\sqrt{\left(\left(\mathbf{r}_1^*\cdot\mathbf{r}_1^0\right)^2-{\mathbf{r}_1^0}^2\left({\mathbf{r}_1^*}^2-d_1^2\right)\right)}-\left(\mathbf{r}_1^*\cdot\mathbf{r}_1^0\right)}{{\mathbf{r}_1^0}^2}
 
-As expected for quadratic equation, we have two solutions. However only one is valid for our problem: the one that gives smaller absolute value of :math:`\mu`. This is because we assume that the bond length after the numerical integration without constraints is close to the target length, i.e. the displacements of the atoms is small. Indeed, we can move the atoms so they satisfy the constraint two ways, one of which employs flipping the bond. The solution we are interested in is the one with the plus sign before the square root. So the final solution for :math:`\mu_1` is:
+As expected for quadratic equation, we have two solutions. However only one is valid for our problem: the one that gives smaller absolute value of :math:`\mu`. This is because we assume that the bond length after the numerical integration without constraints is close to the target length, i.e. the displacements of the atoms is small. Indeed, we can move the atoms so they satisfy the constraint two ways, one of which employs flipping the bond.
+
+    .. figure:: Figures/Constraints/CH1_mu12.png
+        :name: Fig:Constraints:CH1_mu12
+        :width: 400
+
+        Two roots give two different directions of the bond after constraining. Given that the timestep is small, the displacement should be small as well. Hence the correct solution for :math:`\mu_1` is the smallest by absolute value.
+
+The solution we are interested in is the one with the plus sign before the square root. So the final solution for :math:`\mu_1` is:
 
     .. math::
         :label: UncoupledMu
@@ -154,6 +168,12 @@ Note, that using :eq:`UncoupledMuThroughK` is slightly less computationally effi
 
 Two coupled constraints
 -----------------------
+
+    .. figure:: Figures/Constraints/CH2.png
+        :name: Fig:Constraints:CH2
+        :width: 300
+
+        A schematic representation of two coupled constrained bonds.
 
 Two coupled constraints will give us a much more complicated case of two coupled quadratic equations. Assuming that the central atom has index :math:`0`, with atoms :math:`1` and :math:`2` connected to it with two constrained bonds :math:`c=1=\{0,1\}` and :math:`c=2=\{0.2\}`, and using the reduced masses :math:`M_1=\frac{m_0m_1}{m_0+m_1}` and :math:`M_2=\frac{m_0m_2}{m_0+m_2}`, from :eq:`mu` we get:
 
@@ -233,6 +253,12 @@ The numerical procedure to evaluate :math:`\mu_1` and :math:`\mu_2` is then cont
 Three constraints coupled through the central atom
 --------------------------------------------------
 
+    .. figure:: Figures/Constraints/CH3.png
+        :name: Fig:Constraints:CH3
+        :width: 300
+
+        A schematic representation of three atoms constrained to one central atom.
+
     .. math::
 
         \begin{cases}
@@ -302,6 +328,12 @@ Where
 
 Triangle of constraints
 -----------------------
+
+    .. figure:: Figures/Constraints/H2O.png
+        :name: Fig:Constraints:H2O
+        :width: 300
+
+        Three constraints can form a rigid triangle, e.g. in water molecule.
 
     .. math::
 

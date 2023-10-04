@@ -68,6 +68,8 @@ Get the energy plot (to get plain .dat file, use `-xvg none` option):
 
         $GMX energy -f em.edr -o potential.xvg
 
+Select the potential energy.
+
 Run temperature equilibration:
 
     .. code-block:: shell
@@ -81,6 +83,8 @@ Check the temperature:
 
         $GMX energy -f nvt.edr -o temperature.xvg
 
+Select the temperature.
+
 Equilibrate pressure:
 
     .. code-block:: shell
@@ -93,6 +97,8 @@ Check the pressure:
     .. code-block:: shell
 
         $GMX energy -f npt.edr -o pressure.xvg
+
+Select the pressure.
 
 Production run:
 

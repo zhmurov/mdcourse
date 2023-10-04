@@ -19,6 +19,12 @@ Molecular dynamics simulations
 
 .. toctree::
    :maxdepth: 1
+   :caption: MD simulations of protein
+
+   03_UsingGROMACS/Calmodulin/Instructions
+
+.. toctree::
+   :maxdepth: 1
    :caption: MD simulations of small molecules
 
    04_SmallMolecules/01_Benzene

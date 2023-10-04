@@ -53,7 +53,7 @@ Add ions:
 
 Select group SOL
 
-Get the mdp files for energy minimization, nvt and npt equilibration and production md.
+Get the mdp files for :download:`energy minimization <files/emin-charmm.mdp>` , :download:`nvt <files/nvt-charmm.mdp>` and :download:`npt <files/npt-charmm.mdp>` equilibration and :download:`production md <files/md-charmm.mdp>`.
 
 Run energy minimization:
 

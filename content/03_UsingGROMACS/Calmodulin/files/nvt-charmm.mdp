@@ -10,6 +10,17 @@ nstenergy               = 500       ; save energy and temperature every 1.0 ps
 ; periodic boundary condition
 pbc                     = xyz       ;
 
+; Output control - output frequency in steps
+; Output frequency for  output trajctory file ,trr
+nstxout                  = 0       ; for writing coords (x) 
+nstvout                  = 0       ; for writing velocities (v) 
+nstfout                  = 0       ; for writing forces (f) 
+; Output frequency for energies to log file and energy file
+nstlog                   = 1000    ; for writing energies to log file
+nstenergy                = 500     ; for writing energies to edr file 
+; Output frequency and precision for .xtc file
+nstxout-compressed       = 5000    ; for writing coords (x) 
+
 ; Keep system temperature fluctuating physically correct
 tcoupl                  = V-rescale           ; modified Berendsen thermostat
 tc-grps                 = system   ; coupling groups 

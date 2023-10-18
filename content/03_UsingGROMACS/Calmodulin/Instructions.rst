@@ -107,6 +107,12 @@ Production run:
         $GMX grompp -f md-charmm.mdp -c npt.gro -t npt.cpt -o md.tpr
         $GMX mdrun -v -deffnm md
 
+To remove jumps of atoms through the periodic boundary, use the following command:
 
+    .. code-block:: shell
+
+        $GMX trjconv -s md.tpr -f md.xtc -o md_center.xtc -center -pbc mol
+
+Select protein as a molecule to center the trajectory around and save the entire system again.
 
 

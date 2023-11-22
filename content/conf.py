@@ -37,6 +37,7 @@ extensions = [
     # remove once sphinx_rtd_theme updated for contrast and accessibility:
     "sphinx_rtd_theme_ext_color_contrast",
     'sphinxcontrib.yt',
+    "sphinxcontrib.bibtex",
 ]
 
 # Settings for myst_nb:
@@ -60,7 +61,6 @@ exclude_patterns = [
     "jupyter_execute",
     "*venv*",
 ]
-
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -116,3 +116,5 @@ html_static_path = ['_static']
 html_css_files = [
     'css/custom.css',
 ]
+
+bibtex_bibfiles = ['refs.bib']

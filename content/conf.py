@@ -118,3 +118,5 @@ html_css_files = [
 ]
 
 bibtex_bibfiles = ['refs.bib']
+bibtex_default_style = 'plain'
+bibtex_reference_style = 'author_year'

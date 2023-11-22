@@ -1,6 +1,7 @@
 PME
 ===
 
-:cite:p:`DesernoJCP98-1,DesernoJCP98-2`
+:cite:`PME-DesernoJCP98-1,PME-DesernoJCP98-2,PME-Lee09`
 
 .. bibliography::
+    :keyprefix: PME-

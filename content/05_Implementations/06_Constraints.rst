@@ -383,12 +383,7 @@ Triangle of constraints
 Note that :math:`\left(\mathbf{r}_1^0\cdot\mathbf{r}_2^0\right)=\left(\mathbf{r}_2^0\cdot\mathbf{r}_3^0\right)=\left(\mathbf{r}_3^0\cdot\mathbf{r}_1^0\right)=-2S_0`, where :math:`S_0` is the area of the triangle.
 
 
-    .. [RyckaertJCP77] J.P. Ryckaert, G. Ciccotti, and H.J.C. Berendsen, "Numerical integration of the cartesian equations of motion of a system with constraints; molecular dynamics of n-alkanes," J. Comp. Phys., 23 327--341 (1977).
+:cite:`Constraints-RyckaertJCP77,Constraints-MiyamotoJCC92,Constraints-AndersenJCP83,Constraints-HessJCC97,Constraints-HessJCTC07`
 
-    .. [MiyamotoJCC92] S. Miyamoto and P.A. Kollman, "SETTLE: An analytical version of the SHAKE and RATTLE algorithms for rigid water models," J. Comp. Chem., 13 952--962 (1992).
-
-    .. [AndersenJCP83] H.C. Andersen, "RATTLE: A 'Velocity' version of the SHAKE algorithm for molecular dynamics calculations," J. Comp. Phys., 52 24--34 (1983).
-
-    .. [HessJCC97] B. Hess, H. Bekker, H.J.C. Berendsen, and J.G.E.M. Fraaije, "LINCS: A linear constraint solver for molecular simulations," J. Comp. Chem., 18 1463--1472 (1997).
-
-    .. [HessJCTC07] B. Hess, "P-LINCS: A parallel linear constraint solver for molecular simulation," J. Chem. Theory Comput., 4 116--122 (2007).
+.. bibliography::
+    :keyprefix: Constraints-

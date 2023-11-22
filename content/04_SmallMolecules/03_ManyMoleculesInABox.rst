@@ -245,7 +245,7 @@ To start the NVT equilibration stage, create portable simulation file (``.tpr``)
 
 The second equilibration stage is done under constant pressure conditions (NPT ensemble).
 GROMACS will be adjusting the size of the simulation box to reach the target value of pressure.
-The volume of the box can change quite drastically at this stage if the initial box is overfilled or underfilled.
+The volume of the box can change quite drastically at this stage if the initial box is overfilled or undefiled.
 We aim to reach more or less conserved volume at the end of this run as an indicator that the system is well equilibrated and ready for production run.
 
     .. code-block:: text
@@ -302,7 +302,7 @@ Now, configure and run the simulations.
 Production simulations
 ----------------------
 
-Production simulations can be berformed with isotropic or anisotropic pressure coupling scheme.
+Production simulations can be performed with isotropic or anisotropic pressure coupling scheme.
 Configuration file for isotropic pressure coupling is very similar to the one for the NPT equilibration.
 All we need to do is to adjust number of steps and how often we want the output to be saved.
 
@@ -378,3 +378,10 @@ Save the ``.mdp`` file, create ``.tpr`` with ``gmx grompp`` and run the simulati
         $GMX grompp -f md.mdp -c npt.gro -p octane.top -o md.tpr
         $GMX mdrun -deffnm md
 
+If you visualize the trajectory in VMD you may notice that some bonds appear to be broken. Do not worry - this is just an appearance. GROMACS transfer atoms through the periodic boundary as they leave the initial unit cell. As a result, bonded atoms may appear on the opposite sides of the box. VMD does not take into account periodic boundary and connect these atoms, drawing bonds across the entire box. This is only an appearance: it does not matter in which box the atoms are for the simulations. But it may be annoying if you want to visualize the system. To fix this, GROMACS has trjconv utility, which allows for keeping the entire molecule in the same unit cell:
+
+    .. code-block:: shell
+
+        $GMX trjconv -s md.tpr -f md.xtc -o md_pbc.xtc -pbc mol
+
+This command runs interactively and will ask which coordinates you want to save. In the resulting file, ``md_pbc.xtc``, the molecules will be transferred through periodic boundary as a whole when its center crosses the boundary.

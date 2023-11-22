@@ -263,6 +263,7 @@ In the code, this renders to:
                 atoms[i].z = atoms[i].z + tau*atoms[i].vz;
             }
         }
+
 We also want to save the positions of atoms every now and then (say, every 100 steps).
 To do so, we can use the function we implemented earlier by calling it with ``a`` modifier:
 

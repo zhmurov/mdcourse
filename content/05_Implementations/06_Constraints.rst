@@ -382,8 +382,15 @@ Triangle of constraints
 
 Note that :math:`\left(\mathbf{r}_1^0\cdot\mathbf{r}_2^0\right)=\left(\mathbf{r}_2^0\cdot\mathbf{r}_3^0\right)=\left(\mathbf{r}_3^0\cdot\mathbf{r}_1^0\right)=-2S_0`, where :math:`S_0` is the area of the triangle.
 
+SETTLE
+------
 
-:cite:`Constraints-RyckaertJCP77,Constraints-MiyamotoJCC92,Constraints-AndersenJCP83,Constraints-HessJCC97,Constraints-HessJCTC07`
+The triangle of constraints case is very common for the biomolecular simulations since most of water models constrain both bonds between hydrogens and oxygen and H-O-H angle. And there is an analytical solution for this specific case, called SETTLE :cite:`Constraints-MiyamotoJCC92`. This algorithm is in fact used in most of the MD software. In brief, the idea of SETTLE is first to reduce the problem into two dimensions, and than compute the rotation angle of the constraints triangle using two-dimensional Euler angles.
+
+More than three coupled constraints
+-----------------------------------
+
+We can keep expanding our formulas to the cases with more coupled constraints, and they will get more and more complex. However, there are only a few cases that is useful to solve this way: four constraints coupled to the central (e.g. methane molecule) atom and various rings that should be kept planar (e.g. benzene ring in phenylalanine or double ring in the tryptophane side-chain). These are not very common, the rings are usually kept planar with improper dihedral potentials, so we will not derive them here. Much more important is the case where all covalent bonds are constraints, where universal formalism is needed. The two most common algorithms for this case are SHAKE :cite:`Constraints-RyckaertJCP77` (and its "velocity version" RATTLE :cite:`Constraints-AndersenJCP83`) and LINCS :cite:`Constraints-HessJCC97,Constraints-HessJCTC07`. Note that the latter is the default option in GROMACS.
 
 .. bibliography::
     :keyprefix: Constraints-

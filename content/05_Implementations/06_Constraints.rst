@@ -25,7 +25,7 @@ The ''constrain'' force :math:`\delta\mathbf{f}_k` is then:
 
     .. math::
 
-        \delta\mathbf{f}_k=\frac{\partial}{\partial\mathbf{r}_k}\sum_{c=1}^{C}\lambda_c\sigma_c\left(\{\mathbf{r}\}\right)=\sum_{c=1}^{C}\lambda_c\frac{\partial}{\partial\mathbf{r}_k}\sigma_c\left(\{\mathbf{r}\}\right)=\sum_{c=1}^{C}\lambda_c2\delta_{km}\delta_{kl}\mathbf{r}_{ml}
+        \delta\mathbf{f}_k=\frac{\partial}{\partial\mathbf{r}_k}\sum_{c=1}^{C}\lambda_c\sigma_c\left(\{\mathbf{r}\}\right)=\sum_{c=1}^{C}\lambda_c\frac{\partial}{\partial\mathbf{r}_k}\sigma_c\left(\{\mathbf{r}\}\right)=\sum_{c=1}^{C}\lambda_c2\left(\delta_{km}-\delta_{kl}\right)\mathbf{r}_{ml}
 
 Numerical integration
 ---------------------

@@ -73,7 +73,6 @@
         \begin{split}
          m_i\frac{\mathbf{v}_{i}^{n+\frac{1}{2}}-\mathbf{v}_{i}^{n-\frac{1}{2}}}{\tau} &= \mathbf{f}_{i}^{n} - \lambda m_i\frac{\mathbf{v}_{i}^{n+\frac{1}{2}}+\mathbf{v}_{i}^{n-\frac{1}{2}}}{2}+\sqrt{\frac{2k_BT\lambda m_i}{\tau}}\mathbf{r}_i^f\\
         \frac{\mathbf{r}_{i}^{n+1}-\mathbf{r}_{i}^{n}}{\tau} &= \mathbf{v}_{i}^{n+\frac{1}{2}}
-
         \end{split}
 
 Здесь, :math:`\lambda=50` --- коэфициент демпфирования, :math:`\mathbf{r}_i^f` --- вектор из трех нормально распределенных случайных величин, с дисперсией :math:`1` и математическим ожиданием :math:`0`. Постоянная Больцмана :math:`k_B=8.31\times10^{-3}` кДж/K*моль, шаг по времени :math:`\tau=0.001` пс, температура :math:`T=300` K.

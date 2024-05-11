@@ -41,6 +41,7 @@ Molecular dynamics simulations
    05_Implementations/04_Nonbonded
    05_Implementations/05_PME
    05_Implementations/06_Constraints
+   05_Implementations/10_NaCl
 
 .. toctree::
    :maxdepth: 1

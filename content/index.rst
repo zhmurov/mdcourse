@@ -44,6 +44,13 @@ Molecular dynamics simulations
 
 .. toctree::
    :maxdepth: 1
+   :caption: Exercises
+
+   05_Implementations/ExerciseDNAPacking
+   05_Implementations/ExercisePolymerization
+
+.. toctree::
+   :maxdepth: 1
    :caption: Reference
 
    quick-reference

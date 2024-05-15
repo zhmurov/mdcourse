@@ -34,14 +34,14 @@
 
     .. math::
 
-        V_{cov}({\mathbf{r}_i})=\sum_{i=0}^{N-2}k_C(|\mathbf{r}_i-\mathbf{r}_{i+1}|-r_0)^2,
+        V_{cov}(\{\mathbf{r}_i\})=\sum_{i=0}^{N-2}k_C(|\mathbf{r}_i-\mathbf{r}_{i+1}|-r_0)^2,
 
 где :math:`k_c = 100` кДж/моль --- коэфициент упругости ковалентной связи, а :math:`r_0 = 0.1` нм --- равновесное расстояние.
 Все пары фрагментов ДНК :math:`i` и :math:`j`, для которых элемент матрицы :math:`U_{ij}` не нулевой, также связываются при помощи гармонического потенциала:
 
     .. math::
 
-        V_{hic}({\mathbf{r}_i})=\sum_{U_{ij}\ne 0}k_{ij}(|\mathbf{r}_i-\mathbf{r}_{j}|-r_{ij}^0)^2,
+        V_{hic}(\{\mathbf{r}_i\})=\sum_{U_{ij}\ne 0}k_{ij}(|\mathbf{r}_i-\mathbf{r}_{j}|-r_{ij}^0)^2,
 
 где
 

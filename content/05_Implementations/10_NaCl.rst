@@ -9,7 +9,7 @@ The atoms will interact with each other via Lennard-Jones and Coulomb potentials
 Parameters and units
 --------------------
 
-Before, we can to create and fill an array containing all the particles in the system, we need to get and define all the parameters for our simulations (temperature, masses, charges, etc).
+Before, we can create and fill an array containing all the particles in the system, we need to get and define all the parameters for our simulations (temperature, masses, charges, etc).
 This marks an important decision to make: we need to choose the units.
 It is tempting to use familiar SI system, but this will lead to a very small numbers --- atoms are very small.
 We don't need to invent anything here though, since there are two system that are widely used in Molecular Dynamics.

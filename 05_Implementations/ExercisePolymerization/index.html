@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Вариант 2: Реакция полимеризации &mdash; MD simulations  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx_lesson.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/term_role_formatting.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx_rtd_theme_ext_color_contrast.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/clipboard.min.js"></script>
+        <script src="../../_static/copybutton.js"></script>
+        <script src="../../_static/minipres.js"></script>
+        <script>let toggleHintShow = 'Click to show';</script>
+        <script>let toggleHintHide = 'Click to hide';</script>
+        <script>let toggleOpenOnPrint = 'true';</script>
+        <script src="../../_static/togglebutton.js"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex/" />
+    <link rel="search" title="Search" href="../../search/" />
+    <link rel="next" title="Quick Reference" href="../../quick-reference/" />
+    <link rel="prev" title="Вариант 1: Упаковка ДНК" href="../ExerciseDNAPacking/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../" class="icon icon-home">
+            MD simulations
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Prerequisites</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../00_Prereq/01_Software/">Software</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Biological molecules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/01_Water/">Water molecule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/02_AminoAcids/">AminoAcids</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/03_Proteins/">Proteins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/04_DNA/">DNA and RNA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/05_MolecularSystems/">Molecular systems</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">MD simulations of protein</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../03_UsingGROMACS/Calmodulin/Instructions/">MD simulations of calmodulin</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">MD simulations of small molecules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../04_SmallMolecules/01_Benzene/">Create topology and coordinates for benzene molecule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../04_SmallMolecules/02_Alkanes/">Linear hydrocarbons (alkanes)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../04_SmallMolecules/03_ManyMoleculesInABox/">GROMACS simulations of a box of 1000 octane molecules</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Implementations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../01_Integration/">Numerical integration of equations of motion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02_GeneralNotesOnPotential/">From potential energy to atomic forces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../03_Bonded/">Bonded interactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../04_Nonbonded/">Non-bonded interactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../05_PME/">PME</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../06_Constraints/">Constraints</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../10_NaCl/">Implementation of a simple molecular dynamics code: NaCl in vacuum</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Exercises</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../ExerciseDNAPacking/">Вариант 1: Упаковка ДНК</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Вариант 2: Реакция полимеризации</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#vmd">Отображение структуры в программе VMD</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quick-reference/">Quick Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guide/">Instructor’s guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Home</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../AnglePotential/">Three-body potential</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../">MD simulations</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Вариант 2: Реакция полимеризации</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/zhmurov/content/blob/main/content/05_Implementations/ExercisePolymerization.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1>Вариант 2: Реакция полимеризации<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h1>
+<p>Простейшая реакция катализа записывается в виде: <span class="math notranslate nohighlight">\(A+B\xrightarrow{k}A+C\)</span>. Динамику концентрации вещества <span class="math notranslate nohighlight">\(A\)</span> и <span class="math notranslate nohighlight">\(B\)</span> при этом можно описать при помощи следующей системы дифференциальных уравнений:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\begin{split}\begin{cases}
+\frac{dB}{dt} = -kAB,\\
+\frac{dC}{dt} = kAB.
+\end{cases}\end{split}\]</div>
+</div></blockquote>
+<p>В Системе уравнений, <span class="math notranslate nohighlight">\(A=\frac{N_{A}}{V_{0}}\)</span>, <span class="math notranslate nohighlight">\(B=\frac{N_{B}}{V_{0}}\)</span>, <span class="math notranslate nohighlight">\(C=\frac{N_{C}}{V_{0}}\)</span>, <span class="math notranslate nohighlight">\(k\)</span> — кинетическая константа скорости реакции, <span class="math notranslate nohighlight">\(N_{A}\)</span>, <span class="math notranslate nohighlight">\(N_{B}\)</span>, <span class="math notranslate nohighlight">\(N_{C}\)</span> — количество реагентов типа <span class="math notranslate nohighlight">\(A\)</span>, <span class="math notranslate nohighlight">\(B\)</span> и <span class="math notranslate nohighlight">\(C\)</span> соответственно, <span class="math notranslate nohighlight">\(V_{0}\)</span> — объем системы. Решение системы:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\begin{split}\begin{cases}
+B = B_{0}e^{-kAt},\\
+C = B_{0}-B=B_{0}(1-e^{-kAt}).
+\end{cases}\end{split}\]</div>
+</div></blockquote>
+<p>Реагирующая система может быть описана в виде конечного объема со случайным начальным распределением <span class="math notranslate nohighlight">\(N\)</span> частиц в нем и заданными периодическими граничными условиями. Будем считать, что реакция происходит со скоростью <span class="math notranslate nohighlight">\(p=0.001\)</span> фс <span class="math notranslate nohighlight">\(^{-1}\)</span> когда частицы <span class="math notranslate nohighlight">\(A\)</span> и <span class="math notranslate nohighlight">\(B\)</span> находятся ближе чем <span class="math notranslate nohighlight">\(r_c=4.0\)</span> нм друг к другу. Взаимодействие частиц можно описать при помощи следущего потенциала:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[V(\vec{r}_i,\vec{r}_j)=\varepsilon\left[С_1\left(\frac{\sigma}{r_{ij}}\right)^{4} + С_2\left(\frac{\sigma}{r_{ij}}\right)^2\right],\]</div>
+</div></blockquote>
+<p>где <span class="math notranslate nohighlight">\(\varepsilon=1\)</span> кДж/моль — энергетическая постоянная, <span class="math notranslate nohighlight">\(\sigma=1\)</span> нм — равновесное расстояние между частицами, <span class="math notranslate nohighlight">\(С_1\)</span> и <span class="math notranslate nohighlight">\(С_2\)</span> — константы, <span class="math notranslate nohighlight">\(r_{ij}=|\mathbf{r}_i-\mathbf{r}_j|\)</span> — текущее расстояние между частицами.  Если задать постоянные <span class="math notranslate nohighlight">\(С_1=1\)</span>, <span class="math notranslate nohighlight">\(С_2=-2\)</span>, то взаимодействие между частицами будет притягивающим, а при <span class="math notranslate nohighlight">\(С_1=0\)</span>, <span class="math notranslate nohighlight">\(С_2=1\)</span> — отталкивающим. Допустим, что продукт реакции <span class="math notranslate nohighlight">\(C\)</span> полимеризуется. Тогда результатом реакции будет полимер, состоящий из молекул типа <span class="math notranslate nohighlight">\(C\)</span>. Для описания процесса полимеризации предлагается использовать потенциал c притягивающими постоянными (<span class="math notranslate nohighlight">\(С_1=1\)</span> и <span class="math notranslate nohighlight">\(С_2=-2\)</span>) в случае, если обе частицы имеют тип <span class="math notranslate nohighlight">\(C\)</span> и отталкивающие (<span class="math notranslate nohighlight">\(С_1=0\)</span>, <span class="math notranslate nohighlight">\(С_2=1\)</span>) в другом случае.</p>
+<p>Движение частиц описывается уравнениями Ланжевена:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[m_i\frac{d^2\mathbf{r}_i}{dt^2}=-\nabla_iV-\lambda m_i\frac{d\mathbf{r}_i}{dt}+\eta_i(t),\]</div>
+</div></blockquote>
+<p>где <span class="math notranslate nohighlight">\(m_i = 1.0\)</span> г/моль — масса частиц, <span class="math notranslate nohighlight">\(V({\mathbf{r}_i}) = V_{cov}({\mathbf{r}_i}) + V_{hic}({\mathbf{r}_i})\)</span> — потенциальная энергия системы, <span class="math notranslate nohighlight">\(\nabla_i V\)</span> — градиент потенциала по координате <span class="math notranslate nohighlight">\(i\)</span>-ой частицы. <span class="math notranslate nohighlight">\(\eta_i(t)\)</span> — случайная сила, описывающая соударения с молекулами воды с нормальным распределением:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\langle\eta_i(t)\eta_j(t)\rangle = 2\lambda m_i k_BT\delta_{ij}\delta(t-t')\]</div>
+</div></blockquote>
+<p>Динамику Ланжевена можно рассматривать как динамику Ньютона с добавлением двух дополнительных сил: силы трения, пропорциональной скорости частицы и случайной силы, распределенной по Гауссу. Коэффициент пропорциональности <span class="math notranslate nohighlight">\(\lambda\)</span> называется константой демпфирования и задает силу влияния среды на молекулу. При больших <span class="math notranslate nohighlight">\(\lambda\)</span> система переходит к Брауновскому движению, при малых — к Ньютоновскому.</p>
+<p>Для численного решения уравнения Ланжевена можно использовать следующую разностную схему:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}\begin{split}\begin{split}
+ m_i\frac{\mathbf{v}_{i}^{n+\frac{1}{2}}-\mathbf{v}_{i}^{n-\frac{1}{2}}}{\tau} &amp;= \mathbf{f}_{i}^{n} - \lambda m_i\frac{\mathbf{v}_{i}^{n+\frac{1}{2}}+\mathbf{v}_{i}^{n-\frac{1}{2}}}{2}+\sqrt{\frac{2k_BT\lambda m_i}{\tau}}\mathbf{r}_i^f\\
+\frac{\mathbf{r}_{i}^{n+1}-\mathbf{r}_{i}^{n}}{\tau} &amp;= \mathbf{v}_{i}^{n+\frac{1}{2}}\end{split}\\\end{split}\end{aligned}\end{align} \]</div>
+</div></blockquote>
+<p>Здесь, <span class="math notranslate nohighlight">\(\lambda=50\)</span> пс <span class="math notranslate nohighlight">\(^{-1}\)</span> — коэфициент демпфирования, <span class="math notranslate nohighlight">\(\mathbf{r}_i^f\)</span> — вектор из трех нормально распределенных случайных величин, с дисперсией <span class="math notranslate nohighlight">\(1\)</span> и математическим ожиданием <span class="math notranslate nohighlight">\(0\)</span>. Постоянная Больцмана <span class="math notranslate nohighlight">\(k_B=8.31\times10^{-3}\)</span> кДж/K*моль, шаг по времени <span class="math notranslate nohighlight">\(\tau=0.001\)</span> пс, температура <span class="math notranslate nohighlight">\(T=300\)</span> K.</p>
+<section id="vmd">
+<h2>Отображение структуры в программе VMD<a class="headerlink" href="#vmd" title="Permalink to this heading"></a></h2>
+<p>VMD не умеет менять тип молекул.
+Чтобы при визуализации системы цвет атомов менялся при реакции, можно использовать следующий способ.
+Частицы <span class="math notranslate nohighlight">\(B\)</span> и <span class="math notranslate nohighlight">\(C\)</span> всегда сохраняются в файл координат в максимально возможном их количестве.
+Например, если в начале симуляции в системе 100 частиц <span class="math notranslate nohighlight">\(B\)</span> и 0 частиц <span class="math notranslate nohighlight">\(C\)</span>, в файле координат сохраняется 100 частиц <span class="math notranslate nohighlight">\(B\)</span> и 100 частиц <span class="math notranslate nohighlight">\(C\)</span>.
+При этом для неактивных частиц задаются координаты (0,0,0).
+В ходе реакции, частицы <span class="math notranslate nohighlight">\(B\)</span> становятся неактивными, а частицы <span class="math notranslate nohighlight">\(C\)</span> — наоборот переходят из неактивных в активные.
+Координаты же переносятся от прореагирующей частицы к продукту реакции.
+Таким образом, если отображать только активные частицы, при реакции прореагирующие частицы будут менять тип.</p>
+<p>Для визуализации, в строке <code class="docutils literal notranslate"><span class="pre">Selected</span> <span class="pre">atoms</span></code> нужно написать <code class="docutils literal notranslate"><span class="pre">not</span> <span class="pre">x</span> <span class="pre">=</span> <span class="pre">0</span></code>, а во вкладке <code class="docutils literal notranslate"><span class="pre">Trajectory</span></code> выбрать пункт <code class="docutils literal notranslate"><span class="pre">Update</span> <span class="pre">Selection</span> <span class="pre">Every</span> <span class="pre">Frame</span></code>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../ExerciseDNAPacking/" class="btn btn-neutral float-left" title="Вариант 1: Упаковка ДНК" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../quick-reference/" class="btn btn-neutral float-right" title="Quick Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Artem Zhmurov.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

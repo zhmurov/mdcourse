@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create topology and coordinates for benzene molecule &mdash; MD simulations  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx_lesson.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/term_role_formatting.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx_rtd_theme_ext_color_contrast.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/clipboard.min.js"></script>
+        <script src="../../_static/copybutton.js"></script>
+        <script src="../../_static/minipres.js"></script>
+        <script>let toggleHintShow = 'Click to show';</script>
+        <script>let toggleHintHide = 'Click to hide';</script>
+        <script>let toggleOpenOnPrint = 'true';</script>
+        <script src="../../_static/togglebutton.js"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex/" />
+    <link rel="search" title="Search" href="../../search/" />
+    <link rel="next" title="Linear hydrocarbons (alkanes)" href="../02_Alkanes/" />
+    <link rel="prev" title="MD simulations of calmodulin" href="../../03_UsingGROMACS/Calmodulin/Instructions/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../" class="icon icon-home">
+            MD simulations
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Prerequisites</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../00_Prereq/01_Software/">Software</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Biological molecules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/01_Water/">Water molecule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/02_AminoAcids/">AminoAcids</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/03_Proteins/">Proteins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/04_DNA/">DNA and RNA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/05_MolecularSystems/">Molecular systems</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">MD simulations of protein</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../03_UsingGROMACS/Calmodulin/Instructions/">MD simulations of calmodulin</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">MD simulations of small molecules</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Create topology and coordinates for benzene molecule</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#the-coordinates">The coordinates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#molecular-topology">Molecular topology</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-energy-minimization-mdp-file">The energy minimization .mdp file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-molecule-topology-file-for-future-use">Creating molecule topology file for future use</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#conclusions">Conclusions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../02_Alkanes/">Linear hydrocarbons (alkanes)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../03_ManyMoleculesInABox/">GROMACS simulations of a box of 1000 octane molecules</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Implementations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/01_Integration/">Numerical integration of equations of motion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/02_GeneralNotesOnPotential/">From potential energy to atomic forces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/03_Bonded/">Bonded interactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/04_Nonbonded/">Non-bonded interactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/05_PME/">PME</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/06_Constraints/">Constraints</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/10_NaCl/">Implementation of a simple molecular dynamics code: NaCl in vacuum</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Exercises</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/ExerciseDNAPacking/">Вариант 1: Упаковка ДНК</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/ExercisePolymerization/">Вариант 2: Реакция полимеризации</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quick-reference/">Quick Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guide/">Instructor’s guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Home</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/AnglePotential/">Three-body potential</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../">MD simulations</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Create topology and coordinates for benzene molecule</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/zhmurov/content/blob/main/content/04_SmallMolecules/01_Benzene.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="create-topology-and-coordinates-for-benzene-molecule">
+<h1>Create topology and coordinates for benzene molecule<a class="headerlink" href="#create-topology-and-coordinates-for-benzene-molecule" title="Permalink to this heading"></a></h1>
+<p>For the molecular system that contains a mixture of small molecules it is convenient to have topology and coordinate files for each component.
+This way the system coordinates can be created by a third-party software (e.g. Packmol or VMD) and the topology file will just list the molecules and their quantities, not the interatomic connectivity in the molecules.
+We will use an example of benzene to explain the procedure of creating a pair of coordinates and topology files for a single molecule that can be later used when the molecule is added to the mixture of many molecules.</p>
+<section id="the-coordinates">
+<h2>The coordinates<a class="headerlink" href="#the-coordinates" title="Permalink to this heading"></a></h2>
+<p>We will write basic code to synthesize the coordinates according to the atomic parameters.
+Another approach would be to find the coordinates on the internet, as a stand-alone file or part of another molecular system.
+The later for benzene may be, e.g. a part of phenylalanine side-chain form any protein that contains this amino-acid.
+Note that the the carbon, that connects the side-chain to the backbone of the protein will have to be substituted with a hydrogen.
+Also, if the system is synthesized with the correct force-field parameters, there is no need to minimize the energy (but we will do it to show the complete procedure).</p>
+<p>Let us use CHARMM36 force-field for the reference.
+We assume that you have the force-field files in your local folder, see <a class="reference internal" href="../../00_Prereq/01_Software/#charmm36-installation"><span class="std std-ref">CHARMM36</span></a> section for details.
+We need <code class="docutils literal notranslate"><span class="pre">cgenff.rtp</span></code> residue topology file, where we can find benzene molecule description (look for <code class="docutils literal notranslate"><span class="pre">BENZ</span></code> residue):</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[ BENZ ]
+; C6H6, benzene, adm jr.
+[ atoms ]
+    CG   CG2R61 -0.1150   1
+    HG    HGR61  0.1150   1
+    CD1   CG2R61 -0.1150   1
+    HD1    HGR61  0.1150   1
+    CD2   CG2R61 -0.1150   1
+    HD2    HGR61  0.1150   1
+    CE1   CG2R61 -0.1150   1
+    HE1    HGR61  0.1150   1
+    CE2   CG2R61 -0.1150   1
+    HE2    HGR61  0.1150   1
+    CZ   CG2R61 -0.1150   1
+    HZ    HGR61  0.1150   1
+[ bonds ]
+    CD1    CG
+    CD2    CG
+    CE1   CD1
+    CE2   CD2
+    CZ   CE1
+    CZ   CE2
+    CG    HG
+    CD1   HD1
+    CD2   HD2
+    CE1   HE1
+    CE2   HE2
+    CZ    HZ
+</pre></div>
+</div>
+</div></blockquote>
+<p>Here, we have two sections that describe residue atoms and bonds respectively.
+For atoms, the atom name, type, partial charge and charge group are listed.
+Each bond is a pair of atom names that should be connected.
+Note that angles and dihedrals will be generated by GROMACS according to what is in the header to residue topology file, but we will discuss this later.
+All atoms in the residue has unique name, which is used to identify the atom when bonds are defined.
+See how <code class="docutils literal notranslate"><span class="pre">CG</span></code> atom is connected to <code class="docutils literal notranslate"><span class="pre">CD1</span></code> and <code class="docutils literal notranslate"><span class="pre">CD2</span></code> carbons and to <code class="docutils literal notranslate"><span class="pre">HG</span></code> hydrogen.</p>
+<blockquote>
+<div><div class="admonition-exercise exercise important admonition" id="exercise-0">
+<p class="admonition-title">Exercise</p>
+<p>Using the residue description of benzene molecule, try to draw it on a piece of paper.
+Write the unique names of the atoms from the file next to them.</p>
+</div>
+</div></blockquote>
+<p>Now let us try to see how the parameters for the interactions are determined.
+This will also help us to get the equilibrium parameters, needed to create atomic coordinates.
+We see that all the carbons have type <code class="docutils literal notranslate"><span class="pre">CG2R61</span></code>, hydrogens are of type <code class="docutils literal notranslate"><span class="pre">HGR61</span></code>.
+These atom types are what defines the parameters for bonded and non-bonded interactions for these atoms.
+To see how, open <code class="docutils literal notranslate"><span class="pre">ffbonded.itp</span></code> file in the force-field.
+The bond and angle parameters are in the following lines of the <code class="docutils literal notranslate"><span class="pre">ffbonded.itp</span></code> file (we will skip dihedrals and non-bonded parameters for now):</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>...
+CG2R61   CG2R61     1   0.13750000    255224.00 ; PROT benzene, JES 8/25/89
+...
+CG2R61    HGR61     1   0.10800000    284512.00 ; PROT phe,tyr JES 8/25/89
+...
+CG2R61   CG2R61   CG2R61     5   120.000000   334.720000   0.24162000     29288.00 ; PROT JES 8/25/89
+...
+CG2R61   CG2R61    HGR61     5   120.000000   251.040000   0.21525000     18409.60 ; PROT JES 8/25/89 benzene
+...
+</pre></div>
+</div>
+</div></blockquote>
+<p>As one can see from the comments, these atom types are found in phenylalanine and tyrosine amino-acids as well as in benzene molecule.
+The equilibrium bond distances are 0.1375 nm for bond between carbons and 0.108 for carbon-hydrogen bond.
+The equilibrium angle is 120 degrees for both C-C-C and C-C-H angles.</p>
+<p>So, to make a coordinate file, we need to create a regular hexagon with carbons in its corners and hydrogens sticking out.
+Each side of the hexagon is a=0.1375 nm and hydrogens are farther b=0.108 nm away from the corners.</p>
+<p>If placed in the x-y plane so that the center of hexagon is (0,0,0) and the longest diagonal along x-axis, the coordinates of the vertices are (clockwise):</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}(a, 0, 0),\\(a/2, -a\cdot\cos(30), 0),\\(-a/2, -a\cdot\cos(30), 0),\\(-a, 0, 0),\\(-a/2, a\cdot\cos(30), 0),\\(a/2, a\cdot\cos(30), 0)\end{aligned}\end{align} \]</div>
+</div></blockquote>
+<p>The coordinates of the respected hydrogens are in the same layout, but (a+b) away from the center, i.e.:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}(a+b, 0, 0),\\((a+b)/2, -(a+b)\cdot\cos(30), 0),\\(-(a+b)/2, -(a+b)\cdot\cos(30), 0),\\(-(a+b), 0, 0),\\(-(a+b)/2, (a+b)\cdot\cos(30), 0),\\((a+b)/2, (a+b)\cdot\cos(30), 0)\end{aligned}\end{align} \]</div>
+</div></blockquote>
+<p>We also need to synchronize the coordinates with the topology: molecular simulation software needs to know which atom is connected to which.
+This is described in the <code class="docutils literal notranslate"><span class="pre">[</span> <span class="pre">bonds</span> <span class="pre">]</span></code> section of the topology: atom <code class="docutils literal notranslate"><span class="pre">CD1</span></code> is connected to atom <code class="docutils literal notranslate"><span class="pre">CG</span></code>, <code class="docutils literal notranslate"><span class="pre">CD2</span></code> to <code class="docutils literal notranslate"><span class="pre">CG</span></code> as well, and so on.
+Hence, if we want to go around the carbon ring, starting from the <code class="docutils literal notranslate"><span class="pre">CG</span></code> atom, the atom order will be <code class="docutils literal notranslate"><span class="pre">CG</span></code>, <code class="docutils literal notranslate"><span class="pre">CD1</span></code>, <code class="docutils literal notranslate"><span class="pre">CE1</span></code>, <code class="docutils literal notranslate"><span class="pre">CZ</span></code>, <code class="docutils literal notranslate"><span class="pre">CE2</span></code>, <code class="docutils literal notranslate"><span class="pre">CD2</span></code>.
+This notation is inherited from proteins, where atoms are named according to their separation from the C-alpha (<code class="docutils literal notranslate"><span class="pre">CA</span></code>) atom: C-beta (<code class="docutils literal notranslate"><span class="pre">CB</span></code>), C-gamma (<code class="docutils literal notranslate"><span class="pre">CG</span></code>), C-delta (<code class="docutils literal notranslate"><span class="pre">CD</span></code>) and so on.
+If the chain separates, atom names receive a number (e.g. <code class="docutils literal notranslate"><span class="pre">CD1</span></code> and <code class="docutils literal notranslate"><span class="pre">CD2</span></code>).
+This does not make much sense in case of benzene molecule, but this does not affect us in the future so we can leave it as it is.</p>
+<p>Once we decide which coordinates correspond to which atom name, we can create the coordinates file in any format that is suitable for the software.
+For instance, we can use <a class="reference external" href="https://manual.gromacs.org/documentation/current/reference-manual/file-formats.html#gro">GROMACS .gro format</a>.</p>
+<blockquote>
+<div><div class="admonition-exercise exercise important admonition" id="exercise-1">
+<p class="admonition-title">Exercise</p>
+<p>Write a basic code that generates coordinates for benzene and saves them in <code class="docutils literal notranslate"><span class="pre">.gro</span></code> format.</p>
+</div>
+</div></blockquote>
+</section>
+<section id="molecular-topology">
+<h2>Molecular topology<a class="headerlink" href="#molecular-topology" title="Permalink to this heading"></a></h2>
+<p>Once the coordinates are ready, the topology file can be created.
+If the atoms and residue are named according to the force-field, the basic topology can be created using pdb2gmx utility from GROMACS:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">GMX</span><span class="o">=</span>/usr/local/gromacs/bin/gmx
+<span class="nv">SYSTEM_NAME</span><span class="o">=</span>C6H6
+<span class="nv">$GMX</span><span class="w"> </span>pdb2gmx<span class="w"> </span>-f<span class="w"> </span><span class="si">${</span><span class="nv">SYSTEM_NAME</span><span class="si">}</span>.gro<span class="w"> </span>-o<span class="w"> </span><span class="si">${</span><span class="nv">SYSTEM_NAME</span><span class="si">}</span>.gro<span class="w"> </span>-p<span class="w"> </span><span class="si">${</span><span class="nv">SYSTEM_NAME</span><span class="si">}</span>.top<span class="w"> </span>-ff<span class="w"> </span>charmm36<span class="w"> </span>-water<span class="w"> </span>tip3p
+</pre></div>
+</div>
+</div></blockquote>
+<p>We set and use some variable to make it easier to copy-paste these commands later.
+Here, we take the .gro file we created and pass it to the <cite>pdb2gmx</cite>.
+We use CHARMM36 force-field and tip3p water model (if we don’t specify these options, they will be asked interactively).
+Note that CHARMM36 is not supplied with GROMACS by default, so it has to be installed or you need to have force-field files (i.e. <code class="docutils literal notranslate"><span class="pre">charmm36.ff</span></code> folder) in your local folder.
+As an output we have corrected .gro file (if the correction is needed, e.g. hydrogen were added) and topology file in .top format.
+We opted to overwrite the .gro file here, since not much is updated there — only the periodic boundary description is added.
+Don’t worry if you wanted to compare the files — GROMACS makes back-ups it case it overwrites (see the log file for the backup name).</p>
+<p>Before we modify the topology to make it more useful in the future, we can finalize our coordinates by running energy minimization simulations.
+Strictly speaking, this step is not required because we created the coordinates using force-field parameters.
+Hence the structure should be already in its energy minima.
+But it is useful to do the energy minimization to fix any imperfections in the structure and to make sure that the coordinates are useable.</p>
+<p>The following script performs the energy minimization in vacuo for the molecular system. Assuming that you have <a class="reference download internal" download="" href="../../_downloads/19dcc64d9c44866416709c0aafb8ec94/em_vac.mdp"><code class="xref download docutils literal notranslate"><span class="pre">this</span> <span class="pre">minimization</span> <span class="pre">.mdp</span> <span class="pre">file</span></code></a> and your coordinates are saved as <code class="docutils literal notranslate"><span class="pre">C6H6.gro</span></code>:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">SYSTEM_NAME</span><span class="o">=</span>C6H6
+<span class="nv">$GMX</span><span class="w"> </span>editconf<span class="w"> </span>-f<span class="w"> </span><span class="si">${</span><span class="nv">SYSTEM_NAME</span><span class="si">}</span>.gro<span class="w"> </span>-o<span class="w"> </span><span class="si">${</span><span class="nv">SYSTEM_NAME</span><span class="si">}</span>.gro<span class="w"> </span>-d<span class="w"> </span><span class="m">0</span>.1
+<span class="nv">$GMX</span><span class="w"> </span>editconf<span class="w"> </span>-f<span class="w"> </span><span class="si">${</span><span class="nv">SYSTEM_NAME</span><span class="si">}</span>.gro<span class="w"> </span>-o<span class="w"> </span><span class="si">${</span><span class="nv">SYSTEM_NAME</span><span class="si">}</span>.gro<span class="w"> </span>-box<span class="w"> </span><span class="m">100</span><span class="w"> </span><span class="m">100</span><span class="w"> </span><span class="m">100</span><span class="w"> </span>-noc
+<span class="nv">$GMX</span><span class="w"> </span>grompp<span class="w"> </span>-f<span class="w"> </span>em_vac.mdp<span class="w"> </span>-c<span class="w"> </span><span class="si">${</span><span class="nv">SYSTEM_NAME</span><span class="si">}</span>.gro<span class="w"> </span>-o<span class="w"> </span>em_vac.tpr
+<span class="nv">$GMX</span><span class="w"> </span>mdrun<span class="w"> </span>-deffnm<span class="w"> </span>em_vac
+mkdir<span class="w"> </span>hydrocarbons
+cp<span class="w"> </span><span class="si">${</span><span class="nv">SYSTEM_NAME</span><span class="si">}</span>_em.gro<span class="w"> </span>hydrocarbons/<span class="si">${</span><span class="nv">SYSTEM_NAME</span><span class="si">}</span>.gro
+</pre></div>
+</div>
+</div></blockquote>
+<p>Note that this will overwrite your <code class="docutils literal notranslate"><span class="pre">.gro</span></code> file, but don’t worry — GROMACS will make a backup, surrounded by <code class="docutils literal notranslate"><span class="pre">#</span></code> signs.
+We first run the <code class="docutils literal notranslate"><span class="pre">editconf</span></code> utility twice to set the periodic boundary correctly.
+The first run moves the molecule so that all the coordinates are positive.
+The <code class="docutils literal notranslate"><span class="pre">-d</span> <span class="pre">0.1</span></code> option means, that the box will be no closer than 0.1 nm from the molecule.
+By default, the <code class="docutils literal notranslate"><span class="pre">editconf</span></code> shifts the coordinates to the center of the box, which is in the positive quadrant.
+The second run of <code class="docutils literal notranslate"><span class="pre">editconf</span></code> changes the periodic box definition to a cube with 100 nm side.
+This is an arbitrary large number to make sure that PBC don’t affect the system — modern versions of GROMACS can only run with periodic boundary.
+Note that we use <code class="docutils literal notranslate"><span class="pre">-noc</span></code> option here to leave the molecule where it is instead of moving it to the center of the box.
+After coordinates are prepared, we configure GROMACS with <code class="docutils literal notranslate"><span class="pre">grompp</span></code> utility.
+This takes the .mdp file that describes the simulation protocol (see <a class="reference internal" href="#energy-minimization-in-vacuum-mdp"><span class="std std-ref">The energy minimization .mdp file</span></a> section below), topology and coordinate files.
+<code class="docutils literal notranslate"><span class="pre">grompp</span></code> creates a portable <code class="docutils literal notranslate"><span class="pre">.tpr</span></code> file, which contains all the data for the molecular dynamics simulation run.
+This file is used with <code class="docutils literal notranslate"><span class="pre">gmx</span> <span class="pre">mdrun</span></code>, which is the main simulation engine.
+The <code class="docutils literal notranslate"><span class="pre">-deffnm</span></code> option means default name, i.e. the name of the files for input/output that will be different only by extension.
+Hence, the resulting (energy minimized) structure will be saved as <code class="docutils literal notranslate"><span class="pre">${SYSTEM_NAME}_em.gro</span></code>, which are the coordinates that we are going to save for future use.</p>
+<p>Some software packages may need a <code class="docutils literal notranslate"><span class="pre">.pdb</span></code> file instead of <code class="docutils literal notranslate"><span class="pre">.gro</span></code>.
+To convert, one can use <code class="docutils literal notranslate"><span class="pre">editconf</span></code> utility from GROMACS:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">$GMX</span><span class="w"> </span>editconf<span class="w"> </span>-f<span class="w"> </span><span class="si">${</span><span class="nv">SYSTEM_NAME</span><span class="si">}</span>_em.gro<span class="w"> </span>-o<span class="w"> </span><span class="si">${</span><span class="nv">SYSTEM_NAME</span><span class="si">}</span>.pdb
+cp<span class="w"> </span><span class="si">${</span><span class="nv">SYSTEM_NAME</span><span class="si">}</span>.pdb<span class="w"> </span>hydrocarbons/<span class="si">${</span><span class="nv">SYSTEM_NAME</span><span class="si">}</span>.pdb
+</pre></div>
+</div>
+</div></blockquote>
+<p>Now, the <code class="docutils literal notranslate"><span class="pre">hydrocarbons</span></code> folder should have both <code class="docutils literal notranslate"><span class="pre">.gro</span></code> and <code class="docutils literal notranslate"><span class="pre">.pdb</span></code> files.</p>
+</section>
+<section id="the-energy-minimization-mdp-file">
+<span id="energy-minimization-in-vacuum-mdp"></span><h2>The energy minimization .mdp file<a class="headerlink" href="#the-energy-minimization-mdp-file" title="Permalink to this heading"></a></h2>
+<p>Above, we ran something called energy minimization in vacuum.
+This is not something that is done by default, we explicitly asked molecular simulation software to do it.
+This is specified in the configuration or molecular dynamics parameters (<code class="docutils literal notranslate"><span class="pre">.mdp</span></code>) file (see full description <a class="reference external" href="https://manual.gromacs.org/documentation/current/user-guide/mdp-options.html">here</a>).
+We used the following parameters in our run:</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>title       = enrgy minimisation
+
+; Parameters describing what to do, when to stop and what to save
+integrator  = steep  ; Algorithm (steep = steepest descent minimization)
+emtol       = 1000.0 ; Stop minimization when the maximum force &lt; 1000.0 kJ/mol/nm
+emstep      = 0.01   ; Minimization step size
+nstenergy   = 500    ; save energies every 1.0 ps, so we can observe if we are successful
+nstxout-compressed       = 500    ; for writing coords (x)
+nsteps      = -1     ; run as long as we need
+; Settings that make sure we run with parameters in harmony with the selected force-field
+constraints             = none          ; no constraints
+rcoulomb                = 10            ; short-range electrostatic cutoff (in nm)
+rvdw                    = 10            ; short-range van der Waals cutoff (in nm)
+coulombtype             = Cut-Off       ; Cutoff electrostatics with large radii
+rlist                   = 20
+</pre></div>
+</div>
+</div></blockquote>
+<p>The main parameter here is <code class="docutils literal notranslate"><span class="pre">integrator</span></code>, which is set to <code class="docutils literal notranslate"><span class="pre">steep</span></code> or <a class="reference external" href="https://manual.gromacs.org/current/reference-manual/algorithms/energy-minimization.html">steepest descent</a> energy minimization algorithm.
+Also note that we set all the cut-offs to an arbitrary large value, which is only allowed since our simulation box is large.
+This is to minimize the effect of switching the interaction potential off near the cut-off radius.</p>
+</section>
+<section id="creating-molecule-topology-file-for-future-use">
+<h2>Creating molecule topology file for future use<a class="headerlink" href="#creating-molecule-topology-file-for-future-use" title="Permalink to this heading"></a></h2>
+<p>Current <code class="docutils literal notranslate"><span class="pre">.top</span></code> file does two things at the same time: it describes the composition of the entire molecular system and topology of a single benzene molecule.
+This is not surprising because our system is a singular benzene molecule.
+However, this is not convenient if we want to re-use the molecular topology description part of the file when benzene molecule(s) is(are) part of another molecular system.
+What we can do in this case is we can create a separate <cite>Include ToPology</cite> or <code class="docutils literal notranslate"><span class="pre">.itp</span></code> file and copy the topology description there.
+Let us have a look at the generated <code class="docutils literal notranslate"><span class="pre">.top</span></code> file:</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>...
+
+; Include forcefield parameters
+#include &quot;charmm36.ff/forcefield.itp&quot;
+
+[ moleculetype ]
+; Name            nrexcl
+Other               3
+
+[ atoms ]
+;   nr       type  resnr residue  atom   cgnr     charge       mass  typeB    chargeB      massB
+; residue   1 BENZ rtp BENZ q  0.0
+    1     CG2R61      1   BENZ     CG      1     -0.115     12.011
+    2      HGR61      1   BENZ     HG      1      0.115      1.008
+    3     CG2R61      1   BENZ    CD1      1     -0.115     12.011
+    4      HGR61      1   BENZ    HD1      1      0.115      1.008
+    5     CG2R61      1   BENZ    CD2      1     -0.115     12.011
+    6      HGR61      1   BENZ    HD2      1      0.115      1.008
+    7     CG2R61      1   BENZ    CE1      1     -0.115     12.011
+    8      HGR61      1   BENZ    HE1      1      0.115      1.008
+    9     CG2R61      1   BENZ    CE2      1     -0.115     12.011
+    10      HGR61      1   BENZ    HE2      1      0.115      1.008
+    11     CG2R61      1   BENZ     CZ      1     -0.115     12.011
+    12      HGR61      1   BENZ     HZ      1      0.115      1.008   ; qtot 0
+
+[ bonds ]
+;  ai    aj funct            c0            c1            c2            c3
+    1     2     1
+    1     3     1
+    ...
+    9    11     1
+    11    12     1
+
+[ pairs ]
+;  ai    aj funct            c0            c1            c2            c3
+    1     8     1
+    1    10     1
+    ...
+    8    12     1
+    10    12     1
+
+[ angles ]
+;  ai    aj    ak funct            c0            c1            c2            c3
+    2     1     3     5
+    2     1     5     5
+    ...
+    7    11    12     5
+    9    11    12     5
+
+[ dihedrals ]
+;  ai    aj    ak    al funct            c0            c1            c2            c3            c4            c5
+    2     1     3     4     9
+    2     1     3     7     9
+    ...
+    10     9    11     7     9
+    10     9    11    12     9
+
+...
+
+[ system ]
+; Name
+Benzene
+
+[ molecules ]
+; Compound        #mols
+Other               1
+</pre></div>
+</div>
+</div></blockquote>
+<p>Here, dots represent parts of the file that were omitted for shortness.
+After the header, the description of the molecule starts in <code class="docutils literal notranslate"><span class="pre">[</span> <span class="pre">moleculetype</span> <span class="pre">]</span></code> section.
+There are two parameters here: name of the newly created molecule and number of exclusions in it.
+By default, the molecule is called <code class="docutils literal notranslate"><span class="pre">Other</span></code>.
+This is followed by the list of atoms with their respective types, residue number, residue name, charge and mass.
+Note that we are adding mass here, which is defined by the atom type.</p>
+<blockquote>
+<div><div class="admonition-exercise exercise important admonition" id="exercise-2">
+<p class="admonition-title">Exercise</p>
+<p>In the force-filed files, find where is mass is defined for our atom types.</p>
+</div>
+</div></blockquote>
+<p>The following sections describe connectivity between atoms, including bonds, angles and dihedral angles.
+Note that now atoms are referred by their unique index, not by their name.
+This is because each molecule can have several residues and hence names will not be unique any more.
+The angles and dihedral angles were not listed in the residue description above, they were added by GROMACS <code class="docutils literal notranslate"><span class="pre">pdb2gmx</span></code> utility according to the rules in the beginning of the residue database file.</p>
+<p>We are skipping the position restrain section here for the clarity of the lesson.
+This section is normally used if one wants to constrain some (e.g. heavy) atoms in their simulations, which we will not be doing on this stage.There are also some include directive for ions and water molecule, which are self-explanatory.</p>
+<p>The topology is finalized by <code class="docutils literal notranslate"><span class="pre">[</span> <span class="pre">system</span> <span class="pre">]</span></code> and <code class="docutils literal notranslate"><span class="pre">[</span> <span class="pre">molecules</span> <span class="pre">]</span></code> sections, which describe what molecules we have in our system.
+Here, we only have one benzene molecule, which was given a default name <code class="docutils literal notranslate"><span class="pre">Other</span></code> here.</p>
+<p>The part we need to keep for the molecule description starts with <code class="docutils literal notranslate"><span class="pre">[</span> <span class="pre">moleculetype</span> <span class="pre">]</span></code> and ends after <code class="docutils literal notranslate"><span class="pre">[</span> <span class="pre">dihedrals</span> <span class="pre">]</span></code> section of the topology file.
+We also want to change the name <code class="docutils literal notranslate"><span class="pre">Other</span></code> to avoid duplicating names in future.
+The described procedures can be performed with the following script:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp<span class="w"> </span><span class="si">${</span><span class="nv">SYSTEM_NAME</span><span class="si">}</span>.top<span class="w"> </span><span class="si">${</span><span class="nv">SYSTEM_NAME</span><span class="si">}</span>.itp
+sed<span class="w"> </span>-i<span class="w"> </span>-n<span class="w"> </span><span class="s1">&#39;/\[ moleculetype \]/,$p&#39;</span><span class="w"> </span><span class="si">${</span><span class="nv">SYSTEM_NAME</span><span class="si">}</span>.itp
+sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;/; Include Position restraint file/,$d&#39;</span><span class="w"> </span><span class="si">${</span><span class="nv">SYSTEM_NAME</span><span class="si">}</span>.itp
+sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;s/Other/</span><span class="si">${</span><span class="nv">SYSTEM_NAME</span><span class="si">}</span><span class="s2">/g&quot;</span><span class="w"> </span><span class="si">${</span><span class="nv">SYSTEM_NAME</span><span class="si">}</span>.itp
+cp<span class="w"> </span><span class="si">${</span><span class="nv">SYSTEM_NAME</span><span class="si">}</span>.itp<span class="w"> </span>hydrocarbons/<span class="si">${</span><span class="nv">SYSTEM_NAME</span><span class="si">}</span>.itp
+</pre></div>
+</div>
+</div></blockquote>
+<p>This will create a molecular topology or include topology <code class="docutils literal notranslate"><span class="pre">C6H6.itp</span></code> file in <code class="docutils literal notranslate"><span class="pre">hydrocarbons</span></code> folder.
+Now, the system topology can just include the molecular topology.
+For the system of a singular benzene, this topology will be:</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>; Include forcefield parameters
+#include &quot;charmm36.ff/forcefield.itp&quot;
+#include &quot;hydrocarbons/C6H6.itp&quot;
+
+[ system ]
+; Name
+C6H6
+
+[ molecules ]
+; Compound     #mols
+C6H6      1
+</pre></div>
+</div>
+<div class="admonition-exercise exercise important admonition" id="exercise-3">
+<p class="admonition-title">Exercise</p>
+<p>Create <code class="docutils literal notranslate"><span class="pre">.gro</span></code> and <code class="docutils literal notranslate"><span class="pre">.top</span></code> files for a system of two benzene molecules, where one of the molecules is shifted by 0.5 nm from the other in z-direction (perpendicular to the benzene plane).</p>
+</div>
+</div></blockquote>
+</section>
+<section id="conclusions">
+<h2>Conclusions<a class="headerlink" href="#conclusions" title="Permalink to this heading"></a></h2>
+<p>Creating topologies and coordinates for all the molecules of the mixture allow to re-use them in the future, thus simplifying the process of simulating the arbitrary mixture significantly.
+The coordinates file can be constructed using pre-generated coordinate files for the molecules (e.g. using Packmol software) and the topologies of molecules can be included into the system topology file.
+These two files should be kept in-sync though, with the number of molecules and their order in coordinates file strictly correspondent to the number of molecules and their order in the system topology.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../../03_UsingGROMACS/Calmodulin/Instructions/" class="btn btn-neutral float-left" title="MD simulations of calmodulin" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../02_Alkanes/" class="btn btn-neutral float-right" title="Linear hydrocarbons (alkanes)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Artem Zhmurov.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Software &mdash; MD simulations  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx_lesson.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/term_role_formatting.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx_rtd_theme_ext_color_contrast.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/clipboard.min.js"></script>
+        <script src="../../_static/copybutton.js"></script>
+        <script src="../../_static/minipres.js"></script>
+        <script>let toggleHintShow = 'Click to show';</script>
+        <script>let toggleHintHide = 'Click to hide';</script>
+        <script>let toggleOpenOnPrint = 'true';</script>
+        <script src="../../_static/togglebutton.js"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex/" />
+    <link rel="search" title="Search" href="../../search/" />
+    <link rel="next" title="Water molecule" href="../../02_BiologicalMolecules/01_Water/" />
+    <link rel="prev" title="Molecular dynamics simulations" href="../../" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../" class="icon icon-home">
+            MD simulations
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Prerequisites</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Software</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#build-and-install-gromacs">Build and install GROMACS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#force-fields">Force-fields</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#trappe-ua">TraPPE-UA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#charmm36">CHARMM36</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#packmol">PackMol</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#vmd">VMD</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Biological molecules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/01_Water/">Water molecule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/02_AminoAcids/">AminoAcids</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/03_Proteins/">Proteins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/04_DNA/">DNA and RNA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/05_MolecularSystems/">Molecular systems</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">MD simulations of protein</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../03_UsingGROMACS/Calmodulin/Instructions/">MD simulations of calmodulin</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">MD simulations of small molecules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../04_SmallMolecules/01_Benzene/">Create topology and coordinates for benzene molecule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../04_SmallMolecules/02_Alkanes/">Linear hydrocarbons (alkanes)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../04_SmallMolecules/03_ManyMoleculesInABox/">GROMACS simulations of a box of 1000 octane molecules</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Implementations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/01_Integration/">Numerical integration of equations of motion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/02_GeneralNotesOnPotential/">From potential energy to atomic forces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/03_Bonded/">Bonded interactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/04_Nonbonded/">Non-bonded interactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/05_PME/">PME</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/06_Constraints/">Constraints</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/10_NaCl/">Implementation of a simple molecular dynamics code: NaCl in vacuum</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Exercises</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/ExerciseDNAPacking/">Вариант 1: Упаковка ДНК</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/ExercisePolymerization/">Вариант 2: Реакция полимеризации</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quick-reference/">Quick Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guide/">Instructor’s guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Home</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/AnglePotential/">Three-body potential</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../">MD simulations</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Software</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/zhmurov/content/blob/main/content/00_Prereq/01_Software.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="software">
+<h1>Software<a class="headerlink" href="#software" title="Permalink to this heading"></a></h1>
+<section id="build-and-install-gromacs">
+<span id="gromacs-installation"></span><h2>Build and install GROMACS<a class="headerlink" href="#build-and-install-gromacs" title="Permalink to this heading"></a></h2>
+<ol class="arabic">
+<li><p>Get the code from GROMACS web page:</p>
+<blockquote>
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>wget<span class="w"> </span>https://ftp.gromacs.org/gromacs/gromacs-2022.5.tar.gz
+tar<span class="w"> </span>-xvf<span class="w"> </span>gromacs-2022.5.tar.gz
+<span class="nb">cd</span><span class="w"> </span>gromacs-2022.5
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ol>
+<p>Alternatively, you can checkout required version using Git:</p>
+<blockquote>
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://gitlab.com/gromacs/gromacs.git
+<span class="nb">cd</span><span class="w"> </span>gromacs
+git<span class="w"> </span>checkout<span class="w"> </span>v2022.5
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic" start="2">
+<li><p>Build and install</p>
+<blockquote>
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>build
+cmake<span class="w"> </span>-S.<span class="w"> </span>-Bbuild
+<span class="nb">cd</span><span class="w"> </span>build
+make<span class="w"> </span>-j4
+sudo<span class="w"> </span>make<span class="w"> </span>install
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ol>
+<p>Optionally, one can set the installation path by adding <code class="docutils literal notranslate"><span class="pre">-DCMAKE_INSTALL_PREFIX=/your/desired/path</span></code> to the <code class="docutils literal notranslate"><span class="pre">cmake</span></code> command.</p>
+<ol class="arabic" start="3">
+<li><p>You can optionally check the build before installing by running the tests:</p>
+<blockquote>
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>check<span class="w"> </span>-j4
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>It is convenient to set a variable for GROMACS executable. If you install into the default location:</p>
+<blockquote>
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">GMX</span><span class="o">=</span>/usr/local/gromacs/bin/gmx
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ol>
+</section>
+<section id="force-fields">
+<h2>Force-fields<a class="headerlink" href="#force-fields" title="Permalink to this heading"></a></h2>
+<section id="trappe-ua">
+<span id="trappeua-installation"></span><h3>TraPPE-UA<a class="headerlink" href="#trappe-ua" title="Permalink to this heading"></a></h3>
+<p>Get the forcefield files:</p>
+<blockquote>
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/wesbarnett/trappeua.git
+</pre></div>
+</div>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">gmx</span> <span class="pre">pdb2gmx</span></code> utility uses enumeration for the water model selection.
+Hence, one need the water mode to have one of the pre-defined names, which is not the case in the <code class="docutils literal notranslate"><span class="pre">trappeua</span></code> implementation we just downloaded.
+In order to use pdb2gmx later on, we now need to rename the water model file for tip4p model and change this name in the watermodels.dat file before we copy forcefield to the GROMACS installation folder:</p>
+<blockquote>
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>mv<span class="w"> </span>trappeua/trappeua.ff/tip4p2005.itp<span class="w"> </span>trappeua/trappeua.ff/tip4p.itp
+sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;s/tip4p2005/tip4p/&#39;</span><span class="w"> </span>trappeua/trappeua.ff/watermodels.dat
+</pre></div>
+</div>
+</div></blockquote>
+<p>To install the forcefield, copy the result to GROMACS installation folder.
+Assuming that GROMACS in installed at <code class="docutils literal notranslate"><span class="pre">/usr/local/gromacs</span></code>:</p>
+<blockquote>
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>cp<span class="w"> </span>-pr<span class="w"> </span>trappeua/trappeua.ff<span class="w"> </span>/usr/local/gromacs/share/gromacs/top/
+</pre></div>
+</div>
+</div></blockquote>
+<p>Note that you can also keep force-field files in your local folder without installing.</p>
+</section>
+<section id="charmm36">
+<span id="charmm36-installation"></span><h3>CHARMM36<a class="headerlink" href="#charmm36" title="Permalink to this heading"></a></h3>
+<p>Download and extract the force-field files:</p>
+<blockquote>
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>wget<span class="w"> </span>http://mackerell.umaryland.edu/download.php?filename<span class="o">=</span>CHARMM_ff_params_files/charmm36-jul2022.ff.tgz
+tar<span class="w"> </span>-xvf<span class="w"> </span>charmm36-jul2022.ff.tgz
+</pre></div>
+</div>
+</div></blockquote>
+<p>Or clone <a class="reference external" href="https://gitlab.com/artemzhmurov/charmm36">this repository</a>:</p>
+<blockquote>
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>git@gitlab.com:artemzhmurov/charmm36.git
+</pre></div>
+</div>
+</div></blockquote>
+<p>To install the forcefield, copy it to your GROMACS installation folder.
+Assuming that GROMACS in installed at <code class="docutils literal notranslate"><span class="pre">/usr/local/gromacs</span></code>:</p>
+<blockquote>
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>cp<span class="w"> </span>-pr<span class="w"> </span>trappeua/charmm36.ff<span class="w"> </span>/usr/local/gromacs/share/gromacs/top/
+</pre></div>
+</div>
+</div></blockquote>
+<p>Note that you can also keep force-field files in your local folder without installing.</p>
+</section>
+</section>
+<section id="packmol">
+<span id="packmol-installation"></span><h2>PackMol<a class="headerlink" href="#packmol" title="Permalink to this heading"></a></h2>
+<p>To create the coordinates for a box of molecules, we can use Packmol software.
+You will need <code class="docutils literal notranslate"><span class="pre">gfortran</span></code>, which you can install by running <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt</span> <span class="pre">install</span> <span class="pre">gfortran</span></code>.
+To get and install Packmol:</p>
+<blockquote>
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/m3g/packmol.git
+<span class="nb">cd</span><span class="w"> </span>packmol
+git<span class="w"> </span>checkout<span class="w"> </span>v20.3.5
+./configure
+make
+<span class="nv">PACKMOL</span><span class="o">=</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/packmol
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="vmd">
+<span id="vmd-installation"></span><h2>VMD<a class="headerlink" href="#vmd" title="Permalink to this heading"></a></h2>
+<p>Visual Molecular Dynamics (VMD) is a visualization program, that should be installed locally.
+You can get a copy <a class="reference external" href="https://www.ks.uiuc.edu/Research/vmd/">here</a>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../../" class="btn btn-neutral float-left" title="Molecular dynamics simulations" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../02_BiologicalMolecules/01_Water/" class="btn btn-neutral float-right" title="Water molecule" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Artem Zhmurov.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

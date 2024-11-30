@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Implementation of a simple molecular dynamics code: NaCl in vacuum &mdash; MD simulations  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx_lesson.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/term_role_formatting.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx_rtd_theme_ext_color_contrast.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/clipboard.min.js"></script>
+        <script src="../../_static/copybutton.js"></script>
+        <script src="../../_static/minipres.js"></script>
+        <script>let toggleHintShow = 'Click to show';</script>
+        <script>let toggleHintHide = 'Click to hide';</script>
+        <script>let toggleOpenOnPrint = 'true';</script>
+        <script src="../../_static/togglebutton.js"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex/" />
+    <link rel="search" title="Search" href="../../search/" />
+    <link rel="next" title="Вариант 1: Упаковка ДНК" href="../ExerciseDNAPacking/" />
+    <link rel="prev" title="Constraints" href="../06_Constraints/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../" class="icon icon-home">
+            MD simulations
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Prerequisites</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../00_Prereq/01_Software/">Software</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Biological molecules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/01_Water/">Water molecule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/02_AminoAcids/">AminoAcids</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/03_Proteins/">Proteins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/04_DNA/">DNA and RNA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/05_MolecularSystems/">Molecular systems</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">MD simulations of protein</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../03_UsingGROMACS/Calmodulin/Instructions/">MD simulations of calmodulin</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">MD simulations of small molecules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../04_SmallMolecules/01_Benzene/">Create topology and coordinates for benzene molecule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../04_SmallMolecules/02_Alkanes/">Linear hydrocarbons (alkanes)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../04_SmallMolecules/03_ManyMoleculesInABox/">GROMACS simulations of a box of 1000 octane molecules</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Implementations</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../01_Integration/">Numerical integration of equations of motion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02_GeneralNotesOnPotential/">From potential energy to atomic forces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../03_Bonded/">Bonded interactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../04_Nonbonded/">Non-bonded interactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../05_PME/">PME</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../06_Constraints/">Constraints</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Implementation of a simple molecular dynamics code: NaCl in vacuum</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#parameters-and-units">Parameters and units</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-the-system-and-saving-output-for-visualization">Creating the system and saving output for visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#integrating-equations-of-motion-and-applying-periodic-boundary-conditions">Integrating equations of motion and applying periodic boundary conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-interactions-between-atoms">Adding interactions between atoms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#monitoring-and-controlling-temperature-of-the-system">Monitoring and controlling temperature of the system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-final-code">The final code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#big-problem-with-the-code-above">Big problem with the code above</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Exercises</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../ExerciseDNAPacking/">Вариант 1: Упаковка ДНК</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ExercisePolymerization/">Вариант 2: Реакция полимеризации</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quick-reference/">Quick Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guide/">Instructor’s guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Home</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../AnglePotential/">Three-body potential</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../">MD simulations</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Implementation of a simple molecular dynamics code: NaCl in vacuum</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/zhmurov/content/blob/main/content/05_Implementations/10_NaCl.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="implementation-of-a-simple-molecular-dynamics-code-nacl-in-vacuum">
+<h1>Implementation of a simple molecular dynamics code: NaCl in vacuum<a class="headerlink" href="#implementation-of-a-simple-molecular-dynamics-code-nacl-in-vacuum" title="Permalink to this heading"></a></h1>
+<p>Let us consider a basic example to show the underpinnings of any molecular dynamics simulations code.
+We will create a simulation box of size 4nm x 4nm x 4nm and fill it with Na and Cl atoms.
+The motion of atoms will be governed by Newton equations of motion and periodic boundary conditions will be applied to keep the atoms inside the box.
+The atoms will interact with each other via Lennard-Jones and Coulomb potentials.</p>
+<section id="parameters-and-units">
+<h2>Parameters and units<a class="headerlink" href="#parameters-and-units" title="Permalink to this heading"></a></h2>
+<p>Before, we can create and fill an array containing all the particles in the system, we need to get and define all the parameters for our simulations (temperature, masses, charges, etc).
+This marks an important decision to make: we need to choose the units.
+It is tempting to use familiar SI system, but this will lead to a very small numbers — atoms are very small.
+We don’t need to invent anything here though, since there are two system that are widely used in Molecular Dynamics.
+Here, we are going to use the same units as MD software GROMACS: nm for length, ps for time, g/mol for mass, K for temperature.
+These units conveniently converge to kJ/mol for energy.
+We will also use the</p>
+<blockquote>
+<div><div class="admonition-exercise exercise important admonition" id="exercise-0">
+<p class="admonition-title">Exercise</p>
+<p>Suppose that you are using nm for length, ps for time, g/mol for mass, K for temperature and elementary charge for charge.
+Using Newton equation of motion, show that the units of energy are kJ/mol.
+Using Maxwell-Boltzmann distribution for particle velocities, find a numerical value and units for Boltzmann constant.
+Using equation for Coulomb energy for two interacting particles, define the units and find numerical value for Coulomb constant.</p>
+</div>
+</div></blockquote>
+<p>With the units chosen, it is quite easy to define masses and charges for the particles.
+The charges are <span class="math notranslate nohighlight">\(+1\)</span> for sodium ions (Na) and <span class="math notranslate nohighlight">\(-1\)</span> for chloride (Cl)
+Masses can be taken from periodic table of elements: <span class="math notranslate nohighlight">\(23.0\)</span> g/mol for sodium and <span class="math notranslate nohighlight">\(35.5\)</span> g/mol for chloride.</p>
+<p>We also need to define Van-der-Waals parameters (<span class="math notranslate nohighlight">\(\sigma\)</span> and <span class="math notranslate nohighlight">\(\varepsilon\)</span>) for all three possible interactions: Na-Na, Cl-Cl and Na-Cl.
+In force-field, these parameters are usually listed on atom base: one set per atom type.
+When the forces and energies are computed, these are averaged using arithmetic average for <span class="math notranslate nohighlight">\(sigma\)</span> and geometric average for <span class="math notranslate nohighlight">\(\varepsilon\)</span>.
+The main reason for defining parameters this way is to minimize the number of parameters needed for an atomic system: if we have <span class="math notranslate nohighlight">\(N_{at}\)</span> atom types, we will have <span class="math notranslate nohighlight">\(N_{par}=N_{at}(N_{at}-1)/2+N_{at}\)</span> different pairs.
+Though this is not a problem in our case (<span class="math notranslate nohighlight">\(N_{par}=2\times1/2+2=3\)</span>), we are going to stick with this strategy to able to use the force-field files as a source of parameters.
+If you did not do so already, <a class="reference external" href="http://mackerell.umaryland.edu/download.php?filename=CHARMM_ff_params_files/charmm36-jul2022.ff.tgz">download</a> and unpack the force-field files.
+The file that we need is called <code class="docutils literal notranslate"><span class="pre">ffnonbonded.itp</span></code>.
+There we should look for sodium and chloride, the respective lines are:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+<span class="p">;</span> <span class="nb">type</span> <span class="n">atnum</span>         <span class="n">mass</span>   <span class="n">charge</span> <span class="n">ptype</span>           <span class="n">sigma</span>  <span class="n">epsilon</span>
+<span class="o">...</span>
+<span class="n">SOD</span>    <span class="mi">11</span>    <span class="mf">22.989770</span>    <span class="mf">0.000</span>     <span class="n">A</span>  <span class="mf">0.251367073323</span>  <span class="mf">0.1962296</span>  <span class="p">;</span> <span class="n">Sodium</span> <span class="n">Ion</span>
+<span class="o">...</span>
+<span class="n">CLA</span>    <span class="mi">17</span>    <span class="mf">35.450000</span>    <span class="mf">0.000</span>     <span class="n">A</span>  <span class="mf">0.404468018036</span>  <span class="mf">0.6276000</span>  <span class="p">;</span> <span class="n">Chloride</span> <span class="n">Ion</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Two parameters we are looking for are in the last two columns, which list <span class="math notranslate nohighlight">\(sigma\)</span> and <span class="math notranslate nohighlight">\(epsilon\)</span> for the respective atoms in GROMACS units.
+Note that the masses are also listed there (with more precision), feel free to take those from there as well.
+The charges on the other hand are not in this list, since they are more volatile with respect to local environment — same atom type can have different charges depending on the atom position in the molecule.
+The charges thus are defined when the molecule is constructed as we saw when we were making topology of a small molecule.</p>
+<p>Let us summarize all the parameters we found in the code, by adding this on top of the file:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#define T  300.0 // K</span>
+
+<span class="c1">#define KB 8.314462e-3 // kJ/mol/K</span>
+<span class="c1">#define KC 138.9118    // nm*kJ/mol/e^2</span>
+
+<span class="c1">#define Q_NA  1.0 // Elementary charge</span>
+<span class="c1">#define Q_CL  -1.0</span>
+
+<span class="c1">#define M_NA  23.0 // g/mol</span>
+<span class="c1">#define M_CL  35.5</span>
+
+<span class="c1">#define SIGMA_NA 0.25</span>
+<span class="c1">#define SIGMA_CL 0.40</span>
+
+<span class="c1">#define EPSILON_NA 0.196</span>
+<span class="c1">#define EPSILON_CL 0.628</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="creating-the-system-and-saving-output-for-visualization">
+<h2>Creating the system and saving output for visualization<a class="headerlink" href="#creating-the-system-and-saving-output-for-visualization" title="Permalink to this heading"></a></h2>
+<p>Initially, we will place particle in the box randomly.
+This may cause a problem if the atoms will be placed too close to one another, so we should expect that.
+We will use basic XYZ file format to save output so that we will be able to visualize it in third-party software (e.g. VMD).
+But to start with let use introduce the type <code class="docutils literal notranslate"><span class="pre">Atom</span></code> which we will use to store all the atom-related data (positions, velocities, forces, mass, etc.):</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">struct</span> <span class="n">Atom</span>
+<span class="p">{</span>
+    <span class="nb">float</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">;</span>
+    <span class="nb">float</span> <span class="n">vx</span><span class="p">,</span> <span class="n">vy</span><span class="p">,</span> <span class="n">vz</span><span class="p">;</span>
+    <span class="nb">float</span> <span class="n">fx</span><span class="p">,</span> <span class="n">fy</span><span class="p">,</span> <span class="n">fz</span><span class="p">;</span>
+    <span class="nb">float</span> <span class="n">q</span><span class="p">;</span>
+    <span class="nb">float</span> <span class="n">m</span><span class="p">;</span>
+    <span class="nb">float</span> <span class="n">sigma</span><span class="p">;</span>
+    <span class="nb">float</span> <span class="n">epsilon</span><span class="p">;</span>
+    <span class="n">char</span> <span class="n">name</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Note that from the performance standpoint this is not the most efficient way to store positions and other data that we will be frequently interacting with.
+It would be better if these were more localized, for more efficient memory access pattern.
+But this should be fine in our example.</p>
+<p>Before we place the atom, we need to define the dimensions of the system.
+Let us use quadratic box of size L, filled with N randomly placed atoms.
+First, we define these values.</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#define N  100</span>
+<span class="c1">#define L  5.0  // nm</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Now let us create the <code class="docutils literal notranslate"><span class="pre">main</span></code> function in which we define parameters for each atom and fill the box with randomly placed atoms.
+Half of the atoms will be sodium ions, half — chloride.</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="n">main</span><span class="p">(</span><span class="nb">int</span> <span class="n">argc</span><span class="p">,</span> <span class="n">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+    <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Atom</span><span class="o">&gt;</span> <span class="n">atoms</span><span class="p">(</span><span class="n">N</span><span class="p">);</span>
+
+    <span class="n">std</span><span class="p">::</span><span class="n">random_device</span> <span class="n">randomDevice</span><span class="p">;</span>
+    <span class="n">std</span><span class="p">::</span><span class="n">mt19937</span> <span class="n">randomGenerator</span><span class="p">(</span><span class="n">randomDevice</span><span class="p">());</span>
+    <span class="n">std</span><span class="p">::</span><span class="n">uniform_real_distribution</span><span class="o">&lt;&gt;</span> <span class="n">distributionX</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">L</span><span class="p">);</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="nb">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">distributionX</span><span class="p">(</span><span class="n">randomGenerator</span><span class="p">);</span>
+        <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">distributionX</span><span class="p">(</span><span class="n">randomGenerator</span><span class="p">);</span>
+        <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">distributionX</span><span class="p">(</span><span class="n">randomGenerator</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;N&#39;</span><span class="p">;</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">q</span> <span class="o">=</span> <span class="n">Q_NA</span><span class="p">;</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="n">M_NA</span><span class="p">;</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">sigma</span> <span class="o">=</span> <span class="n">SIGMA_NA</span><span class="p">;</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">epsilon</span> <span class="o">=</span> <span class="n">EPSILON_NA</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;C&#39;</span><span class="p">;</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">q</span> <span class="o">=</span> <span class="n">Q_CL</span><span class="p">;</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="n">M_CL</span><span class="p">;</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">sigma</span> <span class="o">=</span> <span class="n">SIGMA_CL</span><span class="p">;</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">epsilon</span> <span class="o">=</span> <span class="n">EPSILON_CL</span><span class="p">;</span>
+        <span class="p">}</span>
+
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>In this function, we first define random numbers generator using Mersene-Twister PRNG.
+We need uniform distribution from 0 to L to draw coordinates of atoms from.
+In a loop, we also add a condition on which atom the <code class="docutils literal notranslate"><span class="pre">i</span></code>-th atom is going to be: sodium or chloride, and assign the parameters accordingly.</p>
+<p>We also need to define initial velocities and zero the initial forces.
+Though, we are going to have an excess in the potential energy in our initial state, the temperature control will also be needed.
+Otherwise, the temperature will increase from its initial value.
+We will deal with this on the later stages.</p>
+<p>To instantiate the velocities, we need normally distributed random numbers.
+The mean of this distribution should be zero, and the dispersion should be <span class="math notranslate nohighlight">\(\sqrt{k_BT/m}\)</span>.
+Since the masses of Na and Cl ions are different, we are going to define the normal distribution with dispersion of <span class="math notranslate nohighlight">\(\sqrt{k_BT}\)</span> and then divide the number over <span class="math notranslate nohighlight">\(\sqrt{m}\)</span> for each particle.
+This way we can use one distribution for all particles:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="n">main</span><span class="p">(</span><span class="nb">int</span> <span class="n">argc</span><span class="p">,</span> <span class="n">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+    <span class="o">...</span>
+    <span class="n">std</span><span class="p">::</span><span class="n">uniform_real_distribution</span><span class="o">&lt;&gt;</span> <span class="n">distributionX</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">L</span><span class="p">);</span>
+    <span class="n">std</span><span class="p">::</span><span class="n">normal_distribution</span><span class="o">&lt;&gt;</span> <span class="n">distributionV</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">sqrtf</span><span class="p">(</span><span class="n">KB</span><span class="o">*</span><span class="n">T</span><span class="p">));</span>
+    <span class="o">...</span>
+    <span class="k">for</span> <span class="p">(</span><span class="nb">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="o">...</span>
+
+        <span class="nb">float</span> <span class="n">mult</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">sqrtf</span><span class="p">(</span><span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">m</span><span class="p">);</span>
+        <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vx</span> <span class="o">=</span> <span class="n">mult</span><span class="o">*</span><span class="n">distributionV</span><span class="p">(</span><span class="n">randomGenerator</span><span class="p">);</span>
+        <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vy</span> <span class="o">=</span> <span class="n">mult</span><span class="o">*</span><span class="n">distributionV</span><span class="p">(</span><span class="n">randomGenerator</span><span class="p">);</span>
+        <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vz</span> <span class="o">=</span> <span class="n">mult</span><span class="o">*</span><span class="n">distributionV</span><span class="p">(</span><span class="n">randomGenerator</span><span class="p">);</span>
+
+        <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">fx</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+        <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">fy</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+        <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">fz</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Now, all the positions are defined, we want to be able to save and visualize them.
+To do so, let us define a function that will save the positions of the atoms in XYZ format:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="n">saveFrame</span><span class="p">(</span><span class="n">const</span> <span class="n">char</span><span class="o">*</span> <span class="n">filename</span><span class="p">,</span> <span class="n">const</span> <span class="n">char</span><span class="o">*</span> <span class="n">modifier</span><span class="p">,</span> <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Atom</span><span class="o">&gt;</span> <span class="n">atoms</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">FILE</span><span class="o">*</span> <span class="n">out</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">modifier</span><span class="p">);</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%ld</span><span class="se">\n</span><span class="s2">Na+Cl</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">atoms</span><span class="o">.</span><span class="n">size</span><span class="p">());</span>
+    <span class="k">for</span> <span class="p">(</span><span class="nb">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">atoms</span><span class="o">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%c</span><span class="se">\t</span><span class="si">%f</span><span class="se">\t</span><span class="si">%f</span><span class="se">\t</span><span class="si">%f</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="o">*</span><span class="mf">10.0</span><span class="p">,</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="mf">10.0</span><span class="p">,</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">z</span><span class="o">*</span><span class="mf">10.0</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">fclose</span><span class="p">(</span><span class="n">out</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The function takes three arguments: the name of the file to save data into, modifier (<code class="docutils literal notranslate"><span class="pre">w</span></code> to overwrite or <code class="docutils literal notranslate"><span class="pre">a</span></code> to append data to the end of the file) and the vector of atoms containing the data that we are saving.
+Note that XYZ format allows one to save multiple frames by appending the data to the same file.
+Also note, that XYZ uses angstroms as length units, hence we are multiplying the positions by 10.
+The first line of the file should contain the number of atoms, which is the length of the atoms vector.
+The second line should have the description of the system.
+These two lines are repeated for each frame if we are appending them.
+XYZ uses only one character for atom name, which we defined earlier, while filling the vector of atoms.</p>
+<p>Now we can add the call to this function to write the initial frame:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">saveFrame</span><span class="p">(</span><span class="s2">&quot;nacl.xyz&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">atoms</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>If you compile and execute the code, you should have <code class="docutils literal notranslate"><span class="pre">nacl.xyz</span></code> file, which can be visualized with e.g. VMD software.
+It is better to look at in VdW representation, that shows Van-der-Waals spheres for particles.</p>
+</section>
+<section id="integrating-equations-of-motion-and-applying-periodic-boundary-conditions">
+<h2>Integrating equations of motion and applying periodic boundary conditions<a class="headerlink" href="#integrating-equations-of-motion-and-applying-periodic-boundary-conditions" title="Permalink to this heading"></a></h2>
+<p>We have the static picture of the system.
+Let us now make the atoms move by integrating their equations of motion numerically.
+Before implementing the numerical integration, we need to define its parameters: the timestep and the number of steps:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#define NSTEPS 1000000</span>
+<span class="c1">#define tau 0.001  // ps</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>We used the timestep of 1 fs, which should be plenty small: we already showed that Leap-Frog method is stable with this timestep even if we have fast harmonic bond oscillations.
+Now, let us add a main loop in which we are going to do these integration steps.
+On each step, for each atom, we need to re-compute its velocities and positions according to the integration scheme.
+We will use the Leap-Frog algorithm:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}\mathbf{v}_{i}^{n+\frac{1}{2}} = \mathbf{v}_{i}^{n-\frac{1}{2}} + \frac{\mathbf{f}_{i}^{n}}{m_i}\tau\\\mathbf{r}_{i}^{n+1} = \mathbf{r}_{i}^{n} + \mathbf{v}_{i}^{n+\frac{1}{2}}\tau\end{aligned}\end{align} \]</div>
+</div></blockquote>
+<p>In the code, this renders to:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="p">(</span><span class="nb">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="n">NSTEPS</span><span class="p">;</span> <span class="n">n</span><span class="o">++</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="nb">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nb">float</span> <span class="n">mult</span> <span class="o">=</span> <span class="n">tau</span><span class="o">/</span><span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">m</span><span class="p">;</span>
+
+        <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vx</span> <span class="o">=</span> <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vx</span> <span class="o">+</span> <span class="n">mult</span><span class="o">*</span><span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">fx</span><span class="p">;</span>
+        <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vy</span> <span class="o">=</span> <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vy</span> <span class="o">+</span> <span class="n">mult</span><span class="o">*</span><span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">fy</span><span class="p">;</span>
+        <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vz</span> <span class="o">=</span> <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vz</span> <span class="o">+</span> <span class="n">mult</span><span class="o">*</span><span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">fz</span><span class="p">;</span>
+
+        <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">tau</span><span class="o">*</span><span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vx</span><span class="p">;</span>
+        <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">tau</span><span class="o">*</span><span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vy</span><span class="p">;</span>
+        <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">z</span> <span class="o">+</span> <span class="n">tau</span><span class="o">*</span><span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vz</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>We also want to save the positions of atoms every now and then (say, every 100 steps).
+To do so, we can use the function we implemented earlier by calling it with <code class="docutils literal notranslate"><span class="pre">a</span></code> modifier:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">saveFrame</span><span class="p">(</span><span class="s2">&quot;nacl.xyz&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">atoms</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Note that this should be placed inside the loop over the time steps, but not inside the loop over the particles.</p>
+<p>If one to compile and run the code, they will see that particles are floating away from the initial box they we put in.
+This is because we are not using any boundary conditions yet.
+In molecular dynamics, the most common boundary conditions are Periodic Boundary Conditions or PBC.
+These affect system in two ways.
+First, when particle floats from the box, it is moved as if it enters from the other side.
+Second, when the distances are computed, one should select the distance between the nearest images of the particles.
+We will deal with the second part later, let us do the first.</p>
+<p>What we need to do is transfer the particle to the other side if the box if it crosses the border.
+Since our box is quadratic, we can do this one component at a time.
+There are two options to go beyond the border then: when the component of the position of the particle becomes negative, or when it is larger than the size of the box L:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">float</span> <span class="n">transferPBC</span><span class="p">(</span><span class="nb">float</span> <span class="n">x</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">L</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">L</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">-</span> <span class="n">L</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">x</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This method only works when particles moved no further than one unit cell (i.e. crossed the border only once).
+There are more robust methods, but in the interest of clarity we stick with this simple method for now.
+Now we need to call this function during the simulation so that the particles are transferred to the initial box.
+Because of the way we implemented the function, is should be called for every component of the position for every atom, which can be done right after moving atoms in the integrator:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">transferPBC</span><span class="p">(</span><span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="p">);</span>
+<span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">transferPBC</span><span class="p">(</span><span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">y</span><span class="p">);</span>
+<span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">transferPBC</span><span class="p">(</span><span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">z</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Compile and run the code to see that everything worked.
+The atoms should now be in the same box throughout the simulation.</p>
+</section>
+<section id="adding-interactions-between-atoms">
+<h2>Adding interactions between atoms<a class="headerlink" href="#adding-interactions-between-atoms" title="Permalink to this heading"></a></h2>
+<p>The atoms should be interacting via Van-der-Waals and electrostatic interactions.
+The functional form of the interaction potential is:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[V_{nb} = \sum_{i,j}\left(\varepsilon_{ij}\left[\left(\frac{\sigma_{ij}}{r_{ij}}\right)^{12}-2\left(\frac{\sigma_{ij}}{r_{ij}}\right)^{6}\right] + k_c\frac{q_{i}q_{j}}{r_{ij}}\right)\]</div>
+</div></blockquote>
+<p>To get the forces out of this, we need to compute the gradient of the potential with respect to the coordinates of the particle in question.
+The formula for the interatomic force acting on the <code class="docutils literal notranslate"><span class="pre">i</span></code>-th particle is:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\mathbf{f}_i = \sum_{j}\left(-12\varepsilon_{ij}\left(\frac{\sigma_{ij}}{r_{ij}}\right)^{6}\left[\left(\frac{\sigma_{ij}}{r_{ij}}\right)^{6}-1\right]\frac{1}{r_{ij}^2}\frac{\mathbf{r}_{ij}}{r_{ij}}-k_c\frac{q_{i}q_{j}}{r_{ij}^2}\frac{\mathbf{r}_{ij}}{r_{ij}} \right)\]</div>
+<div class="admonition-exercise exercise important admonition" id="exercise-1">
+<p class="admonition-title">Exercise</p>
+<p>Derive the expression above.</p>
+</div>
+</div></blockquote>
+<p>Here, <span class="math notranslate nohighlight">\(\mathbf{r}_{ij}\)</span> is the vector, connecting <code class="docutils literal notranslate"><span class="pre">i</span></code>-th and <code class="docutils literal notranslate"><span class="pre">j</span></code>-th particles and :<span class="math notranslate nohighlight">\(r_{ij}\)</span> is its length.</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="p">(</span><span class="nb">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="nb">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nb">float</span> <span class="n">dx</span> <span class="o">=</span> <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">atoms</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="p">;</span>
+        <span class="nb">float</span> <span class="n">dy</span> <span class="o">=</span> <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">atoms</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">y</span><span class="p">;</span>
+        <span class="nb">float</span> <span class="n">dz</span> <span class="o">=</span> <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">z</span> <span class="o">-</span> <span class="n">atoms</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">z</span><span class="p">;</span>
+
+        <span class="nb">float</span> <span class="n">dr2</span> <span class="o">=</span> <span class="n">dx</span><span class="o">*</span><span class="n">dx</span> <span class="o">+</span> <span class="n">dy</span><span class="o">*</span><span class="n">dy</span> <span class="o">+</span> <span class="n">dz</span><span class="o">*</span><span class="n">dz</span><span class="p">;</span>
+        <span class="nb">float</span> <span class="n">sigma</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">sigma</span> <span class="o">+</span> <span class="n">atoms</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">sigma</span><span class="p">);</span>
+        <span class="nb">float</span> <span class="n">epsilon</span> <span class="o">=</span> <span class="n">sqrtf</span><span class="p">(</span><span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">epsilon</span><span class="o">*</span><span class="n">atoms</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">epsilon</span><span class="p">);</span>
+        <span class="nb">float</span> <span class="n">sigma2</span> <span class="o">=</span> <span class="n">sigma</span><span class="o">*</span><span class="n">sigma</span><span class="p">;</span>
+        <span class="nb">float</span> <span class="n">sor2</span> <span class="o">=</span> <span class="n">sigma2</span><span class="o">/</span><span class="n">dr2</span><span class="p">;</span>
+        <span class="nb">float</span> <span class="n">sor6</span> <span class="o">=</span> <span class="n">sor2</span><span class="o">*</span><span class="n">sor2</span><span class="o">*</span><span class="n">sor2</span><span class="p">;</span>
+        <span class="nb">float</span> <span class="n">df</span> <span class="o">=</span> <span class="mf">12.0</span><span class="o">*</span><span class="n">epsilon</span><span class="o">*</span><span class="n">sor6</span><span class="o">*</span><span class="p">(</span><span class="n">sor6</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span><span class="o">/</span><span class="n">dr2</span><span class="p">;</span>
+
+        <span class="nb">float</span> <span class="n">dr</span> <span class="o">=</span> <span class="n">sqrtf</span><span class="p">(</span><span class="n">dr2</span><span class="p">);</span>
+        <span class="n">df</span> <span class="o">+=</span> <span class="n">KC</span><span class="o">*</span><span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">q</span><span class="o">*</span><span class="n">atoms</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">q</span><span class="o">/</span><span class="p">(</span><span class="n">dr2</span><span class="o">*</span><span class="n">dr</span><span class="p">);</span>
+
+        <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">fx</span> <span class="o">+=</span> <span class="n">df</span><span class="o">*</span><span class="n">dx</span><span class="p">;</span>
+        <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">fy</span> <span class="o">+=</span> <span class="n">df</span><span class="o">*</span><span class="n">dy</span><span class="p">;</span>
+        <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">fz</span> <span class="o">+=</span> <span class="n">df</span><span class="o">*</span><span class="n">dz</span><span class="p">;</span>
+
+        <span class="n">atoms</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">fx</span> <span class="o">-=</span> <span class="n">df</span><span class="o">*</span><span class="n">dx</span><span class="p">;</span>
+        <span class="n">atoms</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">fy</span> <span class="o">-=</span> <span class="n">df</span><span class="o">*</span><span class="n">dy</span><span class="p">;</span>
+        <span class="n">atoms</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">fz</span> <span class="o">-=</span> <span class="n">df</span><span class="o">*</span><span class="n">dz</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Note that in the code above we took advantage of the Newton third law and compute force between two particle once and add the increment to both particles force but with opposite signs.
+This requires us to use separate loop over atoms: all the forces should be computed before we integrate the equations of motion.</p>
+<p>Before we test the code, there are two thing to fix.
+First, the vector, connecting particles <code class="docutils literal notranslate"><span class="pre">i</span></code> and <code class="docutils literal notranslate"><span class="pre">j</span></code> and its length should be computed with periodic boundary conditions in mind: the closest distance between any periodic image of particle <code class="docutils literal notranslate"><span class="pre">i</span></code> and any periodic image of particle <code class="docutils literal notranslate"><span class="pre">j</span></code> should be taken.
+Likely, this is easier than going through all the images: from every component of the vector <span class="math notranslate nohighlight">\(\mathbf{r}_{ij}\)</span>, we should subtract the integer number of the box length in it.
+To fix this, edit the code:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="p">(</span><span class="nb">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="nb">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nb">float</span> <span class="n">dx</span> <span class="o">=</span> <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">atoms</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="p">;</span>
+        <span class="nb">float</span> <span class="n">dy</span> <span class="o">=</span> <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">atoms</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">y</span><span class="p">;</span>
+        <span class="nb">float</span> <span class="n">dz</span> <span class="o">=</span> <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">z</span> <span class="o">-</span> <span class="n">atoms</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">z</span><span class="p">;</span>
+
+        <span class="n">dx</span> <span class="o">-=</span> <span class="n">rint</span><span class="p">(</span><span class="n">dx</span><span class="o">/</span><span class="n">L</span><span class="p">)</span><span class="o">*</span><span class="n">L</span><span class="p">;</span>
+        <span class="n">dy</span> <span class="o">-=</span> <span class="n">rint</span><span class="p">(</span><span class="n">dy</span><span class="o">/</span><span class="n">L</span><span class="p">)</span><span class="o">*</span><span class="n">L</span><span class="p">;</span>
+        <span class="n">dz</span> <span class="o">-=</span> <span class="n">rint</span><span class="p">(</span><span class="n">dz</span><span class="o">/</span><span class="n">L</span><span class="p">)</span><span class="o">*</span><span class="n">L</span><span class="p">;</span>
+
+        <span class="o">...</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Secondly, we are accumulating forces for each particle.
+To make sure that we don’t keep these increments from the previous steps, we need to set forces to zero after the numerical integration timestep is done:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">fx</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+<span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">fy</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+<span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">fz</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="monitoring-and-controlling-temperature-of-the-system">
+<h2>Monitoring and controlling temperature of the system<a class="headerlink" href="#monitoring-and-controlling-temperature-of-the-system" title="Permalink to this heading"></a></h2>
+<p>We would expect that after running the simulation for a while, we will have a partly of fully formed NaCl crystal.
+However, this is not what is happening.
+The reason is following.
+When we assigned the initial velocities to the atoms, we used Maxwell-Boltzmann distribution.
+These velocities correspond to the temperature of 300K and should give us the kinetic energy that also corresponds to 300K.
+However, we did not do the same with positions and potential energy — we just placed the particles randomly in the selected compartment.
+Because of that, the initial configuration of the system (i.e. randomly placed particles) has an excess in potential energy.
+During the simulations, the extra energy makes its way into the kinetic energy, particles accelerate and never form crystal.
+The effective temperature is just too high.</p>
+<p>Let us check if this is the case.
+We can use Maxwell-Boltzmann distribution again, only now we are going to get the actual temperature of the system out of particles velocities.
+The formula that we are going to use is:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[T=\langle \frac{m_iv_i^2}{3k_B}\rangle\]</div>
+</div></blockquote>
+<p>Where <span class="math notranslate nohighlight">\(m_i\)</span> and <span class="math notranslate nohighlight">\(v_i\)</span> are the mass and velocity of the particle, <span class="math notranslate nohighlight">\(k_B\)</span> is Boltzmann constant.
+The angular brackets represent average over all particles.
+Since our molecular system is small, we also are going to take the average over time.
+This will allow us to get better average with less noise.</p>
+<p>To do the averaging, we are going to need two numbers: a real number to accumulate the sum of all the temperatures for all particles across the system and an integer that will keep the quantity of the numbers added.
+The integer is not required since we can always compute it as a product of the number of particles and number of steps that we were accumulating.
+But to avoid mistakes it is better to add one to this number every time we accumulate.
+We are also adding the variable to keep last computed temperature, which is going to be useful later.
+Initially, we set it to <code class="docutils literal notranslate"><span class="pre">T</span></code> since this is the temperature that corresponds to the initial velocities of the particles.</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">double</span> <span class="n">temperature</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+<span class="nb">int</span> <span class="n">nTemperature</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="nb">float</span> <span class="n">currentTemperature</span> <span class="o">=</span> <span class="n">T</span><span class="p">;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Note that we used <code class="docutils literal notranslate"><span class="pre">double</span></code> here.
+We are going to add small number to a relatively large sum.
+It is better to use double precision in such cases to avoid round-up errors.</p>
+<p>Now, on each timestep and for each particle, we are going to add <span class="math notranslate nohighlight">\(m_iv_i^2\)</span> to <code class="docutils literal notranslate"><span class="pre">temperature</span></code> and add one to <code class="docutils literal notranslate"><span class="pre">nTemperature</span></code>:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">float</span> <span class="n">v2</span> <span class="o">=</span> <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vx</span><span class="o">*</span><span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vx</span> <span class="o">+</span>
+<span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vy</span><span class="o">*</span><span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vy</span> <span class="o">+</span>
+<span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vz</span><span class="o">*</span><span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vz</span><span class="p">;</span>
+
+<span class="n">temperature</span> <span class="o">+=</span> <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">m</span><span class="o">*</span><span class="n">v2</span><span class="p">;</span>
+<span class="n">nTemperature</span> <span class="o">++</span><span class="p">;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>To compute and print the temperature:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">currentTemperature</span> <span class="o">=</span> <span class="p">(</span><span class="n">temperature</span><span class="o">/</span><span class="p">(</span><span class="mf">3.0</span><span class="o">*</span><span class="n">KB</span><span class="p">))</span><span class="o">/</span><span class="n">nTemperature</span><span class="p">;</span>
+<span class="n">printf</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="se">\t</span><span class="si">%f</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">currentTemperature</span><span class="p">);</span>
+<span class="n">temperature</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+<span class="n">nTemperature</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Note that we divide by <span class="math notranslate nohighlight">\(3k_B\)</span> on the later stage in order to do the division only once, which is better from the performance standpoint.</p>
+<p>If we ran the code, we will see that the temperature rises from its initial value of 300K, which is expected: we have too much extra potential energy in our initial conformation.
+In order to control the current temperature, we are going to employ basic thermostat, that will scale the velocities of particles on each timestep.
+Since the computed temperature is not exact and will oscillate, we are going to smooth the scaling by employing the relaxation time constant, <span class="math notranslate nohighlight">\(\tau_r\)</span>.
+With this constant, the scaling factor is:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[s_v=\sqrt{1 - \frac{(T_c-T)*\tau}{T*\tau_r}}\]</div>
+</div></blockquote>
+<p>Here, <span class="math notranslate nohighlight">\(T_c\)</span> and <span class="math notranslate nohighlight">\(T\)</span> are our current (computed) and target temperatures, <span class="math notranslate nohighlight">\(\tau\)</span> is the timestep and <span class="math notranslate nohighlight">\(\tau_r\)</span> is the relaxation time.
+Note that the relaxation time should be larger than the timestep and larger than periods with which we update the current temperature.
+In the code, the temperature control renders to the definition of relaxation time and scaling of the velocities when we integrate:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+<span class="c1">#define relax 10.0</span>
+<span class="o">...</span>
+<span class="nb">float</span> <span class="n">scale</span> <span class="o">=</span> <span class="n">sqrtf</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="p">((</span><span class="n">currentTemperature</span><span class="o">-</span><span class="n">T</span><span class="p">)</span><span class="o">*</span><span class="n">tau</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">T</span><span class="o">*</span><span class="n">relax</span><span class="p">));</span>
+<span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vx</span> <span class="o">*=</span> <span class="n">scale</span><span class="p">;</span>
+<span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vy</span> <span class="o">*=</span> <span class="n">scale</span><span class="p">;</span>
+<span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vz</span> <span class="o">*=</span> <span class="n">scale</span><span class="p">;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Run the code to see that the temperature is leveling off on the target of 300K.</p>
+</section>
+<section id="the-final-code">
+<h2>The final code<a class="headerlink" href="#the-final-code" title="Permalink to this heading"></a></h2>
+<p>If one puts all the above together, they end up with something similar to the following code snippet:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &lt;stdio.h&gt;</span>
+<span class="c1">#include &lt;math.h&gt;</span>
+<span class="c1">#include &lt;limits.h&gt;</span>
+<span class="c1">#include &lt;vector&gt;</span>
+<span class="c1">#include &lt;random&gt;</span>
+
+<span class="c1">#define N  100</span>
+<span class="c1">#define L  5.0  // nm</span>
+
+<span class="c1">#define T  300.0 // K</span>
+
+<span class="c1">#define KB 8.314462e-3 // kJ/mol/K</span>
+<span class="c1">#define KC 138.9118    // nm*kJ/mol/e^2</span>
+
+<span class="c1">#define NSTEPS 1000000</span>
+<span class="c1">#define tau 0.001  // ps</span>
+
+<span class="c1">#define Q_NA  1.0 // Elementary charge</span>
+<span class="c1">#define Q_CL  -1.0</span>
+
+<span class="c1">#define M_NA  23.0 // g/mol</span>
+<span class="c1">#define M_CL  35.5</span>
+
+<span class="c1">#define SIGMA_NA 0.25</span>
+<span class="c1">#define SIGMA_CL 0.40</span>
+
+<span class="c1">#define EPSILON_NA 0.196</span>
+<span class="c1">#define EPSILON_CL 0.628</span>
+
+<span class="c1">#define relax 10.0</span>
+
+<span class="n">struct</span> <span class="n">Atom</span>
+<span class="p">{</span>
+    <span class="nb">float</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">;</span>
+    <span class="nb">float</span> <span class="n">vx</span><span class="p">,</span> <span class="n">vy</span><span class="p">,</span> <span class="n">vz</span><span class="p">;</span>
+    <span class="nb">float</span> <span class="n">fx</span><span class="p">,</span> <span class="n">fy</span><span class="p">,</span> <span class="n">fz</span><span class="p">;</span>
+    <span class="nb">float</span> <span class="n">q</span><span class="p">;</span>
+    <span class="nb">float</span> <span class="n">m</span><span class="p">;</span>
+    <span class="nb">float</span> <span class="n">sigma</span><span class="p">;</span>
+    <span class="nb">float</span> <span class="n">epsilon</span><span class="p">;</span>
+    <span class="n">char</span> <span class="n">name</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="nb">float</span> <span class="n">transferPBC</span><span class="p">(</span><span class="nb">float</span> <span class="n">x</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">L</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">L</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">-</span> <span class="n">L</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">x</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">void</span> <span class="n">saveFrame</span><span class="p">(</span><span class="n">const</span> <span class="n">char</span><span class="o">*</span> <span class="n">filename</span><span class="p">,</span> <span class="n">const</span> <span class="n">char</span><span class="o">*</span> <span class="n">modifier</span><span class="p">,</span> <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Atom</span><span class="o">&gt;</span> <span class="n">atoms</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">FILE</span><span class="o">*</span> <span class="n">out</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">modifier</span><span class="p">);</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%ld</span><span class="se">\n</span><span class="s2">Na+Cl</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">atoms</span><span class="o">.</span><span class="n">size</span><span class="p">());</span>
+    <span class="k">for</span> <span class="p">(</span><span class="nb">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">atoms</span><span class="o">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">%c</span><span class="se">\t</span><span class="si">%f</span><span class="se">\t</span><span class="si">%f</span><span class="se">\t</span><span class="si">%f</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="o">*</span><span class="mf">10.0</span><span class="p">,</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">y</span><span class="o">*</span><span class="mf">10.0</span><span class="p">,</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">z</span><span class="o">*</span><span class="mf">10.0</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">fclose</span><span class="p">(</span><span class="n">out</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nb">int</span> <span class="n">main</span><span class="p">(</span><span class="nb">int</span> <span class="n">argc</span><span class="p">,</span> <span class="n">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+    <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Atom</span><span class="o">&gt;</span> <span class="n">atoms</span><span class="p">(</span><span class="n">N</span><span class="p">);</span>
+
+    <span class="n">std</span><span class="p">::</span><span class="n">random_device</span> <span class="n">randomDevice</span><span class="p">;</span>
+    <span class="n">std</span><span class="p">::</span><span class="n">mt19937</span> <span class="n">randomGenerator</span><span class="p">(</span><span class="n">randomDevice</span><span class="p">());</span>
+    <span class="n">std</span><span class="p">::</span><span class="n">uniform_real_distribution</span><span class="o">&lt;&gt;</span> <span class="n">distributionX</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">L</span><span class="p">);</span>
+    <span class="n">std</span><span class="p">::</span><span class="n">normal_distribution</span><span class="o">&lt;&gt;</span> <span class="n">distributionV</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">sqrtf</span><span class="p">(</span><span class="n">KB</span><span class="o">*</span><span class="n">T</span><span class="p">));</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="nb">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">distributionX</span><span class="p">(</span><span class="n">randomGenerator</span><span class="p">);</span>
+        <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">distributionX</span><span class="p">(</span><span class="n">randomGenerator</span><span class="p">);</span>
+        <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">distributionX</span><span class="p">(</span><span class="n">randomGenerator</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;N&#39;</span><span class="p">;</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">q</span> <span class="o">=</span> <span class="n">Q_NA</span><span class="p">;</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="n">M_NA</span><span class="p">;</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">sigma</span> <span class="o">=</span> <span class="n">SIGMA_NA</span><span class="p">;</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">epsilon</span> <span class="o">=</span> <span class="n">EPSILON_NA</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;C&#39;</span><span class="p">;</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">q</span> <span class="o">=</span> <span class="n">Q_CL</span><span class="p">;</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="n">M_CL</span><span class="p">;</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">sigma</span> <span class="o">=</span> <span class="n">SIGMA_CL</span><span class="p">;</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">epsilon</span> <span class="o">=</span> <span class="n">EPSILON_CL</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="nb">float</span> <span class="n">mult</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">sqrtf</span><span class="p">(</span><span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">m</span><span class="p">);</span>
+        <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vx</span> <span class="o">=</span> <span class="n">mult</span><span class="o">*</span><span class="n">distributionV</span><span class="p">(</span><span class="n">randomGenerator</span><span class="p">);</span>
+        <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vy</span> <span class="o">=</span> <span class="n">mult</span><span class="o">*</span><span class="n">distributionV</span><span class="p">(</span><span class="n">randomGenerator</span><span class="p">);</span>
+        <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vz</span> <span class="o">=</span> <span class="n">mult</span><span class="o">*</span><span class="n">distributionV</span><span class="p">(</span><span class="n">randomGenerator</span><span class="p">);</span>
+
+        <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">fx</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+        <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">fy</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+        <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">fz</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">saveFrame</span><span class="p">(</span><span class="s2">&quot;nacl.xyz&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">atoms</span><span class="p">);</span>
+
+    <span class="n">double</span> <span class="n">temperature</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+    <span class="nb">int</span> <span class="n">nTemperature</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="nb">float</span> <span class="n">currentTemperature</span> <span class="o">=</span> <span class="n">T</span><span class="p">;</span>
+
+    <span class="k">for</span> <span class="p">(</span><span class="nb">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="n">NSTEPS</span><span class="p">;</span> <span class="n">n</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="nb">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">for</span> <span class="p">(</span><span class="nb">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="nb">float</span> <span class="n">dx</span> <span class="o">=</span> <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">atoms</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="p">;</span>
+                <span class="nb">float</span> <span class="n">dy</span> <span class="o">=</span> <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">atoms</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">y</span><span class="p">;</span>
+                <span class="nb">float</span> <span class="n">dz</span> <span class="o">=</span> <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">z</span> <span class="o">-</span> <span class="n">atoms</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">z</span><span class="p">;</span>
+
+                <span class="n">dx</span> <span class="o">-=</span> <span class="n">rint</span><span class="p">(</span><span class="n">dx</span><span class="o">/</span><span class="n">L</span><span class="p">)</span><span class="o">*</span><span class="n">L</span><span class="p">;</span>
+                <span class="n">dy</span> <span class="o">-=</span> <span class="n">rint</span><span class="p">(</span><span class="n">dy</span><span class="o">/</span><span class="n">L</span><span class="p">)</span><span class="o">*</span><span class="n">L</span><span class="p">;</span>
+                <span class="n">dz</span> <span class="o">-=</span> <span class="n">rint</span><span class="p">(</span><span class="n">dz</span><span class="o">/</span><span class="n">L</span><span class="p">)</span><span class="o">*</span><span class="n">L</span><span class="p">;</span>
+
+                <span class="nb">float</span> <span class="n">dr2</span> <span class="o">=</span> <span class="n">dx</span><span class="o">*</span><span class="n">dx</span> <span class="o">+</span> <span class="n">dy</span><span class="o">*</span><span class="n">dy</span> <span class="o">+</span> <span class="n">dz</span><span class="o">*</span><span class="n">dz</span><span class="p">;</span>
+                <span class="nb">float</span> <span class="n">sigma</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">sigma</span> <span class="o">+</span> <span class="n">atoms</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">sigma</span><span class="p">);</span>
+                <span class="nb">float</span> <span class="n">epsilon</span> <span class="o">=</span> <span class="n">sqrtf</span><span class="p">(</span><span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">epsilon</span><span class="o">*</span><span class="n">atoms</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">epsilon</span><span class="p">);</span>
+                <span class="nb">float</span> <span class="n">sigma2</span> <span class="o">=</span> <span class="n">sigma</span><span class="o">*</span><span class="n">sigma</span><span class="p">;</span>
+                <span class="nb">float</span> <span class="n">sor2</span> <span class="o">=</span> <span class="n">sigma2</span><span class="o">/</span><span class="n">dr2</span><span class="p">;</span>
+                <span class="nb">float</span> <span class="n">sor6</span> <span class="o">=</span> <span class="n">sor2</span><span class="o">*</span><span class="n">sor2</span><span class="o">*</span><span class="n">sor2</span><span class="p">;</span>
+                <span class="nb">float</span> <span class="n">df</span> <span class="o">=</span> <span class="mf">12.0</span><span class="o">*</span><span class="n">epsilon</span><span class="o">*</span><span class="n">sor6</span><span class="o">*</span><span class="p">(</span><span class="n">sor6</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span><span class="o">/</span><span class="n">dr2</span><span class="p">;</span>
+
+                <span class="nb">float</span> <span class="n">dr</span> <span class="o">=</span> <span class="n">sqrtf</span><span class="p">(</span><span class="n">dr2</span><span class="p">);</span>
+                <span class="n">df</span> <span class="o">+=</span> <span class="n">KC</span><span class="o">*</span><span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">q</span><span class="o">*</span><span class="n">atoms</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">q</span><span class="o">/</span><span class="p">(</span><span class="n">dr2</span><span class="o">*</span><span class="n">dr</span><span class="p">);</span>
+
+                <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">fx</span> <span class="o">+=</span> <span class="n">df</span><span class="o">*</span><span class="n">dx</span><span class="p">;</span>
+                <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">fy</span> <span class="o">+=</span> <span class="n">df</span><span class="o">*</span><span class="n">dy</span><span class="p">;</span>
+                <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">fz</span> <span class="o">+=</span> <span class="n">df</span><span class="o">*</span><span class="n">dz</span><span class="p">;</span>
+
+                <span class="n">atoms</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">fx</span> <span class="o">-=</span> <span class="n">df</span><span class="o">*</span><span class="n">dx</span><span class="p">;</span>
+                <span class="n">atoms</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">fy</span> <span class="o">-=</span> <span class="n">df</span><span class="o">*</span><span class="n">dy</span><span class="p">;</span>
+                <span class="n">atoms</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">fz</span> <span class="o">-=</span> <span class="n">df</span><span class="o">*</span><span class="n">dz</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="nb">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="nb">float</span> <span class="n">scale</span> <span class="o">=</span> <span class="n">sqrtf</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="p">((</span><span class="n">currentTemperature</span><span class="o">-</span><span class="n">T</span><span class="p">)</span><span class="o">*</span><span class="n">tau</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">T</span><span class="o">*</span><span class="n">relax</span><span class="p">));</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vx</span> <span class="o">*=</span> <span class="n">scale</span><span class="p">;</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vy</span> <span class="o">*=</span> <span class="n">scale</span><span class="p">;</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vz</span> <span class="o">*=</span> <span class="n">scale</span><span class="p">;</span>
+
+            <span class="nb">float</span> <span class="n">mult</span> <span class="o">=</span> <span class="n">tau</span><span class="o">/</span><span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">m</span><span class="p">;</span>
+
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vx</span> <span class="o">=</span> <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vx</span> <span class="o">+</span> <span class="n">mult</span><span class="o">*</span><span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">fx</span><span class="p">;</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vy</span> <span class="o">=</span> <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vy</span> <span class="o">+</span> <span class="n">mult</span><span class="o">*</span><span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">fy</span><span class="p">;</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vz</span> <span class="o">=</span> <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vz</span> <span class="o">+</span> <span class="n">mult</span><span class="o">*</span><span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">fz</span><span class="p">;</span>
+
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">tau</span><span class="o">*</span><span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vx</span><span class="p">;</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">tau</span><span class="o">*</span><span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vy</span><span class="p">;</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">z</span> <span class="o">+</span> <span class="n">tau</span><span class="o">*</span><span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vz</span><span class="p">;</span>
+
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">transferPBC</span><span class="p">(</span><span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="p">);</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">transferPBC</span><span class="p">(</span><span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">y</span><span class="p">);</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">transferPBC</span><span class="p">(</span><span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">z</span><span class="p">);</span>
+
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">fx</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">fy</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+            <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">fz</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+
+            <span class="nb">float</span> <span class="n">v2</span> <span class="o">=</span> <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vx</span><span class="o">*</span><span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vx</span> <span class="o">+</span>
+                    <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vy</span><span class="o">*</span><span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vy</span> <span class="o">+</span>
+                    <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vz</span><span class="o">*</span><span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">vz</span><span class="p">;</span>
+
+            <span class="n">temperature</span> <span class="o">+=</span> <span class="n">atoms</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">m</span><span class="o">*</span><span class="n">v2</span><span class="p">;</span>
+            <span class="n">nTemperature</span> <span class="o">++</span><span class="p">;</span>
+
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">currentTemperature</span> <span class="o">=</span> <span class="p">(</span><span class="n">temperature</span><span class="o">/</span><span class="p">(</span><span class="mf">3.0</span><span class="o">*</span><span class="n">KB</span><span class="p">))</span><span class="o">/</span><span class="n">nTemperature</span><span class="p">;</span>
+            <span class="n">printf</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="se">\t</span><span class="si">%f</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">currentTemperature</span><span class="p">);</span>
+            <span class="n">temperature</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+            <span class="n">nTemperature</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="n">saveFrame</span><span class="p">(</span><span class="s2">&quot;nacl.xyz&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">atoms</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="big-problem-with-the-code-above">
+<h2>Big problem with the code above<a class="headerlink" href="#big-problem-with-the-code-above" title="Permalink to this heading"></a></h2>
+<p>There is one big problem with the code above, which can not be easily addressed.
+When we compute the distance between two particles, we take into account the periodic boundary conditions.
+This means, that any component of the <span class="math notranslate nohighlight">\(r_{ij}\)</span> vector that connect two particles can not be larger than half of the simulation box.
+What happens is when the distance becomes larger, we switch to another periodic image of the particle.
+This creates an artificial mimima in the interaction potential on the half-box length.
+Throughout the simulations, some of the particles can be dragged to this minima</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../06_Constraints/" class="btn btn-neutral float-left" title="Constraints" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../ExerciseDNAPacking/" class="btn btn-neutral float-right" title="Вариант 1: Упаковка ДНК" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Artem Zhmurov.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

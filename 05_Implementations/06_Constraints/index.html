@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Constraints &mdash; MD simulations  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx_lesson.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/term_role_formatting.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx_rtd_theme_ext_color_contrast.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/clipboard.min.js"></script>
+        <script src="../../_static/copybutton.js"></script>
+        <script src="../../_static/minipres.js"></script>
+        <script>let toggleHintShow = 'Click to show';</script>
+        <script>let toggleHintHide = 'Click to hide';</script>
+        <script>let toggleOpenOnPrint = 'true';</script>
+        <script src="../../_static/togglebutton.js"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex/" />
+    <link rel="search" title="Search" href="../../search/" />
+    <link rel="next" title="Implementation of a simple molecular dynamics code: NaCl in vacuum" href="../10_NaCl/" />
+    <link rel="prev" title="PME" href="../05_PME/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../" class="icon icon-home">
+            MD simulations
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Prerequisites</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../00_Prereq/01_Software/">Software</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Biological molecules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/01_Water/">Water molecule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/02_AminoAcids/">AminoAcids</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/03_Proteins/">Proteins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/04_DNA/">DNA and RNA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/05_MolecularSystems/">Molecular systems</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">MD simulations of protein</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../03_UsingGROMACS/Calmodulin/Instructions/">MD simulations of calmodulin</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">MD simulations of small molecules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../04_SmallMolecules/01_Benzene/">Create topology and coordinates for benzene molecule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../04_SmallMolecules/02_Alkanes/">Linear hydrocarbons (alkanes)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../04_SmallMolecules/03_ManyMoleculesInABox/">GROMACS simulations of a box of 1000 octane molecules</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Implementations</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../01_Integration/">Numerical integration of equations of motion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02_GeneralNotesOnPotential/">From potential energy to atomic forces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../03_Bonded/">Bonded interactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../04_Nonbonded/">Non-bonded interactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../05_PME/">PME</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Constraints</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#numerical-integration">Numerical integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#solving-for-mu-c">Solving for <span class="math notranslate nohighlight">\(\mu_c\)</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#notations">Notations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#one-constraint">One constraint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#two-coupled-constraints">Two coupled constraints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#three-constraints-coupled-through-the-central-atom">Three constraints coupled through the central atom</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#triangle-of-constraints">Triangle of constraints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#settle">SETTLE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#more-than-three-coupled-constraints">More than three coupled constraints</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../10_NaCl/">Implementation of a simple molecular dynamics code: NaCl in vacuum</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Exercises</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../ExerciseDNAPacking/">Вариант 1: Упаковка ДНК</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ExercisePolymerization/">Вариант 2: Реакция полимеризации</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quick-reference/">Quick Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guide/">Instructor’s guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Home</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../AnglePotential/">Three-body potential</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../">MD simulations</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Constraints</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/zhmurov/content/blob/main/content/05_Implementations/06_Constraints.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="constraints">
+<h1>Constraints<a class="headerlink" href="#constraints" title="Permalink to this heading"></a></h1>
+<p>Equations of motion for the <span class="math notranslate nohighlight">\(k\)</span>-th particle:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[m_k\frac{d^2\mathbf{r}_k}{dt^2}=-\frac{\partial}{\partial \mathbf{r}_k}V\left(\{\mathbf{r}\}\right)=-\nabla_kV\left(\{\mathbf{r}\}\right)\]</div>
+</div></blockquote>
+<p>Same equations with constraints:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[m_k\frac{d^2\mathbf{r}_k}{dt^2}=-\frac{\partial}{\partial \mathbf{r}_k}\left(V\left(\{\mathbf{r}\}\right)+\sum_{c=1}^C\lambda_c\sigma_c\left(\{\mathbf{r}\}\right)\right)=\mathbf{f}_k+\delta\mathbf{f}_k\]</div>
+</div></blockquote>
+<p>Where</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\sigma_c\left(\{\mathbf{r}\}\right)=\mathbf{r}_{ml}^2-d_c^2=\mathbf{r}_{ml}^2-d_{ml}^2\]</div>
+</div></blockquote>
+<p>Here, <span class="math notranslate nohighlight">\(d_c=d_{ml}\)</span> is the target distance between <span class="math notranslate nohighlight">\(m\)</span>-th and <span class="math notranslate nohighlight">\(l\)</span>-th particles (constrain <span class="math notranslate nohighlight">\(c\)</span> connects particles <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(l\)</span>).</p>
+<p>The ‘’constrain’’ force <span class="math notranslate nohighlight">\(\delta\mathbf{f}_k\)</span> is then:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\delta\mathbf{f}_k=\frac{\partial}{\partial\mathbf{r}_k}\sum_{c=1}^{C}\lambda_c\sigma_c\left(\{\mathbf{r}\}\right)=\sum_{c=1}^{C}\lambda_c\frac{\partial}{\partial\mathbf{r}_k}\sigma_c\left(\{\mathbf{r}\}\right)=\sum_{c=1}^{C}\lambda_c2\left(\delta_{km}-\delta_{kl}\right)\mathbf{r}_{ml}\]</div>
+</div></blockquote>
+<section id="numerical-integration">
+<h2>Numerical integration<a class="headerlink" href="#numerical-integration" title="Permalink to this heading"></a></h2>
+<p>Since</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[m_k\frac{d^2\mathbf{r}_k}{dt^2}=\mathbf{f}_k+\delta\mathbf{f}_k\]</div>
+</div></blockquote>
+<p>(add numerical scheme here to show how lambda and mu are related)</p>
+<p>The numerical integration can be done in two steps: (1) integration as if there are no constraints and (2) adding the displacement due to ‘’constrain force’’ <span class="math notranslate nohighlight">\(\delta\mathbf{f}_k\)</span>, so that the constraints are satisfied:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\mathbf{r}_k^{n+1}=\mathbf{r}_k^* + \delta\mathbf{r}_k\]</div>
+</div></blockquote>
+<p>Where <span class="math notranslate nohighlight">\(\mathbf{r}_k^*\)</span> is the displaced coordinates as if there are no constraints and:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\delta\mathbf{r}_k=\sum_{c=1}^C\frac{\mu_c}{m_k}\left(\delta_{km}-\delta_{kl}\right)\mathbf{r}_{ml}\]</div>
+</div></blockquote>
+<p>Here, <span class="math notranslate nohighlight">\(\mu_c=2\lambda_c\tau^2\)</span> is the normalized Lagrange multiplier.</p>
+<p>Note that since <span class="math notranslate nohighlight">\(\delta\mathbf{\upsilon}=\frac{\delta\mathbf{r}}{\tau}\)</span>, the scaled Lagrange multiplier for the velocities is <span class="math notranslate nohighlight">\(\mu_c^\upsilon=\frac{\mu_c}{\tau}\)</span>.</p>
+</section>
+<section id="solving-for-mu-c">
+<h2>Solving for <span class="math notranslate nohighlight">\(\mu_c\)</span><a class="headerlink" href="#solving-for-mu-c" title="Permalink to this heading"></a></h2>
+<p>For each constrain c, after the numerical integration, the distance between constrained atoms should be equal to the target distance of that constraint, <span class="math notranslate nohighlight">\(d_c\)</span>. Hence, for each constraint we have <span class="math notranslate nohighlight">\(|\mathbf{r}_{ij}^{n+1}|=d_{ij}\)</span> or <span class="math notranslate nohighlight">\({\mathbf{r}_{ij}^{n+1}}^2=d_{ij}^2\)</span>, where <span class="math notranslate nohighlight">\(\mathbf{r}^{n+1}_{ij}=\mathbf{r}^{n+1}_{i}-\mathbf{r}^{n+1}_{j}\)</span>.</p>
+<p>These conditions should be satisfied by finding appropriate values for <span class="math notranslate nohighlight">\(\mu_c\)</span> (or equally <span class="math notranslate nohighlight">\(\lambda_c\)</span>). The general form for these quadratic equations is:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\begin{split}\begin{split}
+\left(\mathbf{r}_{ij}^*+\delta\mathbf{r}_{ij}\right)^2-d_{ij}^2=0 \\
+\left(\mathbf{r}_{ij}^*+\left(\delta\mathbf{r}_{i}-\delta\mathbf{r}_{j}\right)\right)^2-d_{ij}^2=0 \\
+\left(\mathbf{r}_{ij}^*+\left(\sum_{c=1}^C\frac{\mu_c}{m_i}\left(\delta_{im}-\delta_{il}\right)\mathbf{r}_{ml} - \sum_{c=1}^C\frac{\mu_c}{m_j}\left(\delta_{jm}-\delta_{jl}\right)\mathbf{r}_{ml}\right)\right)^2-d_{ij}^2=0
+\end{split}\end{split}\]</div>
+</div></blockquote>
+<p>Finally:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight" id="equation-mu">
+<span class="eqno">(1)<a class="headerlink" href="#equation-mu" title="Permalink to this equation"></a></span>\[\left(\mathbf{r}_{ij}^*+\sum_{c=1}^C\mu_c\left(\frac{\delta_{im}-\delta_{il}}{m_i} - \frac{\delta_{jm}-\delta_{jl}}{m_j}\right)\mathbf{r}_{ml}\right)^2-d_{ij}^2=0\]</div>
+</div></blockquote>
+<p>Note that the sum over all constraints <span class="math notranslate nohighlight">\(c=\{m,l\}\)</span> should include the pair <span class="math notranslate nohighlight">\(\{i,j\}\)</span>, in which case only two of the kronecker’s deltas will survive. For a coupled constraint, when either <span class="math notranslate nohighlight">\(i\)</span> or <span class="math notranslate nohighlight">\(j\)</span> is equal to one index in the <span class="math notranslate nohighlight">\(\{m,l\}\)</span> pair, only one delta will not be zero. Since <span class="math notranslate nohighlight">\(i\ne j\)</span> and <span class="math notranslate nohighlight">\(m\ne l\)</span>, there is never going to be the case when more than two deltas are not zero.</p>
+</section>
+<section id="notations">
+<h2>Notations<a class="headerlink" href="#notations" title="Permalink to this heading"></a></h2>
+<p>Before applying the above formula to specific cases, let us simplify the notations. First, let us us the <span class="math notranslate nohighlight">\(r_i^0\)</span> for the coordinates of the atom before the integration and <span class="math notranslate nohighlight">\(r_i\)</span> as the coordinates for the same particle after the integration and constraining is done. Second, let us assume that the constrain connecting atoms <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(l\)</span> has an index <span class="math notranslate nohighlight">\(c\)</span>, and we will use the constraint index <span class="math notranslate nohighlight">\(c\)</span> and indices of the connected particles <span class="math notranslate nohighlight">\(m\)</span> and <span class="math notranslate nohighlight">\(l\)</span> interchangeably (we already did this for <span class="math notranslate nohighlight">\(d_c=d_{ml}\)</span> above). We will be assigning these indexes for each case before deriving the formulas. This should allow us to have less noise in the formulas and the generalization for the <span class="math notranslate nohighlight">\(n\)</span>-th step and for arbitrary indices of particles should be straightforward.</p>
+</section>
+<section id="one-constraint">
+<h2>One constraint<a class="headerlink" href="#one-constraint" title="Permalink to this heading"></a></h2>
+<p>The simplest case by far is when we have a single constraint, which is not coupled to any other. An example should be the constrained C-H bond in the protein backbone in the case when only bonds with hydrogens are constrained (with the only exception of glycine, where there is another hydrogen instead of a side-chain). Indeed, this case is very simple: we have the direction of the bond in which atoms should be moved. And the sum of the displacements for two moved atoms should be so that the final distance is equal to the target. The displacements are reversely proportional to masses of atoms. Let us derive this formally, using the <a class="reference internal" href="#equation-mu">Equation 1</a> above.</p>
+<blockquote>
+<div><figure class="align-default" id="fig-constraints-ch1">
+<a class="reference internal image-reference" href="../../_images/CH1.png"><img alt="../../_images/CH1.png" src="../../_images/CH1.png" style="width: 200px;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 6 </span><span class="caption-text">A schematic representation of a constrained bond. Index on top of the bond represents the constraint index <span class="math notranslate nohighlight">\(c\)</span>. Arrow indicates the direction of the vector <span class="math notranslate nohighlight">\(\mathbf{r}_1\)</span>. Masses subscripts correspond to aton indices.</span><a class="headerlink" href="#fig-constraints-ch1" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+<p>We have one constraint <span class="math notranslate nohighlight">\(c=1=\{0,1\}\)</span> that connects two atoms <span class="math notranslate nohighlight">\(i=0\)</span> and <span class="math notranslate nohighlight">\(j=1\)</span> with masses <span class="math notranslate nohighlight">\(m_0\)</span> and <span class="math notranslate nohighlight">\(m_1\)</span>. We will also denote all the connecting vectors with constrain index, i.e. <span class="math notranslate nohighlight">\(\mathbf{r}_1=\mathbf{r}_{01}=\mathbf{r}_0-\mathbf{r}_1\)</span>, etc. so there is less noise in formulas. Note that we could remove the index altogether since there is only one constrained bond, but we will keep the index here for consistency with the rest of the cases. The sole equation derived from <a class="reference internal" href="#equation-mu">Equation 1</a> is:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\left(\mathbf{r}_{1}^*+\mu_1\left(\frac{1}{m_0}+\frac{1}{m_1}\right)\mathbf{r}_1^0\right)^2-d_1^2=0\]</div>
+</div></blockquote>
+<p>With reduced mass <span class="math notranslate nohighlight">\(M_1=\frac{m_0m_1}{m_0+m_1}\)</span>:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\left(\mathbf{r}_{1}^*+\frac{\mu_1}{M_1}\mathbf{r}_1^0\right)^2-d_1^2=0\]</div>
+</div></blockquote>
+<p>Expanding:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight" id="equation-equationoneuncoupled">
+<span class="eqno">(2)<a class="headerlink" href="#equation-equationoneuncoupled" title="Permalink to this equation"></a></span>\[\mu_1^2\frac{{\mathbf{r}_1^0}^2}{M_1^2}+2\mu_1\frac{\left(\mathbf{r}_1^*\cdot\mathbf{r}_1^0\right)}{M_1}+\left({\mathbf{r}_1^*}^2-d_1^2\right)=0\]</div>
+</div></blockquote>
+<p>This is a single quadratic equation for <span class="math notranslate nohighlight">\(\mu_1\)</span>, with the following solution:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\begin{split}\begin{split}
+D_2=\frac{1}{M_1^2}\left(\left(\mathbf{r}_1^*\cdot\mathbf{r}_1^0\right)^2-{\mathbf{r}_1^0}^2\left({\mathbf{r}_1^*}^2-d_1^2\right)\right) \\
+{\mu_1}^{1,2}=\frac{\pm\sqrt{D_2}-\frac{\left(\mathbf{r}_1^*\cdot\mathbf{r}_1^0\right)}{M_1}}{\frac{{\mathbf{r}_1^0}^2}{M_1^2}}
+\end{split}\end{split}\]</div>
+</div></blockquote>
+<p>Plugging the <span class="math notranslate nohighlight">\(D_2\)</span> into the solution gives:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[{\mu_1}^{1,2}=M_1\frac{\pm\sqrt{\left(\left(\mathbf{r}_1^*\cdot\mathbf{r}_1^0\right)^2-{\mathbf{r}_1^0}^2\left({\mathbf{r}_1^*}^2-d_1^2\right)\right)}-\left(\mathbf{r}_1^*\cdot\mathbf{r}_1^0\right)}{{\mathbf{r}_1^0}^2}\]</div>
+</div></blockquote>
+<p>As expected for quadratic equation, we have two solutions. However only one is valid for our problem: the one that gives smaller absolute value of <span class="math notranslate nohighlight">\(\mu\)</span>. This is because we assume that the bond length after the numerical integration without constraints is close to the target length, i.e. the displacements of the atoms is small. Indeed, we can move the atoms so they satisfy the constraint two ways, one of which employs flipping the bond.</p>
+<blockquote>
+<div><figure class="align-default" id="fig-constraints-ch1-mu12">
+<a class="reference internal image-reference" href="../../_images/CH1_mu12.png"><img alt="../../_images/CH1_mu12.png" src="../../_images/CH1_mu12.png" style="width: 400px;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 7 </span><span class="caption-text">Two roots give two different directions of the bond after constraining. Given that the timestep is small, the displacement should be small as well. Hence the correct solution for <span class="math notranslate nohighlight">\(\mu_1\)</span> is the smallest by absolute value.</span><a class="headerlink" href="#fig-constraints-ch1-mu12" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+<p>The solution we are interested in is the one with the plus sign before the square root. So the final solution for <span class="math notranslate nohighlight">\(\mu_1\)</span> is:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight" id="equation-uncoupledmu">
+<span class="eqno">(3)<a class="headerlink" href="#equation-uncoupledmu" title="Permalink to this equation"></a></span>\[\mu_1=M_1\frac{\sqrt{\left(\left(\mathbf{r}_1^*\cdot\mathbf{r}_1^0\right)^2-{\mathbf{r}_1^0}^2\left({\mathbf{r}_1^*}^2-d_1^2\right)\right)}-\left(\mathbf{r}_1^*\cdot\mathbf{r}_1^0\right)}{{\mathbf{r}_1^0}^2}\]</div>
+</div></blockquote>
+<p>Though this equation is quite simple, we need to prepare ourselves to the following cases. So let us introduce the notations for all the coefficients in the <a class="reference internal" href="#equation-equationoneuncoupled">Equation 2</a>, re-writing it as:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[k_1^{11}\mu_1^2+k_1^1\mu_1+k_1^0=0\]</div>
+</div></blockquote>
+<p>Here, the indices for parameters <span class="math notranslate nohighlight">\(k_x^y\)</span> are chosen the following way. The bottom index is the number of equation (we have one so far). The top indexes indicate what combination of variables <span class="math notranslate nohighlight">\(mu\)</span> this coefficient is multiplied by: <span class="math notranslate nohighlight">\(k_1^{11}\)</span> is for <span class="math notranslate nohighlight">\(\mu_1\mu_1=\mu^2\)</span>, <span class="math notranslate nohighlight">\(k_1^1\)</span> is for <span class="math notranslate nohighlight">\(\mu_1\)</span> and <span class="math notranslate nohighlight">\(0\)</span> is for free coefficient. Later we will encounter other variables (<span class="math notranslate nohighlight">\(\mu_2\)</span>, <span class="math notranslate nohighlight">\(\mu_3\)</span>, etc.), for which we will have <span class="math notranslate nohighlight">\(k_1^{22}\)</span>, <span class="math notranslate nohighlight">\(k_1^{33}\)</span> as well as some mixed products, e.g. <span class="math notranslate nohighlight">\(\mu_1\mu_2\)</span> with <span class="math notranslate nohighlight">\(k_1^{12}\)</span>, etc. As follows from <a class="reference internal" href="#equation-equationoneuncoupled">Equation 2</a>, in the case of one uncoupled constraint, there are three coefficient:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[k_1^{11}=\frac{{\mathbf{r}_1^0}^2}{M_1^2}\mathrm{,~~}
+k_1^1=\frac{2\left(\mathbf{r}_1^*\cdot\mathbf{r}_1^0\right)}{M_1}\mathrm{,~~}
+k_1^0={\mathbf{r}_1^*}^2-d_1^2\]</div>
+</div></blockquote>
+<p>In these notations, the solution for <span class="math notranslate nohighlight">\(\mu_1\)</span> is:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight" id="equation-uncoupledmuthroughk">
+<span class="eqno">(4)<a class="headerlink" href="#equation-uncoupledmuthroughk" title="Permalink to this equation"></a></span>\[\mu_1=\frac{\sqrt{{k_1^1}^2-4k_1^{11}k_1^0}-k_1^1}{2k_1^{11}}\]</div>
+</div></blockquote>
+<p>Note, that using <a class="reference internal" href="#equation-uncoupledmuthroughk">Equation 4</a> is slightly less computationally efficient when compared to <a class="reference internal" href="#equation-uncoupledmu">Equation 3</a>.</p>
+</section>
+<section id="two-coupled-constraints">
+<h2>Two coupled constraints<a class="headerlink" href="#two-coupled-constraints" title="Permalink to this heading"></a></h2>
+<blockquote>
+<div><figure class="align-default" id="fig-constraints-ch2">
+<a class="reference internal image-reference" href="../../_images/CH2.png"><img alt="../../_images/CH2.png" src="../../_images/CH2.png" style="width: 300px;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 8 </span><span class="caption-text">A schematic representation of two coupled constrained bonds.</span><a class="headerlink" href="#fig-constraints-ch2" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+<p>Two coupled constraints will give us a much more complicated case of two coupled quadratic equations. Assuming that the central atom has index <span class="math notranslate nohighlight">\(0\)</span>, with atoms <span class="math notranslate nohighlight">\(1\)</span> and <span class="math notranslate nohighlight">\(2\)</span> connected to it with two constrained bonds <span class="math notranslate nohighlight">\(c=1=\{0,1\}\)</span> and <span class="math notranslate nohighlight">\(c=2=\{0.2\}\)</span>, and using the reduced masses <span class="math notranslate nohighlight">\(M_1=\frac{m_0m_1}{m_0+m_1}\)</span> and <span class="math notranslate nohighlight">\(M_2=\frac{m_0m_2}{m_0+m_2}\)</span>, from <a class="reference internal" href="#equation-mu">Equation 1</a> we get:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\begin{split}\begin{cases}
+\left(\mathbf{r}_{1}^*+\frac{\mu_1}{M_1}\mathbf{r}_1^0+\frac{\mu_2}{m_0}\mathbf{r}_2^0\right)^2-d_1^2=0 \\
+\left(\mathbf{r}_{2}^*+\frac{\mu_1}{m_0}\mathbf{r}_1^0+\frac{\mu_2}{M_2}\mathbf{r}_2^0\right)^2-d_2^2=0
+\end{cases}\end{split}\]</div>
+<div class="math notranslate nohighlight" id="equation-systemtwocoupled">
+<span class="eqno">(5)<a class="headerlink" href="#equation-systemtwocoupled" title="Permalink to this equation"></a></span>\[\begin{split}\begin{cases}
+k_1^{11}\mu_1^2+k_1^{22}\mu_2^2+k_1^{12}\mu_1\mu_2+k_1^1\mu_1+k_1^2\mu_2+k_1^0=0 \\
+k_2^{11}\mu_1^2+k_2^{22}\mu_2^2+k_2^{12}\mu_1\mu_2+k_2^1\mu_1+k_2^2\mu_2+k_2^0=0
+\end{cases}\end{split}\]</div>
+</div></blockquote>
+<p>Where</p>
+<blockquote>
+<div><div class="math notranslate nohighlight" id="equation-systemtwocoupledks">
+<span class="eqno">(6)<a class="headerlink" href="#equation-systemtwocoupledks" title="Permalink to this equation"></a></span>\[\begin{split}\begin{split}
+    k_1^{11}=\frac{{\mathbf{r}_1^0}^2}{M_1^2}\mathrm{,~~}
+    k_1^{22}=\frac{{\mathbf{r}_2^0}^2}{m_0^2}\mathrm{,~~}
+    k_1^{12}=\frac{2\left(\mathbf{r}_1^0\cdot\mathbf{r}_2^0\right)}{M_1m_0}\mathrm{,} \\
+    k_1^1=\frac{2\left(\mathbf{r}_1^*\cdot\mathbf{r}_1^0\right)}{M_1}\mathrm{,~~}
+    k_1^2=\frac{2\left(\mathbf{r}_1^*\cdot\mathbf{r}_2^0\right)}{m_0}\mathrm{,~~}
+    k_1^0={\mathbf{r}_1^*}^2-d_1^2\mathrm{,~~} \\ \\
+    k_2^{11}=\frac{{\mathbf{r}_1^0}^2}{m_0^2}\mathrm{,~~}
+    k_2^{22}=\frac{{\mathbf{r}_2^0}^2}{M_2^2}\mathrm{,~~}
+    k_2^{12}=\frac{2\left(\mathbf{r}_1^0\cdot\mathbf{r}_2^0\right)}{M_2m_0}\mathrm{,} \\
+    k_2^1=\frac{2\left(\mathbf{r}_2^*\cdot\mathbf{r}_1^0\right)}{m_0}\mathrm{,~~}
+    k_2^2=\frac{2\left(\mathbf{r}_2^*\cdot\mathbf{r}_2^0\right)}{M_2}\mathrm{,~~}
+    k_2^0={\mathbf{r}_2^*}^2-d_2^2\mathrm{.}
+\end{split}\end{split}\]</div>
+</div></blockquote>
+<p><a class="reference internal" href="#equation-systemtwocoupled">Equation 5</a> are two coupled quadratic equations of a general form. Unfortunately, there is no simple analytical solution to it. Hence the numerical method should be used. Before describing the methods used currently in most MD software packages, let us try to introduce a method for the specific cases we are considering here.</p>
+<p>If we introduce two dimensional vector-function <span class="math notranslate nohighlight">\(F(\mu_1, \mu_2)\)</span> in <a class="reference internal" href="#equation-systemtwocoupled">Equation 5</a> it becomes:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\mathbf{F}(\mu_1, \mu_2) = \mathbf{0}\]</div>
+</div></blockquote>
+<p>This is a system of non-linear equations, which are notoriously hard to solve if we (1) need to find all the solutions and (2) don’t have good initial guess for these solutions. However, this is not the case here. Firstly, we assume that atoms did satisfy the constraints on the previous step (i.e. we are looking for <span class="math notranslate nohighlight">\(mu\)</span>’s with smallest absolute value). Secondly, we only need to find this solution (see how we dropped one of the roots when solving for uncoupled constraint). Hence we can apply the Newtons method (also known as Newton-Raphson method). The general form of in in multi-dimensional case is:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight" id="equation-systemtwocouplednewton">
+<span class="eqno">(7)<a class="headerlink" href="#equation-systemtwocouplednewton" title="Permalink to this equation"></a></span>\[\mathbf{\mu}^{n+1}=\mathbf{\mu}^n-J_\mathbf{F}\left(\mathbf{\mu}^n\right)^{-1}\mathbf{F}\left(\mathbf{\mu}^n\right)\]</div>
+</div></blockquote>
+<p>Here, <span class="math notranslate nohighlight">\(\mathbf{\mu}^n=(\mu_1^n,\mu_2^n)^T\)</span> is a vector with the solutions on <span class="math notranslate nohighlight">\(n\)</span>-th iteration, <span class="math notranslate nohighlight">\(J_\mathbf{F}\left(\mathbf{\mu}\right)=J_\mathbf{F}\left(\mu_1, \mu_2\right)\)</span> is the Jakobian matrix for the system. Using <a class="reference internal" href="#equation-systemtwocoupled">Equation 5</a>, we can compute <span class="math notranslate nohighlight">\(J_\mathbf{F}\left(\mu_1, \mu_2\right)\)</span>:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\begin{split}J_\mathbf{F}=
+\begin{pmatrix}
+2k_1^{11}\mu_1+k_1^{12}\mu_2+k_1^1 &amp; k_1^{12}\mu_1+2k_1^{22}\mu_2+k_1^2 \\
+2k_2^{11}\mu_1+k_2^{12}\mu_2+k_2^1 &amp; k_1^{12}\mu_2+2k_2^{22}\mu_2+k_2^2
+\end{pmatrix}\end{split}\]</div>
+</div></blockquote>
+<p>With everything in the <a class="reference internal" href="#equation-systemtwocouplednewton">Equation 7</a> derived, we need good initial approximation for <span class="math notranslate nohighlight">\(\mu_1\)</span> and <span class="math notranslate nohighlight">\(mu_2\)</span>. One can use zeroes, assuming that atoms did not moved much during the integration time step atoms did not moved far away from their previous positions (which did satisfy the constraints). We can get slightly better initial approximation by assuming that the constraints are not coupled, i.e. by using <a class="reference internal" href="#equation-uncoupledmu">Equation 3</a> or <a class="reference internal" href="#equation-uncoupledmuthroughk">Equation 4</a> for two constraints we have in our case:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight" id="equation-coupledmyasuncoupledthroughk">
+<span class="eqno">(8)<a class="headerlink" href="#equation-coupledmyasuncoupledthroughk" title="Permalink to this equation"></a></span>\[\begin{split}\begin{split}
+\mu_1^0=\frac{\sqrt{{k_1^1}^2-4k_1^{11}k_1^0}-k_1^1}{2k_1^{11}} \\
+\mu_2^0=\frac{\sqrt{{k_2^2}^2-4k_2^{22}k_2^0}-k_2^2}{2k_2^{22}}
+\end{split}\end{split}\]</div>
+</div></blockquote>
+<p>The numerical procedure to evaluate <span class="math notranslate nohighlight">\(\mu_1\)</span> and <span class="math notranslate nohighlight">\(\mu_2\)</span> is then contains following steps. (1) Compute coefficients in <a class="reference internal" href="#equation-systemtwocoupledks">Equation 6</a>. (2) Use <a class="reference internal" href="#equation-coupledmyasuncoupledthroughk">Equation 8</a> to get initial approximations <span class="math notranslate nohighlight">\(\mu_1^0\)</span> and <span class="math notranslate nohighlight">\(\mu_2^0\)</span> for <span class="math notranslate nohighlight">\(\mu_1\)</span> and <span class="math notranslate nohighlight">\(\mu_2\)</span>. (3) Compute <span class="math notranslate nohighlight">\(\mathbf{F}(\mu_1, \mu_2)\)</span> using <a class="reference internal" href="#equation-systemtwocoupled">Equation 5</a> and <span class="math notranslate nohighlight">\(J_\mathbf{F}\left(\mu_1, \mu_2\right)\)</span>, invert the matrix <span class="math notranslate nohighlight">\(J_\mathbf{F}\)</span> (one can derive formulas to compute the inverse Jakobian directly, without computing the Jakobian itself). (4) Apply the <a class="reference internal" href="#equation-systemtwocouplednewton">Equation 7</a> to get the next iteration values for <span class="math notranslate nohighlight">\(\mu_1\)</span> and <span class="math notranslate nohighlight">\(\mu_2\)</span>. (5) Repeat steps (3) and (4) until convergence.</p>
+</section>
+<section id="three-constraints-coupled-through-the-central-atom">
+<h2>Three constraints coupled through the central atom<a class="headerlink" href="#three-constraints-coupled-through-the-central-atom" title="Permalink to this heading"></a></h2>
+<blockquote>
+<div><figure class="align-default" id="fig-constraints-ch3">
+<a class="reference internal image-reference" href="../../_images/CH3.png"><img alt="../../_images/CH3.png" src="../../_images/CH3.png" style="width: 300px;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 9 </span><span class="caption-text">A schematic representation of three atoms constrained to one central atom.</span><a class="headerlink" href="#fig-constraints-ch3" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{cases}
+\left(\mathbf{r}_{1}^*+\frac{\mu_1}{M_1}\mathbf{r}_1^0+\frac{\mu_2}{m_0}\mathbf{r}_2^0+\frac{\mu_3}{m_0}\mathbf{r}_3^0\right)^2-d_1^2=0 \\
+\left(\mathbf{r}_{2}^*+\frac{\mu_1}{m_0}\mathbf{r}_1^0+\frac{\mu_2}{M_2}\mathbf{r}_2^0+\frac{\mu_3}{m_0}\mathbf{r}_3^0\right)^2-d_2^2=0 \\
+\left(\mathbf{r}_{3}^*+\frac{\mu_1}{m_0}\mathbf{r}_1^0+\frac{\mu_2}{m_0}\mathbf{r}_2^0+\frac{\mu_3}{M_3}\mathbf{r}_3^0\right)^2-d_3^2=0 \\
+\end{cases}\end{split}\]</div>
+<div class="math notranslate nohighlight" id="equation-systemthreecoupled">
+<span class="eqno">(9)<a class="headerlink" href="#equation-systemthreecoupled" title="Permalink to this equation"></a></span>\[\begin{split}\begin{cases}
+k_1^{11}\mu_1^2+k_1^{22}\mu_2^2+k_1^{33}\mu_3^2+k_1^{12}\mu_1\mu_2+k_1^{13}\mu_1\mu_3+k_1^{23}\mu_2\mu_3+k_1^1\mu_1+k_1^2\mu_2+k_1^3\mu_3+k_1^0=0 \\
+k_2^{11}\mu_1^2+k_2^{22}\mu_2^2+k_2^{33}\mu_3^2+k_2^{12}\mu_1\mu_2+k_2^{13}\mu_1\mu_3+k_2^{23}\mu_2\mu_3+k_2^1\mu_1+k_2^2\mu_2+k_2^3\mu_3+k_2^0=0 \\
+k_3^{11}\mu_1^2+k_3^{22}\mu_2^2+k_3^{33}\mu_3^2+k_3^{12}\mu_1\mu_2+k_3^{13}\mu_1\mu_3+k_3^{23}\mu_2\mu_3+k_3^1\mu_1+k_3^2\mu_2+k_3^3\mu_3+k_3^0=0
+\end{cases}\end{split}\]</div>
+</div></blockquote>
+<p>Where</p>
+<blockquote>
+<div><div class="math notranslate nohighlight" id="equation-systemthreecoupledks">
+<span class="eqno">(10)<a class="headerlink" href="#equation-systemthreecoupledks" title="Permalink to this equation"></a></span>\[\begin{split}\begin{split}
+    k_1^{11}=\frac{{\mathbf{r}_1^0}^2}{M_1^2}\mathrm{,~~}
+    k_1^{22}=\frac{{\mathbf{r}_2^0}^2}{m_0^2}\mathrm{,~~}
+    k_1^{33}=\frac{{\mathbf{r}_3^0}^2}{m_0^2}\mathrm{,} \\
+    k_1^{12}=\frac{2\left(\mathbf{r}_1^0\cdot\mathbf{r}_2^0\right)}{M_1m_0}\mathrm{,~~}
+    k_1^{13}=\frac{2\left(\mathbf{r}_1^0\cdot\mathbf{r}_3^0\right)}{M_1m_0}\mathrm{,~~}
+    k_1^{23}=\frac{2\left(\mathbf{r}_2^0\cdot\mathbf{r}_3^0\right)}{m_0^2}\mathrm{,} \\
+    k_1^1=\frac{2\left(\mathbf{r}_1^*\cdot\mathbf{r}_1^0\right)}{M_1}\mathrm{,~~}
+    k_1^2=\frac{2\left(\mathbf{r}_1^*\cdot\mathbf{r}_2^0\right)}{m_0}\mathrm{,~~}
+    k_1^3=\frac{2\left(\mathbf{r}_1^*\cdot\mathbf{r}_3^0\right)}{m_0}\mathrm{,~~}
+    k_1^0={\mathbf{r}_1^*}^2-d_1^2\mathrm{,~~} \\ \\
+    k_2^{11}=\frac{{\mathbf{r}_1^0}^2}{m_0^2}\mathrm{,~~}
+    k_2^{22}=\frac{{\mathbf{r}_2^0}^2}{M_2^2}\mathrm{,~~}
+    k_2^{33}=\frac{{\mathbf{r}_3^0}^2}{m_0^2}\mathrm{,} \\
+    k_2^{12}=\frac{2\left(\mathbf{r}_1^0\cdot\mathbf{r}_2^0\right)}{M_2m_0}\mathrm{,~~}
+    k_2^{13}=\frac{2\left(\mathbf{r}_1^0\cdot\mathbf{r}_3^0\right)}{m_0^2}\mathrm{,~~}
+    k_2^{23}=\frac{2\left(\mathbf{r}_2^0\cdot\mathbf{r}_3^0\right)}{M_2m_0}\mathrm{,} \\
+    k_2^1=\frac{2\left(\mathbf{r}_2^*\cdot\mathbf{r}_1^0\right)}{m_0}\mathrm{,~~}
+    k_2^2=\frac{2\left(\mathbf{r}_2^*\cdot\mathbf{r}_2^0\right)}{M_2}\mathrm{,~~}
+    k_2^3=\frac{2\left(\mathbf{r}_2^*\cdot\mathbf{r}_3^0\right)}{m_0}\mathrm{,~~}
+    k_2^0={\mathbf{r}_2^*}^2-d_2^2\mathrm{,~~} \\ \\
+    k_3^{11}=\frac{{\mathbf{r}_1^0}^2}{m_0^2}\mathrm{,~~}
+    k_3^{22}=\frac{{\mathbf{r}_2^0}^2}{m_0^2}\mathrm{,~~}
+    k_3^{33}=\frac{{\mathbf{r}_3^0}^2}{M_3^2}\mathrm{,} \\
+    k_3^{12}=\frac{2\left(\mathbf{r}_1^0\cdot\mathbf{r}_2^0\right)}{m_0^2}\mathrm{,~~}
+    k_3^{13}=\frac{2\left(\mathbf{r}_1^0\cdot\mathbf{r}_3^0\right)}{M_3m_0}\mathrm{,~~}
+    k_3^{23}=\frac{2\left(\mathbf{r}_2^0\cdot\mathbf{r}_3^0\right)}{M_3m_0}\mathrm{,} \\
+    k_3^1=\frac{2\left(\mathbf{r}_3^*\cdot\mathbf{r}_1^0\right)}{m_0}\mathrm{,~~}
+    k_3^2=\frac{2\left(\mathbf{r}_3^*\cdot\mathbf{r}_2^0\right)}{m_0}\mathrm{,~~}
+    k_3^3=\frac{2\left(\mathbf{r}_3^*\cdot\mathbf{r}_3^0\right)}{M_3}\mathrm{,~~}
+    k_3^0={\mathbf{r}_3^*}^2-d_3^2\mathrm{,~~} \\ \\
+\end{split}\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{split}
+&amp;J_\mathbf{F}=\\
+&amp;\begin{pmatrix}
+2k_1^{11}\mu_1+k_1^{12}\mu_2+k_1^{13}\mu_3+k_1^1 &amp; k_1^{12}\mu_1+2k_1^{22}\mu_2+k_1^{23}\mu_3+k_1^2 &amp; k_1^{13}\mu_1+k_1^{23}\mu_2+2k_1^{33}\mu_3+k_1^3 \\
+2k_2^{11}\mu_1+k_2^{12}\mu_2+k_2^{13}\mu_3+k_2^1 &amp; k_2^{12}\mu_1+2k_2^{22}\mu_2+k_2^{23}\mu_3+k_2^2 &amp; k_2^{13}\mu_1+k_2^{23}\mu_2+2k_2^{33}\mu_3+k_2^3 \\
+2k_3^{11}\mu_1+k_3^{12}\mu_2+k_3^{13}\mu_3+k_3^1 &amp; k_3^{12}\mu_1+2k_3^{22}\mu_2+k_3^{23}\mu_3+k_3^2 &amp; k_3^{13}\mu_1+k_3^{23}\mu_2+2k_3^{33}\mu_3+k_3^3 \\
+\end{pmatrix}
+\end{split}\end{split}\]</div>
+</div></blockquote>
+</section>
+<section id="triangle-of-constraints">
+<h2>Triangle of constraints<a class="headerlink" href="#triangle-of-constraints" title="Permalink to this heading"></a></h2>
+<blockquote>
+<div><figure class="align-default" id="fig-constraints-h2o">
+<a class="reference internal image-reference" href="../../_images/H2O.png"><img alt="../../_images/H2O.png" src="../../_images/H2O.png" style="width: 300px;" /></a>
+<figcaption>
+<p><span class="caption-number">Fig. 10 </span><span class="caption-text">Three constraints can form a rigid triangle, e.g. in water molecule.</span><a class="headerlink" href="#fig-constraints-h2o" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{cases}
+\left(\mathbf{r}_{1}^*+\frac{\mu_1}{M_1}\mathbf{r}_1^0-\frac{\mu_2}{m_2}\mathbf{r}_2^0-\frac{\mu_3}{m_1}\mathbf{r}_3^0\right)^2-d_1^2=0 \\
+\left(\mathbf{r}_{2}^*-\frac{\mu_2}{m_0}\mathbf{r}_1^0+\frac{\mu_2}{M_2}\mathbf{r}_2^0-\frac{\mu_3}{m_3}\mathbf{r}_3^0\right)^2-d_2^2=0 \\
+\left(\mathbf{r}_{3}^*-\frac{\mu_1}{m_1}\mathbf{r}_1^0-\frac{\mu_3}{m_0}\mathbf{r}_2^0+\frac{\mu_3}{M_3}\mathbf{r}_3^0\right)^2-d_3^2=0 \\
+\end{cases}\end{split}\]</div>
+<div class="math notranslate nohighlight" id="equation-systemtriangleks">
+<span class="eqno">(11)<a class="headerlink" href="#equation-systemtriangleks" title="Permalink to this equation"></a></span>\[\begin{split}\begin{split}
+    k_1^{11}=\frac{{\mathbf{r}_1^0}^2}{M_1^2}\mathrm{,~~}
+    k_1^{22}=\frac{{\mathbf{r}_2^0}^2}{m_2^2}\mathrm{,~~}
+    k_1^{33}=\frac{{\mathbf{r}_3^0}^2}{m_1^2}\mathrm{,} \\
+    k_1^{12}=-\frac{2\left(\mathbf{r}_1^0\cdot\mathbf{r}_2^0\right)}{M_1m_2}\mathrm{,~~}
+    k_1^{13}=-\frac{2\left(\mathbf{r}_1^0\cdot\mathbf{r}_3^0\right)}{M_1m_1}\mathrm{,~~}
+    k_1^{23}=\frac{2\left(\mathbf{r}_2^0\cdot\mathbf{r}_3^0\right)}{m_1m_2}\mathrm{,} \\
+    k_1^1=\frac{2\left(\mathbf{r}_1^*\cdot\mathbf{r}_1^0\right)}{M_1}\mathrm{,~~}
+    k_1^2=-\frac{2\left(\mathbf{r}_1^*\cdot\mathbf{r}_2^0\right)}{m_2}\mathrm{,~~}
+    k_1^3=-\frac{2\left(\mathbf{r}_1^*\cdot\mathbf{r}_3^0\right)}{m_1}\mathrm{,~~}
+    k_1^0={\mathbf{r}_1^*}^2-d_1^2\mathrm{,~~} \\ \\
+    k_2^{11}=\frac{{\mathbf{r}_1^0}^2}{m_2^2}\mathrm{,~~}
+    k_2^{22}=\frac{{\mathbf{r}_2^0}^2}{M_2^2}\mathrm{,~~}
+    k_2^{33}=\frac{{\mathbf{r}_3^0}^2}{m_3^2}\mathrm{,} \\
+    k_2^{12}=-\frac{2\left(\mathbf{r}_1^0\cdot\mathbf{r}_2^0\right)}{M_2m_2}\mathrm{,~~}
+    k_2^{13}=\frac{2\left(\mathbf{r}_1^0\cdot\mathbf{r}_3^0\right)}{m_2m_3}\mathrm{,~~}
+    k_2^{23}=-\frac{2\left(\mathbf{r}_2^0\cdot\mathbf{r}_3^0\right)}{M_2m_3}\mathrm{,} \\
+    k_2^1=-\frac{2\left(\mathbf{r}_2^*\cdot\mathbf{r}_1^0\right)}{m_2}\mathrm{,~~}
+    k_2^2=\frac{2\left(\mathbf{r}_2^*\cdot\mathbf{r}_2^0\right)}{M_2}\mathrm{,~~}
+    k_2^3=-\frac{2\left(\mathbf{r}_2^*\cdot\mathbf{r}_3^0\right)}{m_3}\mathrm{,~~}
+    k_2^0={\mathbf{r}_2^*}^2-d_2^2\mathrm{,~~} \\ \\
+    k_3^{11}=\frac{{\mathbf{r}_1^0}^2}{m_1^2}\mathrm{,~~}
+    k_3^{22}=-\frac{{\mathbf{r}_2^0}^2}{m_3^2}\mathrm{,~~}
+    k_3^{33}=-\frac{{\mathbf{r}_3^0}^2}{M_3^2}\mathrm{,} \\
+    k_3^{12}=\frac{2\left(\mathbf{r}_1^0\cdot\mathbf{r}_2^0\right)}{m_1m_3}\mathrm{,~~}
+    k_3^{13}=-\frac{2\left(\mathbf{r}_1^0\cdot\mathbf{r}_3^0\right)}{M_3m_1}\mathrm{,~~}
+    k_3^{23}=-\frac{2\left(\mathbf{r}_2^0\cdot\mathbf{r}_3^0\right)}{M_3m_3}\mathrm{,} \\
+    k_3^1=-\frac{2\left(\mathbf{r}_3^*\cdot\mathbf{r}_1^0\right)}{m_1}\mathrm{,~~}
+    k_3^2=-\frac{2\left(\mathbf{r}_3^*\cdot\mathbf{r}_2^0\right)}{m_3}\mathrm{,~~}
+    k_3^3=\frac{2\left(\mathbf{r}_3^*\cdot\mathbf{r}_3^0\right)}{M_3}\mathrm{,~~}
+    k_3^0={\mathbf{r}_3^*}^2-d_3^2\mathrm{,~~} \\ \\
+\end{split}\end{split}\]</div>
+</div></blockquote>
+<p>Note that <span class="math notranslate nohighlight">\(\left(\mathbf{r}_1^0\cdot\mathbf{r}_2^0\right)=\left(\mathbf{r}_2^0\cdot\mathbf{r}_3^0\right)=\left(\mathbf{r}_3^0\cdot\mathbf{r}_1^0\right)=-2S_0\)</span>, where <span class="math notranslate nohighlight">\(S_0\)</span> is the area of the triangle.</p>
+</section>
+<section id="settle">
+<h2>SETTLE<a class="headerlink" href="#settle" title="Permalink to this heading"></a></h2>
+<p>The triangle of constraints case is very common for the biomolecular simulations since most of water models constrain both bonds between hydrogens and oxygen and H-O-H angle. And there is an analytical solution for this specific case, called SETTLE <span id="id1">[<a class="reference internal" href="#id7" title="S. Miyamoto and P.A. Kollman. SETTLE: An analytical version of the SHAKE and RATTLE algorithm for rigid water models. J. Comput. Chem., 13(8):952–962, 1992. doi:10.1002/jcc.540130805.">Miyamoto and Kollman, 1992</a>]</span>. This algorithm is in fact used in most of the MD software. In brief, the idea of SETTLE is first to reduce the problem into two dimensions, and than compute the rotation angle of the constraints triangle using two-dimensional Euler angles.</p>
+</section>
+<section id="more-than-three-coupled-constraints">
+<h2>More than three coupled constraints<a class="headerlink" href="#more-than-three-coupled-constraints" title="Permalink to this heading"></a></h2>
+<p>We can keep expanding our formulas to the cases with more coupled constraints, and they will get more and more complex. However, there are only a few cases that is useful to solve this way: four constraints coupled to the central (e.g. methane molecule) atom and various rings that should be kept planar (e.g. benzene ring in phenylalanine or double ring in the tryptophane side-chain). These are not very common, the rings are usually kept planar with improper dihedral potentials, so we will not derive them here. Much more important is the case where all covalent bonds are constraints, where universal formalism is needed. The two most common algorithms for this case are SHAKE <span id="id2">[<a class="reference internal" href="#id6" title="J.P. Ryckaert, G. Ciccotti and H.J.C. Berendsen. Numerical integration of the cartesian equations of motion of a system with constraints: Molecular Dynamics of n-alkanes. J. Comp. Phys., 23(3):327–341, 1977. doi:10.1016/0021-9991(77)90098-5.">J.P. Ryckaert and Berendsen, 1977</a>]</span> (and its “velocity version” RATTLE <span id="id3">[<a class="reference internal" href="#id8" title="H.C. Andersen. RATTLE: A “velocity” version of the shake algorithm for molecular dynamics calculations. J. Comput. Phys., 52(1):24–34, 1983. doi:10.1016/0021-9991(83)90014-1.">Andersen, 1983</a>]</span>) and LINCS <span id="id4">[<a class="reference internal" href="#id10" title="B. Hess. P-LINCS: A parallel linear constraint solver for molecular simulation. J. Chem. Theory Comput., 4(1):116–122, 2008. doi:10.1021/ct700200b.">Hess, 2008</a>, <a class="reference internal" href="#id9" title="B. Hess, H. Bekker, H.J.C. Berendsen, and J.G.E.M. Fraaije. LINCS: A linear constraint solver for molecular simulations. J. Comput. Chem., 18(12):1463–1472, 1997. doi:10.1002/(SICI)1096-987X(199709)18:12&lt;1463::AID-JCC4&gt;3.0.CO;2-H.">Hess <em>et al.</em>, 1997</a>]</span>. Note that the latter is the default option in GROMACS.</p>
+<div class="docutils container" id="id5">
+<dl class="citation">
+<dt class="label" id="id8"><span class="brackets"><a class="fn-backref" href="#id3">1</a></span></dt>
+<dd><p>H.C. Andersen. RATTLE: A “velocity” version of the shake algorithm for molecular dynamics calculations. <em>J. Comput. Phys.</em>, 52(1):24–34, 1983. <a class="reference external" href="https://doi.org/10.1016/0021-9991(83)90014-1">doi:10.1016/0021-9991(83)90014-1</a>.</p>
+</dd>
+<dt class="label" id="id10"><span class="brackets"><a class="fn-backref" href="#id4">2</a></span></dt>
+<dd><p>B. Hess. P-LINCS: A parallel linear constraint solver for molecular simulation. <em>J. Chem. Theory Comput.</em>, 4(1):116–122, 2008. <a class="reference external" href="https://doi.org/10.1021/ct700200b">doi:10.1021/ct700200b</a>.</p>
+</dd>
+<dt class="label" id="id9"><span class="brackets"><a class="fn-backref" href="#id4">3</a></span></dt>
+<dd><p>B. Hess, H. Bekker, H.J.C. Berendsen, and J.G.E.M. Fraaije. LINCS: A linear constraint solver for molecular simulations. <em>J. Comput. Chem.</em>, 18(12):1463–1472, 1997. <a class="reference external" href="https://doi.org/10.1002/(SICI)1096-987X(199709)18:12&lt;1463::AID-JCC4&gt;3.0.CO;2-H">doi:10.1002/(SICI)1096-987X(199709)18:12&lt;1463::AID-JCC4&gt;3.0.CO;2-H</a>.</p>
+</dd>
+<dt class="label" id="id6"><span class="brackets"><a class="fn-backref" href="#id2">4</a></span></dt>
+<dd><p>J.P. Ryckaert, G. Ciccotti and H.J.C. Berendsen. Numerical integration of the cartesian equations of motion of a system with constraints: Molecular Dynamics of n-alkanes. <em>J. Comp. Phys.</em>, 23(3):327–341, 1977. <a class="reference external" href="https://doi.org/10.1016/0021-9991(77)90098-5">doi:10.1016/0021-9991(77)90098-5</a>.</p>
+</dd>
+<dt class="label" id="id7"><span class="brackets"><a class="fn-backref" href="#id1">5</a></span></dt>
+<dd><p>S. Miyamoto and P.A. Kollman. SETTLE: An analytical version of the SHAKE and RATTLE algorithm for rigid water models. <em>J. Comput. Chem.</em>, 13(8):952–962, 1992. <a class="reference external" href="https://doi.org/10.1002/jcc.540130805">doi:10.1002/jcc.540130805</a>.</p>
+</dd>
+</dl>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../05_PME/" class="btn btn-neutral float-left" title="PME" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../10_NaCl/" class="btn btn-neutral float-right" title="Implementation of a simple molecular dynamics code: NaCl in vacuum" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Artem Zhmurov.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

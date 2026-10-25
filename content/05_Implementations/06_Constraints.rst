@@ -90,7 +90,7 @@ Note that the sum over all constraints :math:`c=\{m,l\}` should include the pair
 Notations
 ---------
 
-Before applying the above formula to specific cases, let us simplify the notation. We write :math:`\mathbf{x}_i^0`, :math:`\mathbf{x}_i^*`, and :math:`\mathbf{x}_i` for the old, trial, and corrected positions of atom :math:`i`. For an oriented constraint :math:`c=(i,j)`, we use :math:`\mathbf{r}_c^0=\mathbf{x}_i^0-\mathbf{x}_j^0`, :math:`\mathbf{r}_c^*=\mathbf{x}_i^*-\mathbf{x}_j^*`, and :math:`\mathbf{r}_c=\mathbf{x}_i-\mathbf{x}_j` for its bond vectors. Thus atom indices on :math:`\mathbf{x}` and constraint indices on :math:`\mathbf{r}` are distinct. The superscript :math:`0` denotes the old integration step, not a Newton iteration. Constraint orientations and indices are specified separately for each case. All bond vectors must use consistent periodic images.
+Before applying the above formula to specific cases, let us simplify the notation. We write :math:`\mathbf{x}_i^0`, :math:`\mathbf{x}_i^*`, and :math:`\mathbf{x}_i` for the old, trial, and corrected positions of atom :math:`i`. For an oriented constraint :math:`c=(i,j)`, we use :math:`\mathbf{r}_c^0=\mathbf{x}_i^0-\mathbf{x}_j^0`, :math:`\mathbf{r}_c^*=\mathbf{x}_i^*-\mathbf{x}_j^*`, and :math:`\mathbf{r}_c=\mathbf{x}_i-\mathbf{x}_j` for its bond vectors. Thus atom indices on :math:`\mathbf{x}` and constraint indices on :math:`\mathbf{r}` are distinct. On position and bond vectors, the superscript :math:`0` denotes the old integration step, not a Newton iteration. Constraint orientations and indices are specified separately for each case. All bond vectors must use consistent periodic images.
 
 One constraint
 --------------
@@ -103,7 +103,7 @@ The simplest case by far is when we have a single constraint, which is not coupl
 
         A schematic representation of a constrained bond. Index on top of the bond represents the constraint index :math:`c`. Arrow indicates the direction of the vector :math:`\mathbf{r}_1`. Masses subscripts correspond to aton indices.
 
-We have one constraint :math:`c=1=\{0,1\}` that connects two atoms :math:`i=0` and :math:`j=1` with masses :math:`m_0` and :math:`m_1`. We will also denote all the connecting vectors with constrain index, i.e. :math:`\mathbf{r}_1=\mathbf{x}_0-\mathbf{x}_1`, etc. so there is less noise in formulas. Note that we could remove the index altogether since there is only one constrained bond, but we will keep the index here for consistency with the rest of the cases. The sole equation derived from :eq:`mu` is:
+We have one constraint :math:`c=1=\{0,1\}` that connects two atoms :math:`i=0` and :math:`j=1` with masses :math:`m_0` and :math:`m_1`. We will also denote all the connecting vectors with constrain index, i.e. :math:`\mathbf{r}_1=\mathbf{x}_1-\mathbf{x}_0`, etc. so there is less noise in formulas. Note that we could remove the index altogether since there is only one constrained bond, but we will keep the index here for consistency with the rest of the cases. The sole equation derived from :eq:`mu` is:
 
     .. math::
 
@@ -167,7 +167,7 @@ Though this equation is quite simple, we need to prepare ourselves to the follow
 
         k_1^{11}\mu_1^2+k_1^1\mu_1+k_1^0=0
 
-Here, the indices for parameters :math:`k_x^y` are chosen the following way. The bottom index is the number of equation (we have one so far). The top indexes indicate what combination of variables :math:`mu` this coefficient is multiplied by: :math:`k_1^{11}` is for :math:`\mu_1\mu_1=\mu^2`, :math:`k_1^1` is for :math:`\mu_1` and :math:`0` is for free coefficient. Later we will encounter other variables (:math:`\mu_2`, :math:`\mu_3`, etc.), for which we will have :math:`k_1^{22}`, :math:`k_1^{33}` as well as some mixed products, e.g. :math:`\mu_1\mu_2` with :math:`k_1^{12}`, etc. As follows from :eq:`EquationOneUncoupled`, in the case of one uncoupled constraint, there are three coefficient:
+Here, the indices for parameters :math:`k_x^y` are chosen the following way. The bottom index is the number of equation (we have one so far). The top indexes indicate what combination of variables :math:`\mu` this coefficient is multiplied by: :math:`k_1^{11}` is for :math:`\mu_1\mu_1=\mu^2`, :math:`k_1^1` is for :math:`\mu_1` and :math:`0` is for free coefficient. Later we will encounter other variables (:math:`\mu_2`, :math:`\mu_3`, etc.), for which we will have :math:`k_1^{22}`, :math:`k_1^{33}` as well as some mixed products, e.g. :math:`\mu_1\mu_2` with :math:`k_1^{12}`, etc. As follows from :eq:`EquationOneUncoupled`, in the case of one uncoupled constraint, there are three coefficient:
 
     .. math::
 
@@ -192,6 +192,8 @@ Two coupled constraints
         :width: 300
 
         A schematic representation of two coupled constrained bonds.
+
+Orient both bond vectors from the central atom to the outer atoms: :math:`\mathbf{r}_1=\mathbf{x}_1-\mathbf{x}_0` and :math:`\mathbf{r}_2=\mathbf{x}_2-\mathbf{x}_0`.
 
 Two coupled constraints will give us a much more complicated case of two coupled quadratic equations. Assuming that the central atom has index :math:`0`, with atoms :math:`1` and :math:`2` connected to it with two constrained bonds :math:`c=1=\{0,1\}` and :math:`c=2=\{0,2\}`, and using the reduced masses :math:`M_1=\frac{m_0m_1}{m_0+m_1}` and :math:`M_2=\frac{m_0m_2}{m_0+m_2}`, from :eq:`mu` we get:
 
@@ -255,7 +257,7 @@ Here, :math:`\mathbf{\mu}^n=(\mu_1^n,\mu_2^n)^T` is a vector with the solutions 
         2k_2^{11}\mu_1+k_2^{12}\mu_2+k_2^1 & k_2^{12}\mu_1+2k_2^{22}\mu_2+k_2^2
         \end{pmatrix}
 
-With everything in the :eq:`SystemTwoCoupledNewton` derived, we need good initial approximation for :math:`\mu_1` and :math:`mu_2`. One can use zeroes, assuming that atoms did not moved much during the integration time step atoms did not moved far away from their previous positions (which did satisfy the constraints). An alternative initial approximation is obtained by assuming that the constraints are not coupled, i.e. by using :eq:`UncoupledMu` or :eq:`UncoupledMuThroughK` for two constraints we have in our case:
+With everything in the :eq:`SystemTwoCoupledNewton` derived, we need good initial approximation for :math:`\mu_1` and :math:`\mu_2`. One can use zeroes, assuming that atoms did not moved much during the integration time step atoms did not moved far away from their previous positions (which did satisfy the constraints). An alternative initial approximation is obtained by assuming that the constraints are not coupled, i.e. by using :eq:`UncoupledMu` or :eq:`UncoupledMuThroughK` for two constraints we have in our case:
 
     .. math::
         :label: CoupledMyAsUncoupledThroughK
@@ -276,6 +278,8 @@ Three constraints coupled through the central atom
         :width: 300
 
         A schematic representation of three atoms constrained to one central atom.
+
+As in the two-bond case, atom :math:`0` is the center. For :math:`c=1,2,3`, define :math:`\mathbf{r}_c=\mathbf{x}_c-\mathbf{x}_0` and :math:`M_c=m_0m_c/(m_0+m_c)`. Use these orientations for the old and trial bond vectors as well.
 
     .. math::
 
@@ -343,6 +347,108 @@ Where
         2k_3^{11}\mu_1+k_3^{12}\mu_2+k_3^{13}\mu_3+k_3^1 & k_3^{12}\mu_1+2k_3^{22}\mu_2+k_3^{23}\mu_3+k_3^2 & k_3^{13}\mu_1+k_3^{23}\mu_2+2k_3^{33}\mu_3+k_3^3 \\
         \end{pmatrix}
         \end{split}
+
+Four constraints coupled through the central atom
+-------------------------------------------------
+
+Consider a central atom :math:`0` connected to four outer atoms :math:`1,2,3,4`, with no additional constraints between them. A typical example is methane with its four C-H bond lengths constrained. This fixes the four distances to the center, but does not fix the bond angles or make the whole group rigid.
+
+As above, orient each bond from the central atom to an outer atom:
+
+    .. math::
+
+        \mathbf{r}_c^0=\mathbf{x}_c^0-\mathbf{x}_0^0,\qquad
+        \mathbf{r}_c^*=\mathbf{x}_c^*-\mathbf{x}_0^*,\qquad
+        M_c=\frac{m_0m_c}{m_0+m_c},\qquad c=1,2,3,4.
+
+The atomic corrections are
+
+    .. math::
+        :label: FourCoupledDisplacements
+
+        \delta\mathbf{x}_0=-\frac{1}{m_0}\sum_{a=1}^4\mu_a\mathbf{r}_a^0,
+        \qquad
+        \delta\mathbf{x}_c=\frac{\mu_c}{m_c}\mathbf{r}_c^0.
+
+Consequently, the displacement of the center couples every bond to the other three. The four distance conditions become
+
+    .. math::
+        :label: SystemFourCoupledVectors
+
+        \begin{cases}
+        \left(\mathbf{r}_1^*+\frac{\mu_1}{M_1}\mathbf{r}_1^0+\frac{\mu_2}{m_0}\mathbf{r}_2^0+\frac{\mu_3}{m_0}\mathbf{r}_3^0+\frac{\mu_4}{m_0}\mathbf{r}_4^0\right)^2-d_1^2=0, \\
+        \left(\mathbf{r}_2^*+\frac{\mu_1}{m_0}\mathbf{r}_1^0+\frac{\mu_2}{M_2}\mathbf{r}_2^0+\frac{\mu_3}{m_0}\mathbf{r}_3^0+\frac{\mu_4}{m_0}\mathbf{r}_4^0\right)^2-d_2^2=0, \\
+        \left(\mathbf{r}_3^*+\frac{\mu_1}{m_0}\mathbf{r}_1^0+\frac{\mu_2}{m_0}\mathbf{r}_2^0+\frac{\mu_3}{M_3}\mathbf{r}_3^0+\frac{\mu_4}{m_0}\mathbf{r}_4^0\right)^2-d_3^2=0, \\
+        \left(\mathbf{r}_4^*+\frac{\mu_1}{m_0}\mathbf{r}_1^0+\frac{\mu_2}{m_0}\mathbf{r}_2^0+\frac{\mu_3}{m_0}\mathbf{r}_3^0+\frac{\mu_4}{M_4}\mathbf{r}_4^0\right)^2-d_4^2=0.
+        \end{cases}
+
+To write the coefficients without repeating nearly identical expressions, introduce the mass-coupling matrix
+
+    .. math::
+        :label: FourCoupledMassMatrix
+
+        H_{ca}=\begin{cases}M_c^{-1},&a=c,\\m_0^{-1},&a\ne c,\end{cases}
+        \qquad
+        H=\begin{pmatrix}
+        M_1^{-1}&m_0^{-1}&m_0^{-1}&m_0^{-1}\\
+        m_0^{-1}&M_2^{-1}&m_0^{-1}&m_0^{-1}\\
+        m_0^{-1}&m_0^{-1}&M_3^{-1}&m_0^{-1}\\
+        m_0^{-1}&m_0^{-1}&m_0^{-1}&M_4^{-1}
+        \end{pmatrix}.
+
+For each :math:`c=1,2,3,4`, define :math:`F_c=\left\lVert\mathbf{r}_c^*+\sum_{a=1}^4H_{ca}\mu_a\mathbf{r}_a^0\right\rVert^2-d_c^2`. Expanding gives four quadratic equations, each with fifteen coefficients:
+
+    .. math::
+        :label: SystemFourCoupled
+
+        \begin{split}
+        F_c(\boldsymbol{\mu})={}&k_c^{11}\mu_1^2+k_c^{22}\mu_2^2+k_c^{33}\mu_3^2+k_c^{44}\mu_4^2\\
+        &+k_c^{12}\mu_1\mu_2+k_c^{13}\mu_1\mu_3+k_c^{14}\mu_1\mu_4\\
+        &+k_c^{23}\mu_2\mu_3+k_c^{24}\mu_2\mu_4+k_c^{34}\mu_3\mu_4\\
+        &+k_c^1\mu_1+k_c^2\mu_2+k_c^3\mu_3+k_c^4\mu_4+k_c^0=0.
+        \end{split}
+
+All coefficients follow from the same expressions:
+
+    .. math::
+        :label: SystemFourCoupledKs
+
+        \begin{split}
+        k_c^{aa}&=H_{ca}^2\left\lVert\mathbf{r}_a^0\right\rVert^2,\qquad a=1,2,3,4,\\
+        k_c^{ab}&=2H_{ca}H_{cb}\left(\mathbf{r}_a^0\cdot\mathbf{r}_b^0\right),\qquad 1\leq a<b\leq4,\\
+        k_c^a&=2H_{ca}\left(\mathbf{r}_c^*\cdot\mathbf{r}_a^0\right),\\
+        k_c^0&=\left\lVert\mathbf{r}_c^*\right\rVert^2-d_c^2.
+        \end{split}
+
+For example, :math:`k_1^{11}=\lVert\mathbf{r}_1^0\rVert^2/M_1^2`, :math:`k_1^{44}=\lVert\mathbf{r}_4^0\rVert^2/m_0^2`, :math:`k_1^{14}=2(\mathbf{r}_1^0\cdot\mathbf{r}_4^0)/(M_1m_0)`, and :math:`k_1^{24}=2(\mathbf{r}_2^0\cdot\mathbf{r}_4^0)/m_0^2`. These coefficients are computed once for a given trial step and reused during the Newton iterations.
+
+The Jacobian is a :math:`4\times4` matrix. With the shorthand :math:`k_c^{ba}=k_c^{ab}` for mixed coefficients, its entries are
+
+    .. math::
+        :label: FourCoupledJacobian
+
+        \begin{split}
+        (J_\mathbf{F})_{ca}
+        &=2k_c^{aa}\mu_a+\sum_{\substack{b=1\\b\ne a}}^4 k_c^{ab}\mu_b+k_c^a\\
+        &=2H_{ca}\left(\mathbf{r}_c^*+\sum_{b=1}^4H_{cb}\mu_b\mathbf{r}_b^0\right)\cdot\mathbf{r}_a^0.
+        \end{split}
+
+As in the two- and three-bond cases, initialize each multiplier with its isolated-bond solution. Let :math:`a_c=\lVert\mathbf{r}_c^0\rVert^2`, :math:`b_c=\mathbf{r}_c^*\cdot\mathbf{r}_c^0`, and :math:`g_c=\lVert\mathbf{r}_c^*\rVert^2-d_c^2`. Under the same conditions as :eq:`UncoupledMuStable`, use
+
+    .. math::
+
+        \mu_c^{(0)}=-M_c\frac{g_c}{b_c+\sqrt{b_c^2-a_cg_c}},\qquad c=1,2,3,4.
+
+For :math:`\boldsymbol{\mu}=(\mu_1,\mu_2,\mu_3,\mu_4)^T`, each Newton iteration then solves a four-dimensional linear system:
+
+    .. math::
+
+        J_\mathbf{F}(\boldsymbol{\mu}^{(\ell)})\Delta\boldsymbol{\mu}^{(\ell)}=-\mathbf{F}(\boldsymbol{\mu}^{(\ell)}),
+        \qquad
+        \boldsymbol{\mu}^{(\ell+1)}=\boldsymbol{\mu}^{(\ell)}+\Delta\boldsymbol{\mu}^{(\ell)}.
+
+Stop when :math:`\max_{c=1,2,3,4}|F_c|/d_c^2` satisfies the requested tolerance. Check invalid discriminants, singular or poorly conditioned linear systems, and the iteration limit as in the two-bond case. Finally, apply :eq:`FourCoupledDisplacements` and verify all four corrected distances. The masses and bond lengths need not be equal, and the reference geometry need not be tetrahedral.
+
 
 Triangle of constraints
 -----------------------
@@ -425,10 +531,10 @@ SETTLE
 
 The triangle of constraints case is very common for the biomolecular simulations since most of water models constrain both bonds between hydrogens and oxygen and H-O-H angle. And there is an analytical solution for this specific case, called SETTLE :cite:`Constraints-MiyamotoJCC92`. This algorithm is in fact used in most of the MD software. In brief, the idea of SETTLE is first to reduce the problem into two dimensions, and than compute the rotation angle of the constraints triangle using two-dimensional Euler angles.
 
-More than three coupled constraints
------------------------------------
+Larger constraint groups and general networks
+---------------------------------------------
 
-We can keep expanding our formulas to the cases with more coupled constraints, and they will get more and more complex. However, there are only a few cases that is useful to solve this way: four constraints coupled to the central (e.g. methane molecule) atom and various rings that should be kept planar (e.g. benzene ring in phenylalanine or double ring in the tryptophane side-chain). These are not very common, the rings are usually kept planar with improper dihedral potentials, so we will not derive them here. Much more important is the case where all covalent bonds are constraints, where universal formalism is needed. The two most common algorithms for this case are SHAKE :cite:`Constraints-RyckaertJCP77` (and its "velocity version" RATTLE :cite:`Constraints-AndersenJCP83`) and LINCS :cite:`Constraints-HessJCC97,Constraints-HessJCTC07`. Note that the latter is the default option in GROMACS.
+The same approach can be extended to stars with more than four bonds and to other small connected groups, including rings. Additional constraints between outer atoms change the coupling matrix and must be included in the same system. We do not derive those cases here. When all covalent bonds are constrained, the connected groups can become large and a general constraint solver is needed. Two common algorithms are SHAKE :cite:`Constraints-RyckaertJCP77` (and its velocity counterpart RATTLE :cite:`Constraints-AndersenJCP83`) and LINCS :cite:`Constraints-HessJCC97,Constraints-HessJCTC07`. The latter is the default option in GROMACS.
 
 .. bibliography::
     :keyprefix: Constraints-

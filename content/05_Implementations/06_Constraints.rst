@@ -25,7 +25,7 @@ The ''constrain'' force :math:`\delta\mathbf{f}_k` is then:
 
     .. math::
 
-        \delta\mathbf{f}_k=\frac{\partial}{\partial\mathbf{r}_k}\sum_{c=1}^{C}\lambda_c\sigma_c\left(\{\mathbf{r}\}\right)=\sum_{c=1}^{C}\lambda_c\frac{\partial}{\partial\mathbf{r}_k}\sigma_c\left(\{\mathbf{r}\}\right)=\sum_{c=1}^{C}\lambda_c2\left(\delta_{km}-\delta_{kl}\right)\mathbf{r}_{ml}
+        \delta\mathbf{f}_k=-\frac{\partial}{\partial\mathbf{r}_k}\sum_{c=1}^{C}\lambda_c\sigma_c\left(\{\mathbf{r}\}\right)=-\sum_{c=1}^{C}\lambda_c\frac{\partial}{\partial\mathbf{r}_k}\sigma_c\left(\{\mathbf{r}\}\right)=-2\sum_{c=1}^{C}\lambda_c\left(\delta_{km}-\delta_{kl}\right)\mathbf{r}_{ml}
 
 Numerical integration
 ---------------------
@@ -36,7 +36,16 @@ Since
 
         m_k\frac{d^2\mathbf{r}_k}{dt^2}=\mathbf{f}_k+\delta\mathbf{f}_k
 
-(add numerical scheme here to show how lambda and mu are related)
+For example, with timestep :math:`\tau`, the leapfrog scheme is
+
+    .. math::
+
+        \begin{split}
+        \mathbf{v}_k^{n+1/2}&=\mathbf{v}_k^{n-1/2}+\frac{\tau}{m_k}\left(\mathbf{f}_k^n+\delta\mathbf{f}_k^n\right), \\
+        \mathbf{r}_k^{n+1}&=\mathbf{r}_k^n+\tau\mathbf{v}_k^{n+1/2}.
+        \end{split}
+
+The constraint force is evaluated along the bond directions at the old positions :math:`\mathbf{r}^n`; its multipliers are chosen so that the new positions satisfy the constraints.
 
 The numerical integration can be done in two steps: (1) integration as if there are no constraints and (2) adding the displacement due to ''constrain force'' :math:`\delta\mathbf{f}_k`, so that the constraints are satisfied:
 
@@ -48,11 +57,11 @@ Where :math:`\mathbf{r}_k^*` is the displaced coordinates as if there are no con
 
     .. math::
         
-        \delta\mathbf{r}_k=\sum_{c=1}^C\frac{\mu_c}{m_k}\left(\delta_{km}-\delta_{kl}\right)\mathbf{r}_{ml}
+        \delta\mathbf{r}_k=\frac{\tau^2}{m_k}\delta\mathbf{f}_k^n=\sum_{c=1}^C\frac{\mu_c}{m_k}\left(\delta_{km}-\delta_{kl}\right)\mathbf{r}_{ml}^n
 
-Here, :math:`\mu_c=2\lambda_c\tau^2` is the normalized Lagrange multiplier.
+Here, :math:`\mu_c=-2\lambda_c^n\tau^2` is the displacement multiplier for this leapfrog scheme and the sign convention used above. The relation between force and displacement multipliers depends on the integration scheme.
 
-Note that since :math:`\delta\mathbf{\upsilon}=\frac{\delta\mathbf{r}}{\tau}`, the scaled Lagrange multiplier for the velocities is :math:`\mu_c^\upsilon=\frac{\mu_c}{\tau}`.
+For the leapfrog half-step velocities, :math:`\delta\mathbf{v}_k^{n+1/2}=\delta\mathbf{r}_k/\tau`, so the corresponding velocity multiplier is :math:`\mu_c^v=\mu_c/\tau`. This update does not by itself impose the end-of-step velocity constraints in a velocity-Verlet scheme; those require a separate velocity projection, as in RATTLE.
 
 Solving for :math:`\mu_c`
 -------------------------
@@ -66,7 +75,7 @@ These conditions should be satisfied by finding appropriate values for :math:`\m
         \begin{split}
         \left(\mathbf{r}_{ij}^*+\delta\mathbf{r}_{ij}\right)^2-d_{ij}^2=0 \\
         \left(\mathbf{r}_{ij}^*+\left(\delta\mathbf{r}_{i}-\delta\mathbf{r}_{j}\right)\right)^2-d_{ij}^2=0 \\
-        \left(\mathbf{r}_{ij}^*+\left(\sum_{c=1}^C\frac{\mu_c}{m_i}\left(\delta_{im}-\delta_{il}\right)\mathbf{r}_{ml} - \sum_{c=1}^C\frac{\mu_c}{m_j}\left(\delta_{jm}-\delta_{jl}\right)\mathbf{r}_{ml}\right)\right)^2-d_{ij}^2=0
+        \left(\mathbf{r}_{ij}^*+\left(\sum_{c=1}^C\frac{\mu_c}{m_i}\left(\delta_{im}-\delta_{il}\right)\mathbf{r}_{ml}^n - \sum_{c=1}^C\frac{\mu_c}{m_j}\left(\delta_{jm}-\delta_{jl}\right)\mathbf{r}_{ml}^n\right)\right)^2-d_{ij}^2=0
         \end{split}
 
 Finally:
@@ -74,14 +83,14 @@ Finally:
     .. math::
         :label: mu
 
-        \left(\mathbf{r}_{ij}^*+\sum_{c=1}^C\mu_c\left(\frac{\delta_{im}-\delta_{il}}{m_i} - \frac{\delta_{jm}-\delta_{jl}}{m_j}\right)\mathbf{r}_{ml}\right)^2-d_{ij}^2=0
+        \left(\mathbf{r}_{ij}^*+\sum_{c=1}^C\mu_c\left(\frac{\delta_{im}-\delta_{il}}{m_i} - \frac{\delta_{jm}-\delta_{jl}}{m_j}\right)\mathbf{r}_{ml}^n\right)^2-d_{ij}^2=0
 
 Note that the sum over all constraints :math:`c=\{m,l\}` should include the pair :math:`\{i,j\}`, in which case only two of the kronecker's deltas will survive. For a coupled constraint, when either :math:`i` or :math:`j` is equal to one index in the :math:`\{m,l\}` pair, only one delta will not be zero. Since :math:`i\ne j` and :math:`m\ne l`, there is never going to be the case when more than two deltas are not zero.
 
 Notations
 ---------
 
-Before applying the above formula to specific cases, let us simplify the notations. First, let us us the :math:`r_i^0` for the coordinates of the atom before the integration and :math:`r_i` as the coordinates for the same particle after the integration and constraining is done. Second, let us assume that the constrain connecting atoms :math:`m` and :math:`l` has an index :math:`c`, and we will use the constraint index :math:`c` and indices of the connected particles :math:`m` and :math:`l` interchangeably (we already did this for :math:`d_c=d_{ml}` above). We will be assigning these indexes for each case before deriving the formulas. This should allow us to have less noise in the formulas and the generalization for the :math:`n`-th step and for arbitrary indices of particles should be straightforward.
+Before applying the above formula to specific cases, let us simplify the notation. We write :math:`\mathbf{x}_i^0`, :math:`\mathbf{x}_i^*`, and :math:`\mathbf{x}_i` for the old, trial, and corrected positions of atom :math:`i`. For an oriented constraint :math:`c=(i,j)`, we use :math:`\mathbf{r}_c^0=\mathbf{x}_i^0-\mathbf{x}_j^0`, :math:`\mathbf{r}_c^*=\mathbf{x}_i^*-\mathbf{x}_j^*`, and :math:`\mathbf{r}_c=\mathbf{x}_i-\mathbf{x}_j` for its bond vectors. Thus atom indices on :math:`\mathbf{x}` and constraint indices on :math:`\mathbf{r}` are distinct. The superscript :math:`0` denotes the old integration step, not a Newton iteration. Constraint orientations and indices are specified separately for each case. All bond vectors must use consistent periodic images.
 
 One constraint
 --------------
@@ -94,7 +103,7 @@ The simplest case by far is when we have a single constraint, which is not coupl
 
         A schematic representation of a constrained bond. Index on top of the bond represents the constraint index :math:`c`. Arrow indicates the direction of the vector :math:`\mathbf{r}_1`. Masses subscripts correspond to aton indices.
 
-We have one constraint :math:`c=1=\{0,1\}` that connects two atoms :math:`i=0` and :math:`j=1` with masses :math:`m_0` and :math:`m_1`. We will also denote all the connecting vectors with constrain index, i.e. :math:`\mathbf{r}_1=\mathbf{r}_{01}=\mathbf{r}_0-\mathbf{r}_1`, etc. so there is less noise in formulas. Note that we could remove the index altogether since there is only one constrained bond, but we will keep the index here for consistency with the rest of the cases. The sole equation derived from :eq:`mu` is:
+We have one constraint :math:`c=1=\{0,1\}` that connects two atoms :math:`i=0` and :math:`j=1` with masses :math:`m_0` and :math:`m_1`. We will also denote all the connecting vectors with constrain index, i.e. :math:`\mathbf{r}_1=\mathbf{x}_0-\mathbf{x}_1`, etc. so there is less noise in formulas. Note that we could remove the index altogether since there is only one constrained bond, but we will keep the index here for consistency with the rest of the cases. The sole equation derived from :eq:`mu` is:
 
     .. math::
 
@@ -128,7 +137,7 @@ Plugging the :math:`D_2` into the solution gives:
 
         {\mu_1}^{1,2}=M_1\frac{\pm\sqrt{\left(\left(\mathbf{r}_1^*\cdot\mathbf{r}_1^0\right)^2-{\mathbf{r}_1^0}^2\left({\mathbf{r}_1^*}^2-d_1^2\right)\right)}-\left(\mathbf{r}_1^*\cdot\mathbf{r}_1^0\right)}{{\mathbf{r}_1^0}^2}
 
-As expected for quadratic equation, we have two solutions. However only one is valid for our problem: the one that gives smaller absolute value of :math:`\mu`. This is because we assume that the bond length after the numerical integration without constraints is close to the target length, i.e. the displacements of the atoms is small. Indeed, we can move the atoms so they satisfy the constraint two ways, one of which employs flipping the bond.
+For a positive discriminant, there are two real solutions. We assume that the trial bond vector is close to the old one, not merely that its length is close to the target. In this regime, :math:`\mathbf{r}_1^*\cdot\mathbf{r}_1^0>0`, and the solution of smaller absolute magnitude gives the small correction connected to the previous configuration. The other root reverses the component of the bond along its old direction. A zero discriminant gives a repeated root; a negative discriminant means that no real correction along the old bond direction can satisfy this isolated constraint.
 
     .. figure:: Figures/Constraints/CH1_mu12.png
         :name: Fig:Constraints:CH1_mu12
@@ -136,12 +145,21 @@ As expected for quadratic equation, we have two solutions. However only one is v
 
         Two roots give two different directions of the bond after constraining. Given that the timestep is small, the displacement should be small as well. Hence the correct solution for :math:`\mu_1` is the smallest by absolute value.
 
-The solution we are interested in is the one with the plus sign before the square root. So the final solution for :math:`\mu_1` is:
+The solution with the plus sign before the square root is the small root under the positive-dot-product assumption above. The resulting expression for :math:`\mu_1` is:
 
     .. math::
         :label: UncoupledMu
 
         \mu_1=M_1\frac{\sqrt{\left(\left(\mathbf{r}_1^*\cdot\mathbf{r}_1^0\right)^2-{\mathbf{r}_1^0}^2\left({\mathbf{r}_1^*}^2-d_1^2\right)\right)}-\left(\mathbf{r}_1^*\cdot\mathbf{r}_1^0\right)}{{\mathbf{r}_1^0}^2}
+
+For numerical evaluation near an already satisfied constraint, the subtraction in :eq:`UncoupledMu` can lose significant digits. Define :math:`a={\mathbf{r}_1^0}^2`, :math:`b=\mathbf{r}_1^*\cdot\mathbf{r}_1^0`, and :math:`c={\mathbf{r}_1^*}^2-d_1^2`. An algebraically equivalent, cancellation-resistant expression for :math:`b>0` is
+
+    .. math::
+        :label: UncoupledMuStable
+
+        \mu_1=-M_1\frac{c}{b+\sqrt{b^2-ac}}.
+
+The discriminant must be checked before taking the square root. If :math:`b\leq0`, the small-step assumption has failed and the plus-root choice is no longer justified by this argument.
 
 Though this equation is quite simple, we need to prepare ourselves to the following cases. So let us introduce the notations for all the coefficients in the :eq:`EquationOneUncoupled`, re-writing it as:
 
@@ -164,7 +182,7 @@ In these notations, the solution for :math:`\mu_1` is:
 
         \mu_1=\frac{\sqrt{{k_1^1}^2-4k_1^{11}k_1^0}-k_1^1}{2k_1^{11}}
 
-Note, that using :eq:`UncoupledMuThroughK` is slightly less computationally efficient when compared to :eq:`UncoupledMu`.
+Equations :eq:`UncoupledMuThroughK` and :eq:`UncoupledMu` are algebraically equivalent; :eq:`UncoupledMuStable` avoids cancellation when the constraint residual is small.
 
 Two coupled constraints
 -----------------------
@@ -175,7 +193,7 @@ Two coupled constraints
 
         A schematic representation of two coupled constrained bonds.
 
-Two coupled constraints will give us a much more complicated case of two coupled quadratic equations. Assuming that the central atom has index :math:`0`, with atoms :math:`1` and :math:`2` connected to it with two constrained bonds :math:`c=1=\{0,1\}` and :math:`c=2=\{0.2\}`, and using the reduced masses :math:`M_1=\frac{m_0m_1}{m_0+m_1}` and :math:`M_2=\frac{m_0m_2}{m_0+m_2}`, from :eq:`mu` we get:
+Two coupled constraints will give us a much more complicated case of two coupled quadratic equations. Assuming that the central atom has index :math:`0`, with atoms :math:`1` and :math:`2` connected to it with two constrained bonds :math:`c=1=\{0,1\}` and :math:`c=2=\{0,2\}`, and using the reduced masses :math:`M_1=\frac{m_0m_1}{m_0+m_1}` and :math:`M_2=\frac{m_0m_2}{m_0+m_2}`, from :eq:`mu` we get:
 
     .. math::
 
@@ -220,24 +238,24 @@ If we introduce two dimensional vector-function :math:`F(\mu_1, \mu_2)` in :eq:`
 
         \mathbf{F}(\mu_1, \mu_2) = \mathbf{0}
 
-This is a system of non-linear equations, which are notoriously hard to solve if we (1) need to find all the solutions and (2) don't have good initial guess for these solutions. However, this is not the case here. Firstly, we assume that atoms did satisfy the constraints on the previous step (i.e. we are looking for :math:`mu`'s with smallest absolute value). Secondly, we only need to find this solution (see how we dropped one of the roots when solving for uncoupled constraint). Hence we can apply the Newtons method (also known as Newton-Raphson method). The general form of in in multi-dimensional case is:
+This is a system of non-linear equations, which are notoriously hard to solve if we (1) need to find all the solutions and (2) don't have good initial guess for these solutions. However, this is not the case here. Firstly, we assume that atoms did satisfy the constraints on the previous step (so we seek the solution near the zero multiplier vector). Secondly, we only need to find this solution (see how we dropped one of the roots when solving for uncoupled constraint). Hence we can apply the Newtons method (also known as Newton-Raphson method). The general form of in in multi-dimensional case is:
 
     .. math::
         :label: SystemTwoCoupledNewton
 
         \mathbf{\mu}^{n+1}=\mathbf{\mu}^n-J_\mathbf{F}\left(\mathbf{\mu}^n\right)^{-1}\mathbf{F}\left(\mathbf{\mu}^n\right)
 
-Here, :math:`\mathbf{\mu}^n=(\mu_1^n,\mu_2^n)^T` is a vector with the solutions on :math:`n`-th iteration, :math:`J_\mathbf{F}\left(\mathbf{\mu}\right)=J_\mathbf{F}\left(\mu_1, \mu_2\right)` is the Jakobian matrix for the system. Using :eq:`SystemTwoCoupled`, we can compute :math:`J_\mathbf{F}\left(\mu_1, \mu_2\right)`:
+Here, :math:`\mathbf{\mu}^n=(\mu_1^n,\mu_2^n)^T` is a vector with the solutions on :math:`n`-th iteration, :math:`J_\mathbf{F}\left(\mathbf{\mu}\right)=J_\mathbf{F}\left(\mu_1, \mu_2\right)` is the Jacobian matrix for the system. Using :eq:`SystemTwoCoupled`, we can compute :math:`J_\mathbf{F}\left(\mu_1, \mu_2\right)`:
 
     .. math::
 
         J_\mathbf{F}=
         \begin{pmatrix}
         2k_1^{11}\mu_1+k_1^{12}\mu_2+k_1^1 & k_1^{12}\mu_1+2k_1^{22}\mu_2+k_1^2 \\
-        2k_2^{11}\mu_1+k_2^{12}\mu_2+k_2^1 & k_1^{12}\mu_2+2k_2^{22}\mu_2+k_2^2
+        2k_2^{11}\mu_1+k_2^{12}\mu_2+k_2^1 & k_2^{12}\mu_1+2k_2^{22}\mu_2+k_2^2
         \end{pmatrix}
 
-With everything in the :eq:`SystemTwoCoupledNewton` derived, we need good initial approximation for :math:`\mu_1` and :math:`mu_2`. One can use zeroes, assuming that atoms did not moved much during the integration time step atoms did not moved far away from their previous positions (which did satisfy the constraints). We can get slightly better initial approximation by assuming that the constraints are not coupled, i.e. by using :eq:`UncoupledMu` or :eq:`UncoupledMuThroughK` for two constraints we have in our case:
+With everything in the :eq:`SystemTwoCoupledNewton` derived, we need good initial approximation for :math:`\mu_1` and :math:`mu_2`. One can use zeroes, assuming that atoms did not moved much during the integration time step atoms did not moved far away from their previous positions (which did satisfy the constraints). An alternative initial approximation is obtained by assuming that the constraints are not coupled, i.e. by using :eq:`UncoupledMu` or :eq:`UncoupledMuThroughK` for two constraints we have in our case:
 
     .. math::
         :label: CoupledMyAsUncoupledThroughK
@@ -247,7 +265,7 @@ With everything in the :eq:`SystemTwoCoupledNewton` derived, we need good initia
         \mu_2^0=\frac{\sqrt{{k_2^2}^2-4k_2^{22}k_2^0}-k_2^2}{2k_2^{22}}
         \end{split}
 
-The numerical procedure to evaluate :math:`\mu_1` and :math:`\mu_2` is then contains following steps. (1) Compute coefficients in :eq:`SystemTwoCoupledKs`. (2) Use :eq:`CoupledMyAsUncoupledThroughK` to get initial approximations :math:`\mu_1^0` and :math:`\mu_2^0` for :math:`\mu_1` and :math:`\mu_2`. (3) Compute :math:`\mathbf{F}(\mu_1, \mu_2)` using :eq:`SystemTwoCoupled` and :math:`J_\mathbf{F}\left(\mu_1, \mu_2\right)`, invert the matrix :math:`J_\mathbf{F}` (one can derive formulas to compute the inverse Jakobian directly, without computing the Jakobian itself). (4) Apply the :eq:`SystemTwoCoupledNewton` to get the next iteration values for :math:`\mu_1` and :math:`\mu_2`. (5) Repeat steps (3) and (4) until convergence.
+The numerical procedure is as follows. (1) Compute the coefficients in :eq:`SystemTwoCoupledKs`. (2) Use the independent-constraint roots in :eq:`CoupledMyAsUncoupledThroughK` as initial estimates, evaluating them with the stable form :eq:`UncoupledMuStable` when applicable. (3) Evaluate :math:`\mathbf{F}` and :math:`J_\mathbf{F}`. (4) Solve :math:`J_\mathbf{F}\Delta\boldsymbol{\mu}=-\mathbf{F}` and update :math:`\boldsymbol{\mu}\leftarrow\boldsymbol{\mu}+\Delta\boldsymbol{\mu}`. Solving this small linear system avoids explicitly forming the inverse. (5) Repeat until :math:`\max_c |F_c|/d_c^2` is below the chosen tolerance, then apply the atomic displacements and verify the resulting bond lengths. This is a relative squared-distance tolerance; for small errors it is approximately twice the relative length error. Newton convergence is local, so invalid initial roots, singular Jacobians, and failure to converge within an iteration limit must be handled explicitly.
 
 
 Three constraints coupled through the central atom
@@ -335,12 +353,22 @@ Triangle of constraints
 
         Three constraints can form a rigid triangle, e.g. in water molecule.
 
+Label the atoms :math:`1,2,3`, as in the figure, and orient the bond vectors along its arrows:
+
+    .. math::
+
+        \mathbf{r}_1=\mathbf{x}_2-\mathbf{x}_1,\qquad
+        \mathbf{r}_2=\mathbf{x}_3-\mathbf{x}_2,\qquad
+        \mathbf{r}_3=\mathbf{x}_1-\mathbf{x}_3.
+
+Use the same orientations for the old and trial vectors. The reduced masses are :math:`M_1=m_1m_2/(m_1+m_2)`, :math:`M_2=m_2m_3/(m_2+m_3)`, and :math:`M_3=m_3m_1/(m_3+m_1)`. Then :eq:`mu` gives
+
     .. math::
 
         \begin{cases}
         \left(\mathbf{r}_{1}^*+\frac{\mu_1}{M_1}\mathbf{r}_1^0-\frac{\mu_2}{m_2}\mathbf{r}_2^0-\frac{\mu_3}{m_1}\mathbf{r}_3^0\right)^2-d_1^2=0 \\
-        \left(\mathbf{r}_{2}^*-\frac{\mu_2}{m_0}\mathbf{r}_1^0+\frac{\mu_2}{M_2}\mathbf{r}_2^0-\frac{\mu_3}{m_3}\mathbf{r}_3^0\right)^2-d_2^2=0 \\
-        \left(\mathbf{r}_{3}^*-\frac{\mu_1}{m_1}\mathbf{r}_1^0-\frac{\mu_3}{m_0}\mathbf{r}_2^0+\frac{\mu_3}{M_3}\mathbf{r}_3^0\right)^2-d_3^2=0 \\
+        \left(\mathbf{r}_{2}^*-\frac{\mu_1}{m_2}\mathbf{r}_1^0+\frac{\mu_2}{M_2}\mathbf{r}_2^0-\frac{\mu_3}{m_3}\mathbf{r}_3^0\right)^2-d_2^2=0 \\
+        \left(\mathbf{r}_{3}^*-\frac{\mu_1}{m_1}\mathbf{r}_1^0-\frac{\mu_2}{m_3}\mathbf{r}_2^0+\frac{\mu_3}{M_3}\mathbf{r}_3^0\right)^2-d_3^2=0 \\
         \end{cases}
 
 
@@ -369,8 +397,8 @@ Triangle of constraints
             k_2^3=-\frac{2\left(\mathbf{r}_2^*\cdot\mathbf{r}_3^0\right)}{m_3}\mathrm{,~~}
             k_2^0={\mathbf{r}_2^*}^2-d_2^2\mathrm{,~~} \\ \\
             k_3^{11}=\frac{{\mathbf{r}_1^0}^2}{m_1^2}\mathrm{,~~}
-            k_3^{22}=-\frac{{\mathbf{r}_2^0}^2}{m_3^2}\mathrm{,~~}
-            k_3^{33}=-\frac{{\mathbf{r}_3^0}^2}{M_3^2}\mathrm{,} \\
+            k_3^{22}=\frac{{\mathbf{r}_2^0}^2}{m_3^2}\mathrm{,~~}
+            k_3^{33}=\frac{{\mathbf{r}_3^0}^2}{M_3^2}\mathrm{,} \\
             k_3^{12}=\frac{2\left(\mathbf{r}_1^0\cdot\mathbf{r}_2^0\right)}{m_1m_3}\mathrm{,~~}
             k_3^{13}=-\frac{2\left(\mathbf{r}_1^0\cdot\mathbf{r}_3^0\right)}{M_3m_1}\mathrm{,~~}
             k_3^{23}=-\frac{2\left(\mathbf{r}_2^0\cdot\mathbf{r}_3^0\right)}{M_3m_3}\mathrm{,} \\
@@ -380,7 +408,17 @@ Triangle of constraints
             k_3^0={\mathbf{r}_3^*}^2-d_3^2\mathrm{,~~} \\ \\
         \end{split}
 
-Note that :math:`\left(\mathbf{r}_1^0\cdot\mathbf{r}_2^0\right)=\left(\mathbf{r}_2^0\cdot\mathbf{r}_3^0\right)=\left(\mathbf{r}_3^0\cdot\mathbf{r}_1^0\right)=-2S_0`, where :math:`S_0` is the area of the triangle.
+The cyclic bond vectors satisfy :math:`\mathbf{r}_1^0+\mathbf{r}_2^0+\mathbf{r}_3^0=0`. Consequently,
+
+    .. math::
+
+        \begin{split}
+        \mathbf{r}_1^0\cdot\mathbf{r}_2^0&=\frac{{\mathbf{r}_3^0}^2-{\mathbf{r}_1^0}^2-{\mathbf{r}_2^0}^2}{2}, \\
+        \mathbf{r}_2^0\cdot\mathbf{r}_3^0&=\frac{{\mathbf{r}_1^0}^2-{\mathbf{r}_2^0}^2-{\mathbf{r}_3^0}^2}{2}, \\
+        \mathbf{r}_3^0\cdot\mathbf{r}_1^0&=\frac{{\mathbf{r}_2^0}^2-{\mathbf{r}_3^0}^2-{\mathbf{r}_1^0}^2}{2}.
+        \end{split}
+
+These dot products are generally different. The triangle area is instead :math:`S_0=\tfrac12\lVert\mathbf{r}_1^0\times\mathbf{r}_2^0\rVert`.
 
 SETTLE
 ------

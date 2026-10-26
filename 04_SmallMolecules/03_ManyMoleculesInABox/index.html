@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GROMACS simulations of a box of 1000 octane molecules &mdash; MD simulations  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx_lesson.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/term_role_formatting.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx_rtd_theme_ext_color_contrast.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/clipboard.min.js"></script>
+        <script src="../../_static/copybutton.js"></script>
+        <script src="../../_static/minipres.js"></script>
+        <script>let toggleHintShow = 'Click to show';</script>
+        <script>let toggleHintHide = 'Click to hide';</script>
+        <script>let toggleOpenOnPrint = 'true';</script>
+        <script src="../../_static/togglebutton.js"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex/" />
+    <link rel="search" title="Search" href="../../search/" />
+    <link rel="next" title="Numerical integration of equations of motion" href="../../05_Implementations/01_Integration/" />
+    <link rel="prev" title="Linear hydrocarbons (alkanes)" href="../02_Alkanes/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../" class="icon icon-home">
+            MD simulations
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Prerequisites</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../00_Prereq/01_Software/">Software</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Biological molecules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/01_Water/">Water molecule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/02_AminoAcids/">AminoAcids</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/03_Proteins/">Proteins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/04_DNA/">DNA and RNA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/05_MolecularSystems/">Molecular systems</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">MD simulations of protein</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../03_UsingGROMACS/Calmodulin/Instructions/">MD simulations of calmodulin</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">MD simulations of small molecules</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../01_Benzene/">Create topology and coordinates for benzene molecule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02_Alkanes/">Linear hydrocarbons (alkanes)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">GROMACS simulations of a box of 1000 octane molecules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#system-coordinates">System coordinates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#system-topology">System topology</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-water-solvent">Adding water solvent</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#preparing-the-system">Preparing the system</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#energy-minimization">Energy minimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#equilibration">Equilibration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#production-simulations">Production simulations</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Implementations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/01_Integration/">Numerical integration of equations of motion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/02_GeneralNotesOnPotential/">From potential energy to atomic forces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/03_Bonded/">Bonded interactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/04_Nonbonded/">Non-bonded interactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/05_PME/">PME</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/06_Constraints/">Constraints</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/10_NaCl/">Implementation of a simple molecular dynamics code: NaCl in vacuum</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Exercises</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/ExerciseDNAPacking/">Вариант 1: Упаковка ДНК</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/ExercisePolymerization/">Вариант 2: Реакция полимеризации</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quick-reference/">Quick Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guide/">Instructor’s guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Home</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/AnglePotential/">Three-body potential</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../">MD simulations</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">GROMACS simulations of a box of 1000 octane molecules</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/zhmurov/content/blob/main/content/04_SmallMolecules/03_ManyMoleculesInABox.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="gromacs-simulations-of-a-box-of-1000-octane-molecules">
+<h1>GROMACS simulations of a box of 1000 octane molecules<a class="headerlink" href="#gromacs-simulations-of-a-box-of-1000-octane-molecules" title="Permalink to this heading"></a></h1>
+<section id="system-coordinates">
+<h2>System coordinates<a class="headerlink" href="#system-coordinates" title="Permalink to this heading"></a></h2>
+<p>To create the system, we will use Packmol software.
+Packmol takes coordinates of a single molecule and fills the specified volume with translated and rotated copies of the molecule.
+We assume that there is a <code class="docutils literal notranslate"><span class="pre">charmm36.ff/hydrocarbons</span></code> folder that contains coordinates of single molecules that can be used to create a mixture.
+To create a 10nm x 10nm x 10nm box containing 1000 octane molecules with Packmol, create <code class="docutils literal notranslate"><span class="pre">octane.inp</span></code> file with the following:</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>tolerance 2.0
+filetype pdb
+output octane.pdb
+
+structure charmm36.ff/hydrocarbons/C8H18.pdb
+number 100
+inside box 0. 0. 0. 40. 40. 40.
+end structure
+</pre></div>
+</div>
+</div></blockquote>
+<p>The first three lines specify the output parameters.
+Distance tolerance (in angstroms) is the minimal distance between molecules.
+Packmol will try to put molecules in the specified dimensions so that the minimal distance between two molecules is larger than tolerance.
+Next two lines specify the output format and file name.
+For each component, we specify the input file, number of molecules to add and the dimensions of the box to put molecules in (in angstroms).
+To create the PDB file with Packmol, feed the created file to the software:</p>
+<blockquote>
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">$PACKMOL</span><span class="w"> </span>&lt;<span class="w"> </span>octane.inp
+</pre></div>
+</div>
+</div></blockquote>
+<p>This should create a <code class="docutils literal notranslate"><span class="pre">octane.pdb</span></code> file. Feel free to load it into VMD or other visualization software to have a look.</p>
+</section>
+<section id="system-topology">
+<h2>System topology<a class="headerlink" href="#system-topology" title="Permalink to this heading"></a></h2>
+<p>Now we have coordinates for the system, we need to create topology file.
+Since we already created the topology files for all the molecules in the mixture (octane in this case), the system topology is quite simple.
+We assume that these files are located in <code class="docutils literal notranslate"><span class="pre">charmm36.ff/hydrocarbons</span></code> folder in your working directory.
+All we need to do is to include pre-generated topologies for molecules in the mixture and list the number of molecules.
+Note that the number of molecules and their quantities should be the same as used when the coordinates were generated. The resulting top file is:</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>; Include forcefield parameters
+#include &quot;charmm36.ff/forcefield.itp&quot;
+#include &quot;charmm36.ff/tip3p.itp&quot;
+#include &quot;charmm36.ff/hydrocarbons/C8H18.itp&quot;
+
+[ system ]
+; Name
+1000 octane molecules
+
+[ molecules ]
+; Compound        #mols
+C8H18             1000
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="adding-water-solvent">
+<h2>Adding water solvent<a class="headerlink" href="#adding-water-solvent" title="Permalink to this heading"></a></h2>
+<p>There are two ways to add water molecules to the system: using GROMACS <code class="docutils literal notranslate"><span class="pre">solvate</span></code> utility or using Packmol with water as another component of the mixture.
+To add water using GROMACS, create <code class="docutils literal notranslate"><span class="pre">.gro</span></code> file with solvation box specified and run <code class="docutils literal notranslate"><span class="pre">solvate</span></code> utility:</p>
+<blockquote>
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">$GMX</span><span class="w"> </span>editconf<span class="w"> </span>-f<span class="w"> </span>octane.pdb<span class="w"> </span>-o<span class="w"> </span>octane_box.gro<span class="w"> </span>-box<span class="w"> </span><span class="m">10</span><span class="w"> </span><span class="m">10</span><span class="w"> </span><span class="m">10</span>
+<span class="nv">$GMX</span><span class="w"> </span>solvate<span class="w"> </span>-cp<span class="w"> </span>octane_box.gro<span class="w"> </span>-o<span class="w"> </span>octane_solv.gro<span class="w"> </span>-p<span class="w"> </span>octane.top
+</pre></div>
+</div>
+<p>This will specify the box size to 10nm x 10nm x 10nm and add as many water molecules as it will be able to without introducing steric clashes between molecules and without exceeding normal density.
+You can also specify maximum number of water molecules by adding <code class="docutils literal notranslate"><span class="pre">--maxsol</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">gmx</span> <span class="pre">solvate</span></code>.
+See <code class="docutils literal notranslate"><span class="pre">gmx</span> <span class="pre">solvate</span></code> <a class="reference external" href="https://manual.gromacs.org/current/onlinehelp/gmx-solvate.html">section in GROMACS manual</a> for more details on how to use this utility.
+Note that this will overwrite the <code class="docutils literal notranslate"><span class="pre">.top</span></code> file, adding the solvent (water) molecules into the system description.
+You can edit the name of the system and/or rename the final topology file if you wish.</p>
+</div></blockquote>
+<p>Another way of adding water molecules is to deal with them the same way as with other components of the mixture with Packmol.
+To do so, you will need a coordinate file for single water molecule, which can be created similarly to the rest of the components.
+To mix 1000 octane molecules with 5000 water molecules, one can use the following Packmol input file:</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>tolerance 2.0
+filetype pdb
+output octane_solv.pdb
+
+structure charmm36.ff/hydrocarbons/C8H18.pdb
+number 1000
+inside box 0. 0. 0. 100. 100. 100.
+end structure
+
+structure charmm36.ff/hydrocarbons/tip3p.pdb
+number 5000
+inside box 0. 0. 0. 100. 100. 100.
+end structure
+</pre></div>
+</div>
+</div></blockquote>
+<p>You will still need to run <code class="docutils literal notranslate"><span class="pre">gmx</span> <span class="pre">editconf</span></code> to specify the box size:</p>
+<blockquote>
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">$GMX</span><span class="w"> </span>editconf<span class="w"> </span>-f<span class="w"> </span>octane_solv.pdb<span class="w"> </span>-o<span class="w"> </span>octane_solv.gro<span class="w"> </span>-box<span class="w"> </span><span class="m">10</span><span class="w"> </span><span class="m">10</span><span class="w"> </span><span class="m">10</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The corresponding topology file will be:</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>; Include forcefield parameters
+#include &quot;charmm36.ff/forcefield.itp&quot;
+#include &quot;charmm36.ff/tip3p.itp&quot;
+#include &quot;charmm36.ff/hydrocarbons/C8H18.itp&quot;
+
+[ system ]
+; Name
+1000 octane molecules in water
+
+[ molecules ]
+; Compound        #mols
+C8H18             1000
+SOL               5000
+</pre></div>
+</div>
+</div></blockquote>
+<p>Note that the name of water molecule in the topology is <code class="docutils literal notranslate"><span class="pre">SOL</span></code>, which is how it is called in the forcefield by default.
+The drawback of this approach is that user has to pre-compute the number of water molecules instead of relying on GROMACS to add water up to desired density.
+The first advantage is that we eliminate one step in the procedure of system generation.
+But more importantly, we can slightly modify the Packmol input file and create molecular system where the two components are separated.
+This is done by providing different compartments to Packmol:</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>tolerance 2.0
+filetype pdb
+output octane_solv.pdb
+
+structure charmm36.ff/hydrocarbons/C8H18.pdb
+number 1000
+inside box 0. 0. 0. 50. 100. 100.
+end structure
+
+structure charmm36.ff/tip3p.pdb
+number 5000
+inside box 50. 0. 0. 100. 100. 100.
+end structure
+</pre></div>
+</div>
+</div></blockquote>
+<p>This way, the simulation box will be split in half with the left side filled with octane and right side filled with water.
+Note that Packmol provides an extensive number of options to specify the geometry of the system.
+See <a class="reference external" href="https://m3g.github.io/packmol/userguide.shtml">Packmol users guide</a> for details.</p>
+</section>
+<section id="preparing-the-system">
+<h2>Preparing the system<a class="headerlink" href="#preparing-the-system" title="Permalink to this heading"></a></h2>
+<section id="energy-minimization">
+<h3>Energy minimization<a class="headerlink" href="#energy-minimization" title="Permalink to this heading"></a></h3>
+<blockquote>
+<div><p>The configuration file for energy minimization follows.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>title       = enrgy minimisation
+
+; Parameters describing what to do, when to stop and what to save
+integrator  = steep  ; Algorithm (steep = steepest descent minimization)
+emtol       = 1000.0 ; Stop minimization when the maximum force &lt; 1000.0 kJ/mol/nm
+emstep      = 0.01   ; Minimization step size
+nstenergy   = 500    ; save energies every 1.0 ps, so we can observe if we are successful
+nstxout-compressed       = 500    ; for writing coords (x)
+nsteps      = -1     ; run as long as we need
+; Settings that make sure we run with parameters in harmony with the selected force-field
+constraints             = h-bonds   ; bonds involving H are constrained
+rcoulomb                = 1.2       ; short-range electrostatic cutoff (in nm)
+rvdw                    = 1.2       ; short-range van der Waals cutoff (in nm)
+vdw-modifier            = Force-switch ;  specific CHARMM
+rvdw_switch             = 1.0       ;
+DispCorr                = no        ; account for cut-off vdW scheme -
+;in case of CHARMM DispCorr = EnerPres only for monolayers
+coulombtype             = PME       ; Particle Mesh Ewald for long-range electrostatics
+fourierspacing          = 0.15     ; grid spacing for FFT
+</pre></div>
+</div>
+</div></blockquote>
+<p>This file is very similar to the one we used for vacuum minimization with only non-bonded parameters different.
+The reason is that the box is now not infinitely large and cut-offs should be adjusted to fit this size.
+The parameters used here are recommended parameters for CHARMM force-fields, i.e. the force-field was parametrize with these non-bonded parameters in mind.</p>
+<blockquote>
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">$GMX</span><span class="w"> </span>grompp<span class="w"> </span>-f<span class="w"> </span>em.mdp<span class="w"> </span>-c<span class="w"> </span>octane_solv.gro<span class="w"> </span>-p<span class="w"> </span>octane.top<span class="w"> </span>-o<span class="w"> </span>em.tpr
+<span class="nv">$GMX</span><span class="w"> </span>mdrun<span class="w"> </span>-deffnm<span class="w"> </span>em
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="equilibration">
+<h3>Equilibration<a class="headerlink" href="#equilibration" title="Permalink to this heading"></a></h3>
+<p>The equilibration is usually done in two steps.
+First run of equilibration is with constant volume (NVT ensemble).
+This is so that the barostat will not pick up large deviation in the pressure that may occur because of bad placement of the molecules.
+The configuration file for the NVT equilibration in CHARMM force-field is:</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>title                   = NVT equilibration
+
+; Parameters describing what to do, when to stop and what to save
+integrator              = md        ; leap-frog integrator
+dt                      = 0.002     ; 2 fs
+nsteps                  = 50000     ; 2 * 50000 = 100 ps
+nstenergy               = 500       ; save energy and temperature every 1.0 ps
+nstxout-compressed      = 5000    ; for writing coords (x)
+
+; periodic boundary condition
+pbc                     = xyz       ;
+
+; Keep system temperature fluctuating physically correct
+tcoupl                  = V-rescale           ; modified Berendsen thermostat
+tc-grps                 = system   ; coupling groups
+tau_t                   = 0.1      ; time constant, in ps
+ref_t                   = 300      ; reference temperature, one for each group, in K
+
+; Pressure coupling is off
+pcoupl                  = no
+
+; Velocity generation
+gen_vel                 = yes                 ; assign velocities from Maxwell distribution
+gen_temp                = 300                 ; temperature for Maxwell distribution
+
+; Settings that make sure we run with parameters in harmony with the selected force-field
+constraints             = h-bonds   ; bonds involving H are constrained
+rcoulomb                = 1.2       ; short-range electrostatic cutoff (in nm)
+rvdw                    = 1.2       ; short-range van der Waals cutoff (in nm)
+vdw-modifier            = Force-switch ;  specific CHARMM
+rvdw_switch             = 1.0       ;
+DispCorr                = no        ; account for cut-off vdW scheme -
+;in case of CHARMM DispCorr = EnerPres only for monolayers
+coulombtype             = PME       ; Particle Mesh Ewald for long-range electrostatics
+fourierspacing          = 0.15     ; grid spacing for FFT
+</pre></div>
+</div>
+</div></blockquote>
+<p>Here, we use <code class="docutils literal notranslate"><span class="pre">md</span></code> integrator, which is a leap-frog scheme.
+Note that now we save the coordinates every 5000 steps in compressed format, so that we can monitor the progress (<code class="docutils literal notranslate"><span class="pre">nstxout-compressed</span></code> parameter).
+We employ the temperature control with <a class="reference external" href="https://manual.gromacs.org/documentation/current/user-guide/mdp-options.html#mdp-tcoupl">velocity rescaling algorithm</a>.
+The pressure coupling is off on this stage.
+The initial velocities are generated at this stage, based on the temperature of 300K.
+Non-bonded parameters remain the same as they should for the rest of the simulations.
+To start the NVT equilibration stage, create portable simulation file (<code class="docutils literal notranslate"><span class="pre">.tpr</span></code>) with <code class="docutils literal notranslate"><span class="pre">gmx</span> <span class="pre">grompp</span></code> and start the run with <code class="docutils literal notranslate"><span class="pre">gmx</span> <span class="pre">mdrun</span></code>.</p>
+<blockquote>
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">$GMX</span><span class="w"> </span>grompp<span class="w"> </span>-f<span class="w"> </span>nvt.mdp<span class="w"> </span>-c<span class="w"> </span>em.gro<span class="w"> </span>-p<span class="w"> </span>octane.top<span class="w"> </span>-o<span class="w"> </span>nvt.tpr
+<span class="nv">$GMX</span><span class="w"> </span>mdrun<span class="w"> </span>-deffnm<span class="w"> </span>nvt
+</pre></div>
+</div>
+</div></blockquote>
+<p>The second equilibration stage is done under constant pressure conditions (NPT ensemble).
+GROMACS will be adjusting the size of the simulation box to reach the target value of pressure.
+The volume of the box can change quite drastically at this stage if the initial box is overfilled or undefiled.
+We aim to reach more or less conserved volume at the end of this run as an indicator that the system is well equilibrated and ready for production run.</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>title                   = NPT equilibration
+
+; Parameters describing what to do, when to stop and what to save
+integrator              = md        ; leap-frog integrator
+dt                      = 0.002     ; 2 fs
+nsteps                  = 50000     ; 2 * 50000 = 100 ps
+nstenergy               = 500       ; save energy and temperature every 1.0 ps
+nstxout-compressed      = 5000    ; for writing coords (x)
+
+; periodic boundary condition
+pbc                     = xyz       ;
+
+continuation            = yes
+
+; Pressure coupling is on
+pcoupl                  = C-rescale             ; Pressure coupling on in NPT
+pcoupltype              = isotropic             ; uniform scaling of box vectors
+tau_p                   = 1.0                   ; time constant, in ps
+ref_p                   = 1.0                   ; reference pressure, in bar
+compressibility         = 4.5e-5                ; isothermal compressibility of water, bar^-1
+refcoord_scaling        = com
+
+; Keep system temperature fluctuating physically correct
+tcoupl                  = V-rescale           ; modified Berendsen thermostat
+tc-grps                 = system   ; coupling groups
+tau_t                   = 0.1      ; time constant, in ps
+ref_t                   = 300      ; reference temperature, one for each group, in K
+
+; Settings that make sure we run with parameters in harmony with the selected force-field
+constraints             = h-bonds   ; bonds involving H are constrained
+rcoulomb                = 1.2       ; short-range electrostatic cutoff (in nm)
+rvdw                    = 1.2       ; short-range van der Waals cutoff (in nm)
+vdw-modifier            = Force-switch ;  specific CHARMM
+rvdw_switch             = 1.0       ;
+DispCorr                = no        ; account for cut-off vdW scheme -
+;in case of CHARMM DispCorr = EnerPres only for monolayers
+coulombtype             = PME       ; Particle Mesh Ewald for long-range electrostatics
+fourierspacing          = 0.15     ; grid spacing for FFT
+</pre></div>
+</div>
+</div></blockquote>
+<p>Here we have isotropic pressure coupling enabled with exponential relaxation pressure coupling scheme.
+More on pressure coupling algorithms that are supported by GROMACS <a class="reference external" href="https://manual.gromacs.org/documentation/current/user-guide/mdp-options.html#mdp-pcoupl">here</a>.
+Now, configure and run the simulations.</p>
+<blockquote>
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">$GMX</span><span class="w"> </span>grompp<span class="w"> </span>-f<span class="w"> </span>npt.mdp<span class="w"> </span>-c<span class="w"> </span>nvt.gro<span class="w"> </span>-p<span class="w"> </span>octane.top<span class="w"> </span>-o<span class="w"> </span>npt.tpr
+<span class="nv">$GMX</span><span class="w"> </span>mdrun<span class="w"> </span>-deffnm<span class="w"> </span>npt
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+</section>
+<section id="production-simulations">
+<h2>Production simulations<a class="headerlink" href="#production-simulations" title="Permalink to this heading"></a></h2>
+<p>Production simulations can be performed with isotropic or anisotropic pressure coupling scheme.
+Configuration file for isotropic pressure coupling is very similar to the one for the NPT equilibration.
+All we need to do is to adjust number of steps and how often we want the output to be saved.</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>title                   = Equilibrium simulations
+
+; Parameters describing what to do, when to stop and what to save
+integrator              = md        ; leap-frog integrator
+dt                      = 0.002     ; 2 fs
+nsteps                  = 5000000     ;
+
+; periodic boundary condition
+pbc                     = xyz       ;
+
+continuation            = yes
+
+; Output control - output frequency in steps
+; Output frequency for  output trajctory file ,trr
+nstxout                  = 0       ; for writing coords (x)
+nstvout                  = 0       ; for writing velocities (v)
+nstfout                  = 0       ; for writing forces (f)
+; Output frequency for energies to log file and energy file
+nstlog                   = 1000    ; for writing energies to log file
+nstenergy                = 500     ; for writing energies to edr file
+; Output frequency and precision for .xtc file
+nstxout-compressed       = 5000    ; for writing coords (x)
+
+; Pressure coupling is on
+pcoupl                  = C-rescale             ; Pressure coupling on in NPT
+pcoupltype              = isotropic             ; uniform scaling of box vectors
+tau_p                   = 5.0                   ; time constant, in ps
+ref_p                   = 1.0                   ; reference pressure, in bar
+compressibility         = 4.5e-5                ; isothermal compressibility of water, bar^-1
+refcoord_scaling        = com
+
+; Keep system temperature fluctuating physically correct
+tcoupl                  = V-rescale           ; modified Berendsen thermostat
+tc-grps                 = system ;
+tau_t                   = 0.1    ; time constant, in ps
+ref_t                   = 300    ; reference temperature, one for each group, in K
+
+; Settings that make sure we run with parameters in harmony with the selected force-field
+constraints             = h-bonds   ; bonds involving H are constrained
+rcoulomb                = 1.2       ; short-range electrostatic cutoff (in nm)
+rvdw                    = 1.2       ; short-range van der Waals cutoff (in nm)
+vdw-modifier            = Force-switch ;  specific CHARMM
+rvdw_switch             = 1.0       ;
+DispCorr                = no        ; account for cut-off vdW scheme -
+;in case of CHARMM DispCorr = EnerPres only for monolayers
+coulombtype             = PME       ; Particle Mesh Ewald for long-range electrostatics
+fourierspacing          = 0.15     ; grid spacing for FFT
+</pre></div>
+</div>
+</div></blockquote>
+<p>For anisotropic pressure coupling, we will have to use Parrinello-Rahman barostat and set the target pressure for each component individually.
+The box will shrink in different dimentions differently, depending on the pressure along the respective component.
+This type of pressure coupling is usefull, if the system itself is anisotropic (e.g. when there is a flat layer of compound or clear separation between mixed component along one of the axis).
+To set up anisotropic pressure coupling, use the following block in <code class="docutils literal notranslate"><span class="pre">.mdp</span></code> file:</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><div class="highlight"><pre><span></span>; Pressure coupling is on
+pcoupl                  = Parrinello-Rahman                         ; Pressure coupling on in NPT
+pcoupltype              = anisotropic                               ; non-uniform scaling of box vectors
+ref_p                   = 1.0    1.0    1.0    0.0    0.0    0.0    ; reference pressure, in bar. No shear, off-diagonal elements are zero
+tau_p                   = 50.0                                       ; time constant, in ps
+compressibility         = 4.5e-5 4.5e-5 4.5e-5 4.5e-5 4.5e-5 4.5e-5 ; isothermal compressibility of water, bar^-1
+refcoord_scaling        = com
+</pre></div>
+</div>
+</div></blockquote>
+<p>Save the <code class="docutils literal notranslate"><span class="pre">.mdp</span></code> file, create <code class="docutils literal notranslate"><span class="pre">.tpr</span></code> with <code class="docutils literal notranslate"><span class="pre">gmx</span> <span class="pre">grompp</span></code> and run the simulations with <code class="docutils literal notranslate"><span class="pre">gmx</span> <span class="pre">mdrun</span></code>:</p>
+<blockquote>
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">$GMX</span><span class="w"> </span>grompp<span class="w"> </span>-f<span class="w"> </span>md.mdp<span class="w"> </span>-c<span class="w"> </span>npt.gro<span class="w"> </span>-p<span class="w"> </span>octane.top<span class="w"> </span>-o<span class="w"> </span>md.tpr
+<span class="nv">$GMX</span><span class="w"> </span>mdrun<span class="w"> </span>-deffnm<span class="w"> </span>md
+</pre></div>
+</div>
+</div></blockquote>
+<p>If you visualize the trajectory in VMD you may notice that some bonds appear to be broken. Do not worry - this is just an appearance. GROMACS transfer atoms through the periodic boundary as they leave the initial unit cell. As a result, bonded atoms may appear on the opposite sides of the box. VMD does not take into account periodic boundary and connect these atoms, drawing bonds across the entire box. This is only an appearance: it does not matter in which box the atoms are for the simulations. But it may be annoying if you want to visualize the system. To fix this, GROMACS has trjconv utility, which allows for keeping the entire molecule in the same unit cell:</p>
+<blockquote>
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nv">$GMX</span><span class="w"> </span>trjconv<span class="w"> </span>-s<span class="w"> </span>md.tpr<span class="w"> </span>-f<span class="w"> </span>md.xtc<span class="w"> </span>-o<span class="w"> </span>md_pbc.xtc<span class="w"> </span>-pbc<span class="w"> </span>mol
+</pre></div>
+</div>
+</div></blockquote>
+<p>This command runs interactively and will ask which coordinates you want to save. In the resulting file, <code class="docutils literal notranslate"><span class="pre">md_pbc.xtc</span></code>, the molecules will be transferred through periodic boundary as a whole when its center crosses the boundary.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../02_Alkanes/" class="btn btn-neutral float-left" title="Linear hydrocarbons (alkanes)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../05_Implementations/01_Integration/" class="btn btn-neutral float-right" title="Numerical integration of equations of motion" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Artem Zhmurov.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

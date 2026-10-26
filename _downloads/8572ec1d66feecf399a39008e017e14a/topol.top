@@ -1,0 +1,10 @@
+; Include forcefield parameters
+#include "charmm36.ff/forcefield.itp"
+
+[ system ]
+; Name
+A number of C6H14 molecules
+
+[ molecules ]
+; Compound        #mols
+C6H14             5

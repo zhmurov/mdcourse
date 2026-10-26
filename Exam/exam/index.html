@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Exam &mdash; MD simulations  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx_lesson.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/term_role_formatting.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx_rtd_theme_ext_color_contrast.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/clipboard.min.js"></script>
+        <script src="../../_static/copybutton.js"></script>
+        <script src="../../_static/minipres.js"></script>
+        <script>let toggleHintShow = 'Click to show';</script>
+        <script>let toggleHintHide = 'Click to hide';</script>
+        <script>let toggleOpenOnPrint = 'true';</script>
+        <script src="../../_static/togglebutton.js"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex/" />
+    <link rel="search" title="Search" href="../../search/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../" class="icon icon-home">
+            MD simulations
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Prerequisites</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../00_Prereq/01_Software/">Software</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Biological molecules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/01_Water/">Water molecule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/02_AminoAcids/">AminoAcids</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/03_Proteins/">Proteins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/04_DNA/">DNA and RNA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/05_MolecularSystems/">Molecular systems</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">MD simulations of protein</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../03_UsingGROMACS/Calmodulin/Instructions/">MD simulations of calmodulin</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">MD simulations of small molecules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../04_SmallMolecules/01_Benzene/">Create topology and coordinates for benzene molecule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../04_SmallMolecules/02_Alkanes/">Linear hydrocarbons (alkanes)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../04_SmallMolecules/03_ManyMoleculesInABox/">GROMACS simulations of a box of 1000 octane molecules</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Implementations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/01_Integration/">Numerical integration of equations of motion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/02_GeneralNotesOnPotential/">From potential energy to atomic forces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/03_Bonded/">Bonded interactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/04_Nonbonded/">Non-bonded interactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/05_PME/">PME</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/06_Constraints/">Constraints</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/10_NaCl/">Implementation of a simple molecular dynamics code: NaCl in vacuum</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Exercises</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/ExerciseDNAPacking/">Вариант 1: Упаковка ДНК</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/ExercisePolymerization/">Вариант 2: Реакция полимеризации</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quick-reference/">Quick Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guide/">Instructor’s guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Home</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../05_Implementations/AnglePotential/">Three-body potential</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../">MD simulations</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Exam</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/zhmurov/content/blob/main/content/Exam/exam.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="exam">
+<h1>Exam<a class="headerlink" href="#exam" title="Permalink to this heading"></a></h1>
+<section id="morse-potential">
+<h2>Morse potential<a class="headerlink" href="#morse-potential" title="Permalink to this heading"></a></h2>
+<p>Morse potential sometimes used to describe covalent bonds.
+The potential for two connected atoms is:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[V^{Morse}_{ij}=D_e^{ij}\left(1-e^{-a_{ij}(r_{ij}-r_{ij}^0)}\right)^2\]</div>
+</div></blockquote>
+<p>Compute the atomic forces due to this potential.</p>
+</section>
+<section id="fene-potential">
+<h2>FENE potential<a class="headerlink" href="#fene-potential" title="Permalink to this heading"></a></h2>
+<p>In some coarse-grained model it important to allow for extensibility of a covalent bond.
+These models sometimes use Finitely Extensible Non-linear Elastic potential.
+Its mathematical form is:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[V^{FENE}_{ij}=-\frac{k_{ij}}{2}R_{0}^2\log\left[1-(r_{ij}-r_{ij}^0)^2\right]\]</div>
+</div></blockquote>
+<p>Compute the atomic forces due to this potential.</p>
+</section>
+<section id="units">
+<h2>Units<a class="headerlink" href="#units" title="Permalink to this heading"></a></h2>
+<p>Consider a system of particles linked by a set of harmonic springs with spring coefficient <span class="math notranslate nohighlight">\(K_s\)</span>.</p>
+<ol class="arabic simple">
+<li><p>Masses of particles are in g/mol, distances are in Angstroms, time is in femtoseconds.</p></li>
+<li><p>Masses of particles are in g/mol, distances are in nm, time is in picoseconds.</p></li>
+</ol>
+</section>
+<section id="fix-the-topology-file">
+<h2>Fix the topology file<a class="headerlink" href="#fix-the-topology-file" title="Permalink to this heading"></a></h2>
+<p>You are given a topology/coordinates pair to run simulations.
+However, <code class="docutils literal notranslate"><span class="pre">gmx</span> <span class="pre">grompp</span></code> exits with error.
+Fix the topology file:</p>
+<ol class="arabic simple">
+<li><p>Use these <a class="reference download internal" download="" href="../../_downloads/ccc2ad8d87b3726e09f30973fec38186/topol.top"><code class="xref download docutils literal notranslate"><span class="pre">topology</span></code></a> and <a class="reference download internal" download="" href="../../_downloads/e2314a1886404ecbcf5e996ca167cc99/conf.gro"><code class="xref download docutils literal notranslate"><span class="pre">coordinates</span></code></a> files.</p></li>
+</ol>
+<ol class="arabic simple">
+<li><p>Use these <a class="reference download internal" download="" href="../../_downloads/8572ec1d66feecf399a39008e017e14a/topol.top"><code class="xref download docutils literal notranslate"><span class="pre">topology</span></code></a> and <a class="reference download internal" download="" href="../../_downloads/0c50d70100e7378f9421e9d4b148d6de/conf.gro"><code class="xref download docutils literal notranslate"><span class="pre">coordinates</span></code></a> files.</p></li>
+</ol>
+</section>
+<section id="end-to-end-distance">
+<h2>End-to-end distance<a class="headerlink" href="#end-to-end-distance" title="Permalink to this heading"></a></h2>
+<p>Compute the distribution of the end-to-end distance for hydrocarbon (i.e. distribution of distances between first and last carbon atom throughout the MD simulation run).
+Hint: use VMD label functionality.</p>
+</section>
+<section id="surface-tension">
+<h2>Surface tension<a class="headerlink" href="#surface-tension" title="Permalink to this heading"></a></h2>
+<p>Consider a system, in which there are two phase-separation surfaces, parallel to X-Y plane.
+In this case, the surface tension can be computed using the following relation <a class="reference internal" href="../var1/#alejandrejcp95" id="id1"><span>[AlejandreJCP95]</span></a>:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\gamma=\frac{L_{X}}{2}\langle P_{ZZ}-\frac{1}{2}\left(P_{XX}+P_{YY}\right)\rangle\]</div>
+</div></blockquote>
+<p>Given the energy output of GROMACS, compute the surface tension.</p>
+<dl class="citation">
+<dt class="label" id="alejandrejcp95"><span class="brackets"><a class="fn-backref" href="#id1">AlejandreJCP95</a></span></dt>
+<dd><p>Alejandre, J., Tildesley, D. J., &amp; Chapela, G. A. (1995). <a class="reference external" href="https://aip.scitation.org/doi/pdf/10.1063/1.469505">Molecular dynamics simulation of the orthobaric densities and surface tension of water.</a> J. Chem. Phys., 102(11), 4574–4583.</p>
+</dd>
+</dl>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Artem Zhmurov.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

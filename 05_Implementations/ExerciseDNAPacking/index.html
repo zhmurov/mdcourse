@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Вариант 1: Упаковка ДНК &mdash; MD simulations  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx_lesson.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/term_role_formatting.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx_rtd_theme_ext_color_contrast.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script src="../../_static/clipboard.min.js"></script>
+        <script src="../../_static/copybutton.js"></script>
+        <script src="../../_static/minipres.js"></script>
+        <script>let toggleHintShow = 'Click to show';</script>
+        <script>let toggleHintHide = 'Click to hide';</script>
+        <script>let toggleOpenOnPrint = 'true';</script>
+        <script src="../../_static/togglebutton.js"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex/" />
+    <link rel="search" title="Search" href="../../search/" />
+    <link rel="next" title="Вариант 2: Реакция полимеризации" href="../ExercisePolymerization/" />
+    <link rel="prev" title="Implementation of a simple molecular dynamics code: NaCl in vacuum" href="../10_NaCl/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../" class="icon icon-home">
+            MD simulations
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Prerequisites</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../00_Prereq/01_Software/">Software</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Biological molecules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/01_Water/">Water molecule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/02_AminoAcids/">AminoAcids</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/03_Proteins/">Proteins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/04_DNA/">DNA and RNA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../02_BiologicalMolecules/05_MolecularSystems/">Molecular systems</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">MD simulations of protein</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../03_UsingGROMACS/Calmodulin/Instructions/">MD simulations of calmodulin</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">MD simulations of small molecules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../04_SmallMolecules/01_Benzene/">Create topology and coordinates for benzene molecule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../04_SmallMolecules/02_Alkanes/">Linear hydrocarbons (alkanes)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../04_SmallMolecules/03_ManyMoleculesInABox/">GROMACS simulations of a box of 1000 octane molecules</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Implementations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../01_Integration/">Numerical integration of equations of motion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02_GeneralNotesOnPotential/">From potential energy to atomic forces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../03_Bonded/">Bonded interactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../04_Nonbonded/">Non-bonded interactions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../05_PME/">PME</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../06_Constraints/">Constraints</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../10_NaCl/">Implementation of a simple molecular dynamics code: NaCl in vacuum</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Exercises</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Вариант 1: Упаковка ДНК</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#vmd">Отображение структуры в программе VMD</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ExercisePolymerization/">Вариант 2: Реакция полимеризации</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quick-reference/">Quick Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guide/">Instructor’s guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Home</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../AnglePotential/">Three-body potential</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../">MD simulations</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Вариант 1: Упаковка ДНК</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/zhmurov/content/blob/main/content/05_Implementations/ExerciseDNAPacking.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1>Вариант 1: Упаковка ДНК<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h1>
+<p>Экcперименты FISH и Hi-C позволяют получить информацию о пространственной организации молекулы ДНК внутри хромосомы <a class="reference internal" href="#dekker02" id="id2"><span>[Dekker02]</span></a>, <a class="reference internal" href="#lieberman-aiden" id="id3"><span>[Lieberman-Aiden]</span></a>, <a class="reference internal" href="#fraser" id="id4"><span>[Fraser]</span></a>, <a class="reference internal" href="#nagano" id="id5"><span>[Nagano]</span></a>.
+Суть эксперимента состоит в том, чтобы при помощи химической реакции скрепить соседние участки нити ДНК друг с другом (Рисунок 1a).
+Затем геном расшепляется на <span class="math notranslate nohighlight">\(N\)</span> небольших участков, при этом химическая сцепка не разрушается.
+В результате получается раствор, содержащий <span class="math notranslate nohighlight">\(N\)</span> небольших участков ДНК, некоторые из которых скреплены между собой.
+Далее делается предположение, что вероятность того, что участки <span class="math notranslate nohighlight">\(i\)</span> и <span class="math notranslate nohighlight">\(j\)</span> окажутся скреплены зависит от того, насколько близко друг к другу они находились изначально.
+То есть, если какие-то из участков находятся в хромосомах близко друг к другу, очень вероятно что они свяжутся.
+Если же они находятся далеко, то вероятность связывания мала.
+Посчитав количества пар <span class="math notranslate nohighlight">\(i-j\)</span> в растворе, можно построить матрицу близости отдельных учатков ДНК в хромосоме (Рисунок 1b).
+Используя эту матрицу, можно хатем восстановить исходную пространственную структуру ДНК (Рисунок 1c).</p>
+<blockquote>
+<div><figure class="align-default" id="id7">
+<img alt="../../_images/HiC.png" src="../../_images/HiC.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 11 </span><span class="caption-text">Рисунок 1:
+(a): Схема эксперимента Hi-C.
+Два соседних участка скрепляются ковалентной сшивкой, затем ДНК расщепляется специальным ферментом.
+Далее проводится анализ того, какие из участков ДНК скрепились между собой.
+(b): Участок получаемой в результате эксперимента матрицы близости участков ДНК.
+Индексы <span class="math notranslate nohighlight">\(i\)</span> и <cite>j</cite> в матрице соответствуют номеру участка ДНК, а цвет — близости участков <span class="math notranslate nohighlight">\(i\)</span> и <span class="math notranslate nohighlight">\(j\)</span> в хромосоме.
+Близость определяется из количества раз, в которых участки <span class="math notranslate nohighlight">\(i\)</span> и <span class="math notranslate nohighlight">\(j\)</span> были связаны между собой в эксперименте.
+(c): Интерпретация экспериментальных даннных на примере короткого участка молекулы ДНК.
+Иллюстрация взята из <a class="reference internal" href="#dekker02" id="id6"><span>[Dekker02]</span></a>.</span><a class="headerlink" href="#id7" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+</div></blockquote>
+<p>Результатом эксперимента Hi-C являются матрицы <span class="math notranslate nohighlight">\(U\)</span> близости размером <span class="math notranslate nohighlight">\(N\times N\)</span> , содержащие в качестве элемента <span class="math notranslate nohighlight">\(U_{ij}\)</span> количества связываний для каждой пары участков ДНК <span class="math notranslate nohighlight">\(i\)</span> и <span class="math notranslate nohighlight">\(j\)</span>.
+Примеры результатов реальных экспериментов можно скачать <a class="reference download internal" download="" href="../../_downloads/d201f1bc2ecea4c659a1b4c414a7ed5d/hicdata.tar.gz"><code class="xref download docutils literal notranslate"><span class="pre">по</span> <span class="pre">этой</span> <span class="pre">ссылке</span></code></a>.
+Каждой хромосоме соответствует отдельный файл.
+Каждый файл содержит матрицу <span class="math notranslate nohighlight">\(U_{ij}\)</span> размером <span class="math notranslate nohighlight">\(N\times N\)</span> в текстовом формате (<span class="math notranslate nohighlight">\(N\)</span> строк, по <span class="math notranslate nohighlight">\(N\)</span> значений в каждой).</p>
+<p>В работе предлагается реализовать программу, которая будет восстанавливать структуру ДНК по этим матрицам.
+При этом ДНК представляется в виде набора из <span class="math notranslate nohighlight">\(N\)</span> взаимодействующих центров с координатами <span class="math notranslate nohighlight">\({\mathbf{r}_i}\)</span>. Центры <span class="math notranslate nohighlight">\(i\)</span> и <span class="math notranslate nohighlight">\(i + 1\)</span> связываются ковалентно, при помощи гармонического потенциала:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[V_{cov}(\{\mathbf{r}_i\})=\sum_{i=0}^{N-2}k_C(|\mathbf{r}_i-\mathbf{r}_{i+1}|-r_0)^2,\]</div>
+</div></blockquote>
+<p>где <span class="math notranslate nohighlight">\(k_c = 100\)</span> кДж/моль — коэфициент упругости ковалентной связи, а <span class="math notranslate nohighlight">\(r_0 = 0.1\)</span> нм — равновесное расстояние.
+Все пары фрагментов ДНК <span class="math notranslate nohighlight">\(i\)</span> и <span class="math notranslate nohighlight">\(j\)</span>, для которых элемент матрицы <span class="math notranslate nohighlight">\(U_{ij}\)</span> не нулевой, также связываются при помощи гармонического потенциала:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[V_{hic}(\{\mathbf{r}_i\})=\sum_{U_{ij}\ne 0}k_{ij}(|\mathbf{r}_i-\mathbf{r}_{j}|-r_{ij}^0)^2,\]</div>
+</div></blockquote>
+<p>где</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\begin{split}\begin{split}
+k_{ij} &amp;= 50.0 \times \frac{U_{ij}}{\max_{ij}\{U_{ij}\}},\\
+r^0_{ij} &amp;= 0.19 + 0.01 \times \frac{\max_{ij} \{U_{ij}\}}{U_{ij}}.
+\end{split}\end{split}\]</div>
+</div></blockquote>
+<p>Далее, для каждой частицы численно интегрируются уравнения движения Ланжевена:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[m_i\frac{d^2\mathbf{r}_i}{dt^2}=-\nabla_iV-\lambda m_i\frac{d\mathbf{r}_i}{dt}+\eta_i(t),\]</div>
+</div></blockquote>
+<p>где <span class="math notranslate nohighlight">\(m_i = 1.0\)</span> г/моль — масса частиц, <span class="math notranslate nohighlight">\(V({\mathbf{r}_i}) = V_{cov}({\mathbf{r}_i}) + V_{hic}({\mathbf{r}_i})\)</span> — потенциальная энергия системы, <span class="math notranslate nohighlight">\(\nabla_i V\)</span> — градиент потенциала по координате <span class="math notranslate nohighlight">\(i\)</span>-ой частицы. <span class="math notranslate nohighlight">\(\eta_i(t)\)</span> — случайная сила, описывающая соударения с молекулами воды с нормальным распределением:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\langle\eta_i(t)\eta_j(t)\rangle = 2\lambda m_i k_BT\delta_{ij}\delta(t-t')\]</div>
+</div></blockquote>
+<p>Динамику Ланжевена можно рассматривать как динамику Ньютона с добавлением двух дополнительных сил: силы трения, пропорциональной скорости частицы и случайной силы, распределенной по Гауссу. Коэффициент пропорциональности <span class="math notranslate nohighlight">\(\lambda\)</span> называется константой демпфирования и задает силу влияния среды на молекулу. При больших <span class="math notranslate nohighlight">\(\lambda\)</span> система переходит к Брауновскому движению, при малых — к Ньютоновскому.</p>
+<p>Для численного решения уравнения Ланжевена можно использовать следующую разностную схему:</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[\begin{split}\begin{split}
+ m_i\frac{\mathbf{v}_{i}^{n+\frac{1}{2}}-\mathbf{v}_{i}^{n-\frac{1}{2}}}{\tau} &amp;= \mathbf{f}_{i}^{n} - \lambda m_i\frac{\mathbf{v}_{i}^{n+\frac{1}{2}}+\mathbf{v}_{i}^{n-\frac{1}{2}}}{2}+\sqrt{\frac{2k_BT\lambda m_i}{\tau}}\mathbf{r}_i^f\\
+\frac{\mathbf{r}_{i}^{n+1}-\mathbf{r}_{i}^{n}}{\tau} &amp;= \mathbf{v}_{i}^{n+\frac{1}{2}}
+\end{split}\end{split}\]</div>
+</div></blockquote>
+<p>Здесь, <span class="math notranslate nohighlight">\(\lambda=50\)</span> пс <span class="math notranslate nohighlight">\(^{-1}\)</span> — константа демпфирования, <span class="math notranslate nohighlight">\(\mathbf{r}_i^f\)</span> — вектор из трех нормально распределенных случайных величин, с дисперсией <span class="math notranslate nohighlight">\(1\)</span> и математическим ожиданием <span class="math notranslate nohighlight">\(0\)</span>. Постоянная Больцмана <span class="math notranslate nohighlight">\(k_B=8.31\times10^{-3}\)</span> кДж/K*моль, шаг по времени <span class="math notranslate nohighlight">\(\tau=0.001\)</span> пс, температура <span class="math notranslate nohighlight">\(T=300\)</span> K.</p>
+<p>В качестве начальной структуры можно взять линейную молекулу, в которой частицы разделены расстоянием в <span class="math notranslate nohighlight">\(0.1\)</span> нм. Так как все частицы связаны, периодические граничные условия не требуются.</p>
+<p>К заданию прилагается <a class="reference download internal" download="" href="../../_downloads/d201f1bc2ecea4c659a1b4c414a7ed5d/hicdata.tar.gz"><code class="xref download docutils literal notranslate"><span class="pre">архив</span></code></a>, который содержит экспериментальные данные и небольшую программу, которая считывает данные из файла и распечатывает на экран все пары с ненулевыми значениями <span class="math notranslate nohighlight">\(U_{ij}\)</span>.</p>
+<section id="vmd">
+<h2>Отображение структуры в программе VMD<a class="headerlink" href="#vmd" title="Permalink to this heading"></a></h2>
+<p>При использовании файлов координат (например, xyz), VMD добавляет в отображения связи, основываясь на расстоянии между частицами.
+Чтобы отобразить нить ДНК в виде цепочки связанных частиц, можно создать файл координат, где эти частицы будут находится вдоль одной прямой на расстоянии 1.0 Ангстрем друг от друга.
+Эти координаты потом можно удалить из молекулы.</p>
+<blockquote>
+<div><dl class="citation">
+<dt class="label" id="dekker02"><span class="brackets">Dekker02</span><span class="fn-backref">(<a href="#id2">1</a>,<a href="#id6">2</a>)</span></dt>
+<dd><ol class="upperalpha simple" start="10">
+<li><p>Dekker, K. Rippe, M. Dekker, and N. Kleckner, “Capturing chromosome conformation,” Science, vol. 295, no. 5558, pp. 1306–1311, 2002.</p></li>
+</ol>
+</dd>
+<dt class="label" id="lieberman-aiden"><span class="brackets"><a class="fn-backref" href="#id3">Lieberman-Aiden</a></span></dt>
+<dd><ol class="upperalpha simple" start="5">
+<li><p>Lieberman-Aiden, N. L. Van Berkum, L. Williams, M. Imakaev, T. Ragoczy, A. Telling, I. Amit, B. R. Lajoie, P. J. Sabo, M. O. Dorschner, et al., “Comprehensive mapping of long-range interactions reveals folding principles of the human genome,” Science, vol. 326, no. 5950, pp. 289–293, 2009.</p></li>
+</ol>
+</dd>
+<dt class="label" id="fraser"><span class="brackets"><a class="fn-backref" href="#id4">Fraser</a></span></dt>
+<dd><ol class="upperalpha simple" start="10">
+<li><p>Fraser, I. Williamson, W. A. Bickmore, and J. Dostie, “An overview of genome organization and how we got there: from FISH to Hi-C,” Microbiol. Mol. Biol. Rev., vol. 79, no. 3, pp. 347–372, 2015.</p></li>
+</ol>
+</dd>
+<dt class="label" id="nagano"><span class="brackets"><a class="fn-backref" href="#id5">Nagano</a></span></dt>
+<dd><ol class="upperalpha simple" start="20">
+<li><p>Nagano, Y. Lubling, T. J. Stevens, S. Schoenfelder, E. Yaffe, W. Dean, E. D. Laue, A. Tanay, and P. Fraser, “Single-cell Hi-C reveals cell-to-cell variability in chromosome structure,” Nature, vol. 502, no. 7469, pp. 59–64, 2013.</p></li>
+</ol>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../10_NaCl/" class="btn btn-neutral float-left" title="Implementation of a simple molecular dynamics code: NaCl in vacuum" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../ExercisePolymerization/" class="btn btn-neutral float-right" title="Вариант 2: Реакция полимеризации" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Artem Zhmurov.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
